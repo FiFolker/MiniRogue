@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -30,6 +31,10 @@ public class Game extends JPanel implements Runnable{
 	Classe[] classes = new Classe[3];
 	Card cardHovered = null;
 	Menu menu;
+	Classe selectedClass;
+	GUI gui = new GUI(this);
+	Button diceButton;
+	public ArrayList<Dice> dices = new ArrayList<>();
 
 	public static final int SCREEN_WIDTH = 1280;
 
@@ -39,6 +44,8 @@ public class Game extends JPanel implements Runnable{
 	public Font sansSerif = new Font("Sans-Serif", Font.BOLD, 15);
 	public Font title = new Font("Sans-Serif", Font.BOLD, 48);
 	int currentClasse = 0;
+	int stage = 0;
+	int totalStage = 4;
 
 	int FPS = 60;
 
@@ -55,22 +62,26 @@ public class Game extends JPanel implements Runnable{
 		this.addMouseListener(mouseH);
 		this.addMouseMotionListener(mouseH);
 		this.setBackground(Color.black);
+
 		gameState = menuState;
+		diceButton = new Button(new Rectangle(655, 850, 200, 50), "Lancer Dé");
+		dices.add(new Dice(6));
 		try {
-			classes[0] = new Classe(ImageIO.read(new File("assets/classes/rogue.png")), "Voleur", 7, 3, 0, 8);
-			classes[1] = new Classe(ImageIO.read(new File("assets/classes/mage.png")), "Magicien", 4, 5, 0, 3);
-			classes[2] = new Classe(ImageIO.read(new File("assets/classes/swordman.png")), "Epeiste", 10, 3, 3, 5);
+			classes[0] = new Classe(this, ImageIO.read(new File("assets/classes/rogue.png")), "Voleur", 7, 3, 0, 8);
+			classes[1] = new Classe(this, ImageIO.read(new File("assets/classes/mage.png")), "Magicien", 4, 5, 0, 3);
+			classes[2] = new Classe(this, ImageIO.read(new File("assets/classes/swordman.png")), "Epeiste", 10, 3, 3, 5);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		menu = new Menu(this);
 	}
 
 	public void loadCards(){
-		int topPos = 300;
-		int leftPos = 500;
-		int line = 1;
+		int topPos = 50;
+		int leftPos = 450;
+		int line = 0;
 		int col = 0;
 		for(int i = 0;i<cards.length; i++){
 			BufferedImage image = null;
@@ -81,17 +92,20 @@ public class Game extends JPanel implements Runnable{
 				e.printStackTrace();
 			}
 
-			int x = leftPos+col*image.getWidth()+10;
-			int y = topPos+line*image.getHeight()+10;
-			cards[i] = new Card(image, "Test "+i, new Rectangle(x,y,image.getWidth(), image.getHeight()), x, y);
+			int sizeWidth = image.getWidth()*2;
+			int sizeHeight = image.getHeight()*2;
+
+			int x = leftPos+(col*sizeWidth)+10;
+			int y = topPos+(line*sizeHeight)+10;
+			cards[i] = new Card(image, "Test "+i, new Rectangle(x,y,sizeWidth, sizeHeight), x, y);
 
 			col ++;
 			if(i == 2){
-				line = 2;
+				line = 1;
 				col = 0;
 			}
 			if(i == 5){
-				line = 3;
+				line = 2;
 				col = 0;
 			}
 			
@@ -142,6 +156,13 @@ public class Game extends JPanel implements Runnable{
 					c.revealCard();
 				}
 			}
+			selectedClass.update();
+			if(diceButton.isClicked()){
+				for(Dice d : dices){
+					System.out.println(d.roll());
+				}
+				
+			}
 		}
 		if(mouseH.leftClickedOnceTime){
 			mouseH.leftClickedOnceTime = false;
@@ -171,7 +192,8 @@ public class Game extends JPanel implements Runnable{
 			if(cardHovered != null){
 				cardHovered.draw(g2);
 			}
-			
+			diceButton.draw(g2);
+			gui.draw(g2);
 		}
 	}
 

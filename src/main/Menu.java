@@ -43,6 +43,7 @@ public class Menu {
 				switch(s){
 					case playButton:
 						game.gameState = game.playState;
+						game.selectedClass = game.classes[game.currentClasse];
 						game.loadCards();
 						break;
 					case exitButton:
