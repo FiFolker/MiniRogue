@@ -1,18 +1,15 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -27,13 +24,14 @@ public class Game extends JPanel implements Runnable{
 	JFrame frame;
 	Thread gameThread;
 	public static MouseHandler mouseH = new MouseHandler();
-	Card[] cards = new Card[9];
-	Classe[] classes = new Classe[3];
+	Card[][] cardBoard = new Card[3][3];
+	Classe[] classes = new Classe[4];
 	Card cardHovered = null;
 	Menu menu;
 	Classe selectedClass;
 	GUI gui = new GUI(this);
 	Button diceButton;
+	Coordonnees currentPos;
 	public ArrayList<Dice> dices = new ArrayList<>();
 
 	public static final int SCREEN_WIDTH = 1280;
@@ -70,6 +68,7 @@ public class Game extends JPanel implements Runnable{
 			classes[0] = new Classe(this, ImageIO.read(new File("assets/classes/rogue.png")), "Voleur", 7, 3, 0, 8);
 			classes[1] = new Classe(this, ImageIO.read(new File("assets/classes/mage.png")), "Magicien", 4, 5, 0, 3);
 			classes[2] = new Classe(this, ImageIO.read(new File("assets/classes/swordman.png")), "Epeiste", 10, 3, 3, 5);
+			classes[3] = new Classe(this, ImageIO.read(new File("assets/classes/adventurer.png")), "Aventurier", 10, 3, 3, 5);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,36 +80,28 @@ public class Game extends JPanel implements Runnable{
 	public void loadCards(){
 		int topPos = 50;
 		int leftPos = 450;
-		int line = 0;
-		int col = 0;
-		for(int i = 0;i<cards.length; i++){
-			BufferedImage image = null;
-			try {
-				image = ImageIO.read(new File("assets/cards/cardBlue.png"));
-			} catch (IOException e) {
-				System.out.println("erreur dans le load de l'image");
-				e.printStackTrace();
-			}
+		currentPos = new Coordonnees(0, 0);
+		for(int i = 0;i<cardBoard.length; i++){
+			for(int j=0; j<cardBoard[i].length;j++){
+				BufferedImage image = null;
+				try {
+					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
+				} catch (IOException e) {
+					System.out.println("erreur dans le load de l'image");
+					e.printStackTrace();
+				}
 
-			int sizeWidth = image.getWidth()*2;
-			int sizeHeight = image.getHeight()*2;
+				int sizeWidth = image.getWidth()*2;
+				int sizeHeight = image.getHeight()*2;
 
-			int x = leftPos+(col*sizeWidth)+10;
-			int y = topPos+(line*sizeHeight)+10;
-			cards[i] = new Card(image, "Test "+i, new Rectangle(x,y,sizeWidth, sizeHeight), x, y);
-
-			col ++;
-			if(i == 2){
-				line = 1;
-				col = 0;
-			}
-			if(i == 5){
-				line = 2;
-				col = 0;
+				int x = leftPos+(i*sizeWidth)+10;
+				int y = topPos+(j*sizeHeight)+10;
+				cardBoard[i][j] = new Card(image, "Test "+i, new Rectangle(x,y,sizeWidth, sizeHeight), x, y);
 			}
 			
+			
 		}
-		cards[0].revealCard();
+		cardBoard[0][0].revealCard();
 	}
 
 	public void startGameThread(){
@@ -152,15 +143,19 @@ public class Game extends JPanel implements Runnable{
 		if(gameState == menuState){
 			menu.update();
 		}else if (gameState == playState){
-			for(Card c : cards){
-				if(c.isClicked() && !c.isReveal){
-					c.revealCard();
+			for(int i=0;i<cardBoard.length;i++){
+				for(int j=0;j<cardBoard[i].length;j++){
+					if(cardBoard[i][j].isClicked() && !cardBoard[i][j].isReveal && isAdjacentToCurrentPos(new Coordonnees(i, j))){
+						cardBoard[i][j].revealCard();
+						currentPos.ligne = i;
+						currentPos.colonne = j;
+					}
 				}
 			}
 			selectedClass.update();
 			if(diceButton.isClicked()){
 				for(Dice d : dices){
-					System.out.println(d.roll());
+					d.roll();
 				}
 				
 			}
@@ -180,24 +175,57 @@ public class Game extends JPanel implements Runnable{
 			menu.draw(g2);
 		}
 		if(gameState == playState){
-			if(cards[0] != null){
-				for(Card c : cards){
-					if(!c.isHover()){
-						c.draw(g2);
-					}
-					if(c.isHover()){
-						cardHovered = c;
+			if(cardBoard[0] != null){
+				for(int i=0;i<cardBoard.length;i++){
+					for(int j=0;j<cardBoard[i].length;j++){
+						if(!cardBoard[i][j].isHover()){
+							cardBoard[i][j].draw(g2);
+						}
+						if(cardBoard[i][j].isHover()){
+							cardHovered = cardBoard[i][j];
+						}
 					}
 				}
 			}
 			if(cardHovered != null){
 				cardHovered.draw(g2);
 			}
+			int xDice = 10;
+			for(Dice d : dices){
+				d.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
+				xDice += 10;
+			}
 			diceButton.draw(g2);
 			gui.draw(g2);
 		}
 	}
 
+	/**
+	 * Renvoie les coordonnées de la case suivante, en suivant une direction donnée.
+	 *
+	 * @param c coordoonée de laquelle on part
+	 * @param d la direction à suivre
+	 * @return les coordonnées de la case suivante
+	 */
+	static Coordonnees suivante(Coordonnees c, Direction d) {
+		return new Coordonnees(c.ligne + Direction.mvtVertic(d),
+				c.colonne + Direction.mvtHoriz(d));
+	}
+
+
+	public boolean isAdjacentToCurrentPos(Coordonnees coord){
+		boolean isAdjacent = false;
+		Direction[] cardinales = Direction.cardinales();
+		int i = 0;
+		while(i<cardinales.length && !isAdjacent){
+			Coordonnees voisine = Game.suivante(coord, cardinales[i]);
+			if(coord.estDansPlateau() && voisine.equals(currentPos)){
+				isAdjacent = true;
+			}
+			i++;
+		}
+		return isAdjacent;
+	}
 	
 	
 }
