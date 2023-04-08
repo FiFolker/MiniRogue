@@ -58,7 +58,7 @@ public class Button {
 		if(buttonText != null){
 			int tempX = button.x + button.width/2;
 			int tempY = button.y + button.height/2;
-			g2.drawString(buttonText, tempX -(int)textToRectangle2D(buttonText, g2).getWidth()/2, tempY + (int)textToRectangle2D(buttonText, g2).getHeight()/3);
+			g2.drawString(buttonText, tempX -(int)Utils.textToRectangle2D(buttonText, g2).getWidth()/2, tempY + (int)Utils.textToRectangle2D(buttonText, g2).getHeight()/3);
 		}
 
 		if(icon != null){
@@ -85,8 +85,6 @@ public class Button {
 		return inCollision() && Game.mouseH.leftClickedOnceTime;
 	}
 
-	private Rectangle2D textToRectangle2D(String txt, Graphics2D g2){
-		return g2.getFontMetrics().getStringBounds(txt, g2);
-	}
+	
 	
 }

@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,21 +26,18 @@ public class Game extends JPanel implements Runnable{
 	JFrame frame;
 	Thread gameThread;
 	public static MouseHandler mouseH = new MouseHandler();
-	HashMap<String, Button> buttons = new HashMap<>();
 	Card[] cards = new Card[9];
 	Classe[] classes = new Classe[3];
 	Card cardHovered = null;
+	Menu menu;
 
 	public static final int SCREEN_WIDTH = 1280;
 
 	public int gameState; 
 	public final int menuState = 0;
 	public final int playState = 1;
-	private String playButton = "playButton";
-	private String exitButton = "exitButton";
 	public Font sansSerif = new Font("Sans-Serif", Font.BOLD, 15);
 	public Font title = new Font("Sans-Serif", Font.BOLD, 48);
-	private Dimension sizeOfButton = new Dimension(200,25);
 	int currentClasse = 0;
 
 	int FPS = 60;
@@ -58,8 +56,6 @@ public class Game extends JPanel implements Runnable{
 		this.addMouseMotionListener(mouseH);
 		this.setBackground(Color.black);
 		gameState = menuState;
-		buttons.put(playButton, new Button(new Rectangle(632-sizeOfButton.width/2, 470 - sizeOfButton.height/2, sizeOfButton.width, sizeOfButton.height), "Jouer"));
-		buttons.put(exitButton, new Button(new Rectangle(632-sizeOfButton.width/2, 470- sizeOfButton.height/2 + sizeOfButton.height + 10, sizeOfButton.width, sizeOfButton.height), "Quitter"));
 		try {
 			classes[0] = new Classe(ImageIO.read(new File("assets/classes/rogue.png")), "Voleur", 7, 3, 0, 8);
 			classes[1] = new Classe(ImageIO.read(new File("assets/classes/mage.png")), "Magicien", 4, 5, 0, 3);
@@ -68,6 +64,7 @@ public class Game extends JPanel implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		menu = new Menu(this);
 	}
 
 	public void loadCards(){
@@ -138,15 +135,7 @@ public class Game extends JPanel implements Runnable{
 
 	public void update(){
 		if(gameState == menuState){
-			for(String s: buttons.keySet()){
-				if(buttons.get(s).isClicked() && s.equals(playButton)){
-					gameState = playState;
-					loadCards();
-				}
-				if(buttons.get(s).isClicked() && s.equals(exitButton)){
-					System.exit(0);
-				}
-			}
+			menu.update();
 		}else if (gameState == playState){
 			for(Card c : cards){
 				if(c.isClicked()){
@@ -166,14 +155,7 @@ public class Game extends JPanel implements Runnable{
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setColor(Color.white);
 		if(gameState == menuState){
-			g2.setFont(title);
-			g2.drawString("MINI ROGUE", getXforCenteredText("MINI ROGUE", g2), 400);
-			g2.setFont(sansSerif);
-			classes[currentClasse].drawIcon(g2, 432, 500);
-
-			for(Button b : buttons.values()){
-				b.draw(g2);
-			}
+			menu.draw(g2);
 		}
 		if(gameState == playState){
 			if(cards[0] != null){
@@ -193,9 +175,6 @@ public class Game extends JPanel implements Runnable{
 		}
 	}
 
-	public int getXforCenteredText(String text, Graphics2D g2){
-		int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-		return Game.SCREEN_WIDTH/2 - length/2;
-	}
+	
 	
 }
