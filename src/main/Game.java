@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import cards.Card;
+import cards.GuardianCard;
 import classes.Classe;
 import controls.MouseHandler;
 
@@ -96,7 +97,11 @@ public class Game extends JPanel implements Runnable{
 
 				int x = leftPos+(i*sizeWidth)+10;
 				int y = topPos+(j*sizeHeight)+10;
-				cardBoard[i][j] = new Card(image, "Test "+i, new Rectangle(x,y,sizeWidth, sizeHeight), x, y);
+				if(i == 2 && j ==2){
+					cardBoard[i][j] = new GuardianCard(image, "Test "+i, new Rectangle(x,y,sizeWidth, sizeHeight), x, y);
+				}else{
+					cardBoard[i][j] = new Card(image, "Test "+i, new Rectangle(x,y,sizeWidth, sizeHeight), x, y);
+				}
 			}
 			
 			
