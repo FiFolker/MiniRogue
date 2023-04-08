@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import cards.Card;
+import classes.Classe;
 import controls.MouseHandler;
 
 public class Game extends JPanel implements Runnable{
@@ -26,6 +27,7 @@ public class Game extends JPanel implements Runnable{
 	public static MouseHandler mouseH = new MouseHandler();
 	HashMap<String, Button> buttons = new HashMap<>();
 	Card[] cards = new Card[9];
+	Classe[] classes = new Classe[3];
 	Card cardHovered = null;
 
 	public static final int SCREEN_WIDTH = 1280;
@@ -38,6 +40,7 @@ public class Game extends JPanel implements Runnable{
 	public Font sansSerif = new Font("Sans-Serif", Font.BOLD, 15);
 	public Font title = new Font("Sans-Serif", Font.BOLD, 48);
 	private Dimension sizeOfButton = new Dimension(200,25);
+	int currentClasse = 0;
 
 	int FPS = 60;
 
@@ -57,6 +60,14 @@ public class Game extends JPanel implements Runnable{
 		gameState = menuState;
 		buttons.put(playButton, new Button(new Rectangle(632-sizeOfButton.width/2, 470 - sizeOfButton.height/2, sizeOfButton.width, sizeOfButton.height), "Jouer"));
 		buttons.put(exitButton, new Button(new Rectangle(632-sizeOfButton.width/2, 470- sizeOfButton.height/2 + sizeOfButton.height + 10, sizeOfButton.width, sizeOfButton.height), "Quitter"));
+		try {
+			classes[0] = new Classe(ImageIO.read(new File("assets/classes/rogue.png")), "Voleur", 7, 3, 0, 8);
+			classes[1] = new Classe(ImageIO.read(new File("assets/classes/mage.png")), "Magicien", 4, 5, 0, 3);
+			classes[2] = new Classe(ImageIO.read(new File("assets/classes/swordman.png")), "Epeiste", 10, 3, 3, 5);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void loadCards(){
@@ -158,6 +169,7 @@ public class Game extends JPanel implements Runnable{
 			g2.setFont(title);
 			g2.drawString("MINI ROGUE", getXforCenteredText("MINI ROGUE", g2), 400);
 			g2.setFont(sansSerif);
+			classes[currentClasse].drawIcon(g2, 432, 500);
 
 			for(Button b : buttons.values()){
 				b.draw(g2);
