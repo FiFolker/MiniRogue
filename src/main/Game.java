@@ -110,6 +110,7 @@ public class Game extends JPanel implements Runnable{
 			}
 			
 		}
+		cards[0].revealCard();
 	}
 
 	public void startGameThread(){
@@ -152,7 +153,7 @@ public class Game extends JPanel implements Runnable{
 			menu.update();
 		}else if (gameState == playState){
 			for(Card c : cards){
-				if(c.isClicked()){
+				if(c.isClicked() && !c.isReveal){
 					c.revealCard();
 				}
 			}

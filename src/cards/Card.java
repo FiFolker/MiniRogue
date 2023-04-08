@@ -20,6 +20,7 @@ public class Card {
 	Rectangle hitbox;
 	int x,y;
 	private int zoom = 15;
+	public boolean isReveal = false;
 
 	public Card(BufferedImage image, String name, Rectangle hitbox, int x, int y) {
 		try {
@@ -45,6 +46,7 @@ public class Card {
 
 	public void revealCard(){
 		currentImage = image;
+		isReveal = true;
 	}
 
 	public void draw(Graphics2D g2){
