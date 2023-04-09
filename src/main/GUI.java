@@ -37,6 +37,13 @@ public class GUI {
 			}
 			yStats += 20;
 		}
+		g2.drawLine(0,  yStats + 10, xLine, yStats + 10);
+		g2.drawString("Inventaire", xLine/2-(int)Utils.textToRectangle2D("Inventaire", g2).getWidth()/2, yStats +30);
+		g2.drawString("Potions :", 10, yStats + 100);
+		g2.drawString("Objets :", 10, yStats*3/2);
+		g2.drawLine(0,  yStats*5/3, xLine, yStats*5/3);
+		g2.drawString("Dé", xLine/2-(int)Utils.textToRectangle2D("Dé", g2).getWidth()/2, yStats*5/3+20);
+
 	}
 
 }

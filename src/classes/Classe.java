@@ -54,10 +54,16 @@ public class Classe {
 	}
 
 	public void update(){
-		if(this.stats.get(xpString) == xpRequired){
+		if(this.stats.get(xpString) == xpRequired && this.stats.get(levelString) < 3){
 			game.dices.add(new CharacterDice());
 			this.addStat(levelString, 1);
 			xpRequired += xpRequired*2;
+		}else if(this.stats.get(xpString) >= 23){
+			this.stats.replace(xpString, 23);
+			this.addStat(lifeString, 1);
+		}
+		if(this.stats.get(foodString) == 0 ){
+
 		}
 	}
 

@@ -16,6 +16,7 @@ public class Menu {
 	private final String exitButton = "exitButton";
 	private final String rightButton = "rightButton";
 	private final String leftButton = "leftButton";
+	private final String helpButton = "helpButton";
 	private Dimension sizeOfButton = new Dimension(200,25);
 
 
@@ -26,8 +27,10 @@ public class Menu {
 
 	public void setup(){
 		Rectangle playRect = new Rectangle(632-sizeOfButton.width/2, 470 - sizeOfButton.height/2, sizeOfButton.width, sizeOfButton.height);
-		Rectangle exitRect = new Rectangle(632-sizeOfButton.width/2, 470- sizeOfButton.height/2 + sizeOfButton.height + 10, sizeOfButton.width, sizeOfButton.height);
+		Rectangle helpRect = new Rectangle(632-sizeOfButton.width/2, 470 - sizeOfButton.height/2+ sizeOfButton.height + 10, sizeOfButton.width, sizeOfButton.height);
+		Rectangle exitRect = new Rectangle(632-sizeOfButton.width/2, 470- sizeOfButton.height/2 + sizeOfButton.height*2 + 20, sizeOfButton.width, sizeOfButton.height);
 		buttons.put(playButton, new Button(playRect, "Jouer"));
+		buttons.put(helpButton, new Button(helpRect, "Aide"));
 		buttons.put(exitButton, new Button(exitRect, "Quitter"));
 
 		Rectangle leftRect = new Rectangle(634-80, 600, 16, game.classes[game.currentClasse].size);
@@ -48,6 +51,8 @@ public class Menu {
 						break;
 					case exitButton:
 						System.exit(0);
+						break;
+					case helpButton:
 						break;
 					case rightButton:
 						if(game.currentClasse+1 > game.classes.length-1){
