@@ -45,7 +45,7 @@ public class Game extends JPanel implements Runnable{
 	Card cardHovered = null;
 	Menu menu;
 	public Classe selectedClass;
-	GUI gui = new GUI(this);
+	public GUI gui = new GUI(this);
 	Button diceButton;
 	Coordonnees currentPos;
 	Card currentCard;
@@ -57,6 +57,7 @@ public class Game extends JPanel implements Runnable{
 	public int gameState; 
 	public final int menuState = 0;
 	public final int playState = 1;
+	public final int loseState = 2;
 	public Font sansSerif = new Font("Sans-Serif", Font.BOLD, 15);
 	public Font title = new Font("Sans-Serif", Font.BOLD, 48);
 	public Font secondTitle = new Font("Sans-Serif", Font.PLAIN, 28);
@@ -179,18 +180,22 @@ public class Game extends JPanel implements Runnable{
 			menu.update();
 		}else if (gameState == playState){
 			movementOnTheBoard();
+
 			selectedClass.update();
-			if(diceButton.isClicked() && canRoll){
+
+			currentCard.updateAlways();
+
+			if(diceButton.isClicked() && canRoll){ // lancé de dé
 				for(Dice d : dices){
 					d.roll();
 				}
 				diceHasRolled = true;
-				canRoll = false;
-				Game.mouseH.leftClickedOnceTime = false;
-				
+				canRoll = false;				
 			}
-			if(diceHasRolled){
-				currentCard.update(dices, stage);
+
+			if(diceHasRolled){ // si le dé a été lancé
+				currentCard.updateOnRoll(dices, stage);
+
 				if(currentCard.getClass() == EnnemyCard.class){
 					EnnemyCard e = (EnnemyCard)currentCard;
 					if(e.ennemy.life > 0){
@@ -204,9 +209,8 @@ public class Game extends JPanel implements Runnable{
 					canMove = true;
 					diceHasRolled = false;
 				}
-				
 			}
-			selectedClass.update();
+
 		}
 		if(mouseH.leftClickedOnceTime){
 			mouseH.leftClickedOnceTime = false;
@@ -234,6 +238,12 @@ public class Game extends JPanel implements Runnable{
 							zone = 1;
 							loadCards();
 						}else if(zone < zonePerStage[stage-1]){
+							if(selectedClass.stats.get(selectedClass.foodString) > 0){
+								selectedClass.substractStat(selectedClass.foodString, 1);
+							}
+							if(selectedClass.stats.get(selectedClass.foodString) == 0 ){
+								selectedClass.substractStat(selectedClass.lifeString, 3);
+							}
 							zone ++;
 							loadCards();
 						}
@@ -252,6 +262,7 @@ public class Game extends JPanel implements Runnable{
 			menu.draw(g2);
 		}
 		if(gameState == playState){
+
 			if(cardBoard[0] != null){
 				for(int col=0;col<cardBoard.length;col++){
 					for(int lig=0;lig<cardBoard[col].length;lig++){
@@ -264,17 +275,26 @@ public class Game extends JPanel implements Runnable{
 					}
 				}
 			}
+
 			if(cardHovered != null){
 				cardHovered.draw(g2);
 			}
+
 			int xDice = 10;
+
 			for(Dice d : dices){
 				d.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
 				xDice += Utils.textToRectangle2D(d.name, g2).getWidth() + 10;
 			}
+
+
 			g2.drawImage(selectedClass.icon, currentCard.hitbox.x + currentCard.hitbox.width - 80,
 			currentCard.hitbox.y + currentCard.hitbox.height - 80, 64, 64, null);
+
 			diceButton.draw(g2);
+
+			currentCard.additionalDraw(g2, gui.xLine/2, gui.yChoice+30);
+
 			gui.draw(g2);
 		}
 	}
@@ -291,9 +311,8 @@ public class Game extends JPanel implements Runnable{
 
 	public Card randomCard(int x, int y){
 		Card returnedCard = null;
-		Random rand = new Random();
 		BufferedImage image = null;
-		int rng = rand.nextInt(7);
+		int rng = Utils.randomNumber(0, 7);
 		switch(rng){
 			case 0:
 				try {

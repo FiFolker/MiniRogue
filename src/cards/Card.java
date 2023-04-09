@@ -11,12 +11,14 @@ import javax.imageio.ImageIO;
 
 import dices.Dice;
 import main.Game;
+import main.Utils;
 
 public class Card {
 
 	BufferedImage backCard;
 	BufferedImage image;
 	BufferedImage currentImage;
+	String name = "defaultCard";
 	public Rectangle hitbox;
 	Game game;
 	int x,y;
@@ -57,8 +59,12 @@ public class Card {
 		}else{
 			g2.drawImage(currentImage, x, y, hitbox.width, hitbox.height, null);
 		}
+		g2.drawString(name, x + hitbox.width/2 - (int)Utils.textToRectangle2D(name, g2).getWidth()/2 , y + 30);
 	}
 
-	public void update(ArrayList<Dice> dices, int stage) {}
+	public void updateOnRoll(ArrayList<Dice> dices, int stage) {}
+	public void updateAlways(){}
+
+	public void additionalDraw(Graphics2D g2, int x, int y){}
 	
 }

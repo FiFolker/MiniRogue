@@ -9,6 +9,8 @@ public class SanctuaryCard extends Card{
 
     public SanctuaryCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y) {
         super(game, image, hitbox, x, y);
+        name = "Carte Sanctuaire";
+
         //TODO Auto-generated constructor stub
     }
     

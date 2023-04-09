@@ -13,10 +13,11 @@ public class TreasureCard extends Card{
 
 	public TreasureCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y) {
 		super(game, image, hitbox, x, y);
+		name = "Carte Trésor";
 	}
 
 	@Override
-	public void update(ArrayList<Dice> dices, int stage){
+	public void updateOnRoll(ArrayList<Dice> dices, int stage){
 		boolean testSkill = false;
 		for(Dice d : dices){
 			if(d.getClass() == CharacterDice.class){

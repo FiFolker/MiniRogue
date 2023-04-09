@@ -19,6 +19,7 @@ public class Classe {
 	public int xpRequired = 6;
 	public int size = 128;
 	public HashMap<String, Integer> stats;
+	public HashMap<String, Integer> maxStats;
 	public String lifeString = "Vie";
 	public String foodString = "Nourriture";
 	public String armorString = "Armure";
@@ -31,6 +32,14 @@ public class Classe {
 		this.icon = icon;
 		this.name = name;
 		stats = new HashMap<>();
+		maxStats = new HashMap<>();
+		maxStats.put(this.lifeString, 20);
+		maxStats.put(this.foodString, 4);
+		maxStats.put(this.armorString, 4);
+		maxStats.put(this.moneyString, 10);
+		maxStats.put(this.xpString, 23);
+		maxStats.put(this.levelString, 3);
+
 		stats.put(this.lifeString, life);
 		stats.put(this.foodString, food);
 		stats.put(this.armorString, armor);
@@ -54,21 +63,24 @@ public class Classe {
 	}
 
 	public void update(){
-		if(this.stats.get(xpString) == xpRequired && this.stats.get(levelString) < 3){
+		if(this.stats.get(xpString) == xpRequired && this.stats.get(levelString) < this.maxStats.get(levelString)){
 			game.dices.add(new CharacterDice());
 			this.addStat(levelString, 1);
 			xpRequired += xpRequired*2;
-		}else if(this.stats.get(xpString) >= 23){
-			this.stats.replace(xpString, 23);
+		}else if(this.stats.get(xpString) >= this.maxStats.get(xpString)){
+			this.stats.replace(xpString, this.maxStats.get(xpString));
 			this.addStat(lifeString, 1);
 		}
-		if(this.stats.get(foodString) == 0 ){
-
+		if(this.stats.get(lifeString) <= 0){
+			game.gameState = game.loseState;
 		}
 	}
 
 	public void addStat(String key, int value){
-		this.stats.replace(key, this.stats.get(key)+value);
+		while(this.stats.get(key) < this.maxStats.get(key) && value > 0){
+			this.stats.replace(key, this.stats.get(key)+1);
+			value --;
+		}
 	}
 
 	public void damageReceived(int damage, boolean armor){
@@ -83,7 +95,10 @@ public class Classe {
 	}
 
 	public void substractStat(String key, int value){
-		this.stats.replace(key, this.stats.get(key)-value);
+		while(this.stats.get(key) > 0 && value > 0){
+			this.stats.replace(key, this.stats.get(key)-1);
+			value --;
+		}
 	}
 
 }

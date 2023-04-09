@@ -1,5 +1,7 @@
 package cards;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import dices.DungeonDice;
 import dices.PoisonDice;
 import ennemy.Ennemy;
 import main.Game;
+import main.Utils;
 
 public class EnnemyCard extends Card{
 
@@ -19,8 +22,8 @@ public class EnnemyCard extends Card{
 
 	public EnnemyCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y, int stage) {
 		super(game, image, hitbox, x, y);
-		Random rand = new Random();
-		int rng = rand.nextInt(1);
+		name = "Carte Monstre";
+		int rng = Utils.randomNumber(0, 1);
 		if(rng == 0){
 			switch(stage){ // malédiction
 				case 1:
@@ -57,7 +60,7 @@ public class EnnemyCard extends Card{
 	}
 
 	@Override
-	public void update(ArrayList<Dice> dices, int stage){
+	public void updateOnRoll(ArrayList<Dice> dices, int stage){
 		int playerDamage = 0;
 		System.out.println(ennemy.name + " Vous attaque");
 		for(Dice d : dices){
@@ -99,13 +102,19 @@ public class EnnemyCard extends Card{
 					}
 				}
 			}
-			//game.canMove = false;
-			//game.canRoll = true;
 		}else{
 			System.out.println("Bravo vous avez terrasé " + ennemy.name);
 			game.selectedClass.addStat(game.selectedClass.xpString, ennemy.reward);
 		}
-		
+	}
+
+	@Override
+	public void additionalDraw(Graphics2D g2, int x, int y){
+		g2.setColor(Color.white);
+		g2.drawString(ennemy.name, x-(int)Utils.textToRectangle2D(ennemy.name, g2).getWidth()/2, y);
+		g2.drawString("PV : " + ennemy.life+"/"+ennemy.totalLife, x-(int)Utils.textToRectangle2D("PV : " + ennemy.life+"/"+ennemy.totalLife, g2).getWidth()/2, y+30);
+		g2.drawString("Dégats : " + Integer.toString(ennemy.damage), x-(int)Utils.textToRectangle2D("Dégats : " + Integer.toString(ennemy.damage), g2).getWidth()/2, y+60);
+		g2.drawString("Récompense : "+ Integer.toString(ennemy.reward), x-(int)Utils.textToRectangle2D("Récompense : "+ Integer.toString(ennemy.reward), g2).getWidth()/2, y+90);
 	}
 
 }

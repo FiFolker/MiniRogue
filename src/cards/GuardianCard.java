@@ -13,6 +13,7 @@ public class GuardianCard extends Card{
 
     public GuardianCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y) {
         super(game, image, hitbox, x, y);
+        name = "Carte Guardien";
 
         try {
             backCard = ImageIO.read(new File("assets/cards/guardianBackCard.png"));

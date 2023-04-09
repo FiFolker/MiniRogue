@@ -9,6 +9,8 @@ public class MerchantCard extends Card{
 
 	public MerchantCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y) {
 		super(game, image, hitbox, x, y);
+        name = "Carte Marchand";
+
 	}
 	
 }

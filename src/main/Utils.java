@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Random;
 
 public class Utils {
 
@@ -12,6 +13,10 @@ public class Utils {
 	
 	public static Rectangle2D textToRectangle2D(String txt, Graphics2D g2){
 		return g2.getFontMetrics().getStringBounds(txt, g2);
+	}
+
+	public static int randomNumber(int min, int max){
+		return (int)Math.floor(Math.random() * (max - min + 1) + min);
 	}
     
 }

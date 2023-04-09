@@ -5,16 +5,14 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 
 public class Button {
 
-	Rectangle button;
+	public Rectangle button;
 	Polygon icon;
 	BufferedImage image;
-	boolean isSelected = false;
 	String toolTipMessage;
 	String buttonText;
 
@@ -47,8 +45,6 @@ public class Button {
 		
 		if(inCollision()){
 			g2.setColor(Color.gray);
-		}else if(isSelected){
-			g2.setColor(Color.green);
 		}else{
 			g2.setColor(Color.white);
 		}
