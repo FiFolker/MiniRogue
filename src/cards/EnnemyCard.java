@@ -15,7 +15,7 @@ import main.Game;
 
 public class EnnemyCard extends Card{
 
-	Ennemy ennemy;
+	public Ennemy ennemy;
 
 	public EnnemyCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y, int stage) {
 		super(game, image, hitbox, x, y);
@@ -77,7 +77,7 @@ public class EnnemyCard extends Card{
 				if(d.getClass() == DungeonDice.class){
 					switch(d.value){
 						case 1:
-							System.out.println("Attaque ennemi loupé ! " + ennemy.damage + " dégats");
+							System.out.println("Attaque ennemi loupé ! ");
 							break;
 						case 2:
 						case 3:

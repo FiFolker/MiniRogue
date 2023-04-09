@@ -13,7 +13,7 @@ import main.Utils;
 public class Classe {
 	
 	Game game;
-	BufferedImage icon;
+	public BufferedImage icon;
 	String name;
 	String info;
 	public int xpRequired = 6;
@@ -68,10 +68,8 @@ public class Classe {
 	public void damageReceived(int damage, boolean armor){
 		if(armor){
 			while(this.stats.get(armorString) > 0 && damage > 0){
-				System.out.println(damage + " avant");
 				substractStat(armorString, 1);
 				damage --;
-				System.out.println(damage + " après");
 			}
 		}
 		substractStat(lifeString, damage);

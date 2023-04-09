@@ -190,9 +190,21 @@ public class Game extends JPanel implements Runnable{
 				
 			}
 			if(diceHasRolled){
-				canMove = true;
-				diceHasRolled = false;
 				currentCard.update(dices, stage);
+				if(currentCard.getClass() == EnnemyCard.class){
+					EnnemyCard e = (EnnemyCard)currentCard;
+					if(e.ennemy.life > 0){
+						diceHasRolled = false;
+						canRoll = true;
+					}else{
+						canMove = true;
+						diceHasRolled = false;
+					}
+				}else{
+					canMove = true;
+					diceHasRolled = false;
+				}
+				
 			}
 			selectedClass.update();
 		}
@@ -260,8 +272,8 @@ public class Game extends JPanel implements Runnable{
 				d.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
 				xDice += Utils.textToRectangle2D(d.name, g2).getWidth() + 10;
 			}
-			g2.drawImage(token, currentCard.hitbox.x + currentCard.hitbox.width - 64,
-			currentCard.hitbox.y + currentCard.hitbox.height - 64, 48, 48, null);
+			g2.drawImage(selectedClass.icon, currentCard.hitbox.x + currentCard.hitbox.width - 80,
+			currentCard.hitbox.y + currentCard.hitbox.height - 80, 64, 64, null);
 			diceButton.draw(g2);
 			gui.draw(g2);
 		}
