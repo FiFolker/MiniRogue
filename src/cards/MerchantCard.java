@@ -5,9 +5,8 @@ import java.awt.image.BufferedImage;
 
 public class MerchantCard extends Card{
 
-    public MerchantCard(BufferedImage image, String name, Rectangle hitbox, int x, int y) {
-        super(image, name, hitbox, x, y);
-        //TODO Auto-generated constructor stub
-    }
-    
+	public MerchantCard(BufferedImage image, Rectangle hitbox, int x, int y) {
+		super(image, hitbox, x, y);
+	}
+	
 }

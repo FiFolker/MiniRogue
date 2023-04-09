@@ -9,14 +9,24 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import cards.BurialCard;
 import cards.Card;
+import cards.EnnemyCard;
+import cards.FireCampCard;
 import cards.GuardianCard;
+import cards.MerchantCard;
+import cards.ObjectCard;
+import cards.SanctuaryCard;
+import cards.TrapCard;
+import cards.TreasureCard;
 import classes.Classe;
 import controls.MouseHandler;
 
@@ -33,6 +43,7 @@ public class Game extends JPanel implements Runnable{
 	GUI gui = new GUI(this);
 	Button diceButton;
 	Coordonnees currentPos;
+	Card currentCard;
 	public ArrayList<Dice> dices = new ArrayList<>();
 
 	public static final int SCREEN_WIDTH = 1280;
@@ -42,9 +53,17 @@ public class Game extends JPanel implements Runnable{
 	public final int playState = 1;
 	public Font sansSerif = new Font("Sans-Serif", Font.BOLD, 15);
 	public Font title = new Font("Sans-Serif", Font.BOLD, 48);
+	BufferedImage token;
 	int currentClasse = 0;
-	int stage = 0;
+	int stage = 1;
 	int totalStage = 4;
+	int zone = 1;
+	int[] zonePerStage = {2, 3, 3, 4};
+	int topPos = 50;
+	int leftPos = 450;
+	boolean diceHasRolled = false;
+	int sizeWidthCard = 202;
+	int sizeHeightCard = 250;
 
 	int FPS = 60;
 
@@ -66,6 +85,7 @@ public class Game extends JPanel implements Runnable{
 		diceButton = new Button(new Rectangle(655, 850, 200, 50), "Lancer Dé");
 		dices.add(new Dice(6));
 		try {
+			token = ImageIO.read(new File("assets/jeton/player.png"));
 			classes[0] = new Classe(this, ImageIO.read(new File("assets/classes/rogue.png")), "Voleur", 7, 3, 0, 8);
 			classes[1] = new Classe(this, ImageIO.read(new File("assets/classes/mage.png")), "Magicien", 4, 5, 0, 3);
 			classes[2] = new Classe(this, ImageIO.read(new File("assets/classes/swordman.png")), "Epeiste", 10, 3, 3, 5);
@@ -79,33 +99,31 @@ public class Game extends JPanel implements Runnable{
 	}
 
 	public void loadCards(){
-		int topPos = 50;
-		int leftPos = 450;
+		
 		currentPos = new Coordonnees(0, 0);
 		for(int i = 0;i<cardBoard.length; i++){
 			for(int j=0; j<cardBoard[i].length;j++){
-				BufferedImage image = null;
-				try {
-					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
-				} catch (IOException e) {
-					System.out.println("erreur dans le load de l'image");
-					e.printStackTrace();
-				}
+				
 
-				int sizeWidth = image.getWidth()*2;
-				int sizeHeight = image.getHeight()*2;
-
-				int x = leftPos+(i*sizeWidth)+10;
-				int y = topPos+(j*sizeHeight)+10;
-				if(i == 2 && j ==2){
-					cardBoard[i][j] = new GuardianCard(image, "Test "+i, new Rectangle(x,y,sizeWidth, sizeHeight), x, y);
+				int x = leftPos+(i*sizeWidthCard)+10;
+				int y = topPos+(j*sizeHeightCard)+10;
+				if(i == cardBoard.length-1 && j == cardBoard[i].length-1){
+					BufferedImage image = null;
+					try {
+						image = ImageIO.read(new File("assets/cards/cardRed.png"));
+					} catch (IOException e) {
+						System.out.println("erreur dans le load de l'image");
+						e.printStackTrace();
+					}
+					cardBoard[i][j] = new GuardianCard(image, new Rectangle(x,y,sizeWidthCard, sizeHeightCard), x, y);
 				}else{
-					cardBoard[i][j] = new Card(image, "Test "+i, new Rectangle(x,y,sizeWidth, sizeHeight), x, y);
+					cardBoard[i][j] = randomCard(x, y);
 				}
 			}
 			
 			
 		}
+		currentCard = cardBoard[0][0];
 		cardBoard[0][0].revealCard();
 	}
 
@@ -148,20 +166,13 @@ public class Game extends JPanel implements Runnable{
 		if(gameState == menuState){
 			menu.update();
 		}else if (gameState == playState){
-			for(int i=0;i<cardBoard.length;i++){
-				for(int j=0;j<cardBoard[i].length;j++){
-					if(cardBoard[i][j].isClicked() && !cardBoard[i][j].isReveal && isAdjacentToCurrentPos(new Coordonnees(i, j))){
-						cardBoard[i][j].revealCard();
-						currentPos.ligne = i;
-						currentPos.colonne = j;
-					}
-				}
-			}
+			movementOnTheBoard();
 			selectedClass.update();
 			if(diceButton.isClicked()){
 				for(Dice d : dices){
 					d.roll();
 				}
+				diceHasRolled = true;
 				
 			}
 		}
@@ -170,6 +181,34 @@ public class Game extends JPanel implements Runnable{
 		}
 
 		
+	}
+
+	public void movementOnTheBoard(){
+		for(int col=0;col<cardBoard.length;col++){
+			for(int lig=0;lig<cardBoard[col].length;lig++){
+				if(cardBoard[col][lig].isClicked() && !cardBoard[col][lig].isReveal && isAdjacentToCurrentPos(new Coordonnees(lig, col))){// && diceHasRolled
+					cardBoard[col][lig].revealCard();
+					
+					currentPos.ligne = lig;
+					currentPos.colonne = col;
+					diceHasRolled = false;
+
+					currentCard = cardBoard[currentPos.colonne][currentPos.ligne];
+
+					if(col == cardBoard.length-1 && lig == cardBoard[col].length - 1){
+						if(zone == zonePerStage[stage-1] && stage < totalStage){
+							stage ++;
+							zone = 1;
+							loadCards();
+						}else if(zone < zonePerStage[stage-1]){
+							zone ++;
+							loadCards();
+						}
+						
+					}
+				}
+			}
+		}
 	}
 
 	public void paintComponent(Graphics g){
@@ -181,13 +220,13 @@ public class Game extends JPanel implements Runnable{
 		}
 		if(gameState == playState){
 			if(cardBoard[0] != null){
-				for(int i=0;i<cardBoard.length;i++){
-					for(int j=0;j<cardBoard[i].length;j++){
-						if(!cardBoard[i][j].isHover()){
-							cardBoard[i][j].draw(g2);
+				for(int col=0;col<cardBoard.length;col++){
+					for(int lig=0;lig<cardBoard[col].length;lig++){
+						if(!cardBoard[col][lig].isHover()){
+							cardBoard[col][lig].draw(g2);
 						}
-						if(cardBoard[i][j].isHover()){
-							cardHovered = cardBoard[i][j];
+						if(cardBoard[col][lig].isHover()){
+							cardHovered = cardBoard[col][lig];
 						}
 					}
 				}
@@ -200,6 +239,8 @@ public class Game extends JPanel implements Runnable{
 				d.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
 				xDice += 10;
 			}
+			g2.drawImage(token, currentCard.hitbox.x + currentCard.hitbox.width - 64,
+			currentCard.hitbox.y + currentCard.hitbox.height - 64, 48, 48, null);
 			diceButton.draw(g2);
 			gui.draw(g2);
 		}
@@ -232,5 +273,90 @@ public class Game extends JPanel implements Runnable{
 		return isAdjacent;
 	}
 	
+
+	public Card randomCard(int x, int y){
+		Card returnedCard = null;
+		Random rand = new Random();
+		BufferedImage image = null;
+		int rng = rand.nextInt(7);
+		int multiplicateur = 2;
+		switch(rng){
+			case 0:
+				try {
+					image = ImageIO.read(new File("assets/cards/cardGray.png"));
+				} catch (IOException e) {
+					System.out.println("erreur dans le load de l'image");
+					e.printStackTrace();
+				}
+				returnedCard = new BurialCard(image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				break;
+			case 1:
+				try {
+					image = ImageIO.read(new File("assets/cards/cardRed.png"));
+				} catch (IOException e) {
+					System.out.println("erreur dans le load de l'image");
+					e.printStackTrace();
+				}
+				returnedCard = new EnnemyCard(image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				break;
+			case 2:
+				try {
+					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
+				} catch (IOException e) {
+					System.out.println("erreur dans le load de l'image");
+					e.printStackTrace();
+				}
+				returnedCard = new FireCampCard(image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				break;
+			case 3:
+				try {
+					image = ImageIO.read(new File("assets/cards/cardGreen.png"));
+				} catch (IOException e) {
+					System.out.println("erreur dans le load de l'image");
+					e.printStackTrace();
+				}
+				returnedCard = new MerchantCard(image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				break;
+			case 4:
+				try {
+					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
+				} catch (IOException e) {
+					System.out.println("erreur dans le load de l'image");
+					e.printStackTrace();
+				}
+				returnedCard = new ObjectCard(image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				break;
+			case 5:
+				try {
+					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
+				} catch (IOException e) {
+					System.out.println("erreur dans le load de l'image");
+					e.printStackTrace();
+				}
+				returnedCard = new SanctuaryCard(image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				break;
+			case 6:
+				try {
+					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
+				} catch (IOException e) {
+					System.out.println("erreur dans le load de l'image");
+					e.printStackTrace();
+				}
+				returnedCard = new TrapCard(image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				break;
+			case 7:
+				try {
+					image = ImageIO.read(new File("assets/cards/cardYellow.png"));
+				} catch (IOException e) {
+					System.out.println("erreur dans le load de l'image");
+					e.printStackTrace();
+				}
+				returnedCard = new TreasureCard(image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				break;
+		}
+
+		return returnedCard;
+
+	}
 	
 }

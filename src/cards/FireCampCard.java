@@ -5,8 +5,8 @@ import java.awt.image.BufferedImage;
 
 public class FireCampCard extends Card{
 
-    public FireCampCard(BufferedImage image, String name, Rectangle hitbox, int x, int y) {
-        super(image, name, hitbox, x, y);
+    public FireCampCard(BufferedImage image, Rectangle hitbox, int x, int y) {
+        super(image, hitbox, x, y);
         //TODO Auto-generated constructor stub
     }
     

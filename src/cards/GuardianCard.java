@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 
 public class GuardianCard extends Card{
 
-    public GuardianCard(BufferedImage image, String name, Rectangle hitbox, int x, int y) {
-        super(image, name, hitbox, x, y);
+    public GuardianCard(BufferedImage image, Rectangle hitbox, int x, int y) {
+        super(image, hitbox, x, y);
 
         try {
             backCard = ImageIO.read(new File("assets/cards/guardianBackCard.png"));

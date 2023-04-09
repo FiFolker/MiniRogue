@@ -16,13 +16,12 @@ public class Card {
 	BufferedImage backCard;
 	BufferedImage image;
 	BufferedImage currentImage;
-	String name;
-	Rectangle hitbox;
+	public Rectangle hitbox;
 	int x,y;
 	private int zoom = 15;
 	public boolean isReveal = false;
 
-	public Card(BufferedImage image, String name, Rectangle hitbox, int x, int y) {
+	public Card(BufferedImage image, Rectangle hitbox, int x, int y) {
 		try {
 			backCard = ImageIO.read(new File("assets/cards/backCard.png"));
 		} catch (IOException e) {
@@ -30,7 +29,6 @@ public class Card {
 		}
 		currentImage = backCard;
 		this.image = image;
-		this.name = name;
 		this.hitbox = hitbox;
 		this.x = x;
 		this.y = y;
