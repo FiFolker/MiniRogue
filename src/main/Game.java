@@ -27,6 +27,7 @@ import cards.SanctuaryCard;
 import cards.TrapCard;
 import cards.TreasureCard;
 import classes.Classe;
+import controls.KeyHandler;
 import controls.MouseHandler;
 import dices.CharacterDice;
 import dices.Dice;
@@ -38,6 +39,7 @@ public class Game extends JPanel implements Runnable{
 	JFrame frame;
 	Thread gameThread;
 	public static MouseHandler mouseH = new MouseHandler();
+	public static KeyHandler keyH = new KeyHandler();
 	Card[][] cardBoard = new Card[3][3];
 	Classe[] classes = new Classe[4];
 	Card cardHovered = null;
@@ -66,9 +68,9 @@ public class Game extends JPanel implements Runnable{
 	int[] zonePerStage = {2, 2, 3, 3};
 	int topPos = 50;
 	int leftPos = 450;
-	boolean diceHasRolled = false;
-	boolean canMove = false;
-	boolean canRoll = true;
+	public boolean diceHasRolled = false;
+	public boolean canMove = false;
+	public boolean canRoll = true;
 	int sizeWidthCard = 202;
 	int sizeHeightCard = 250;
 
@@ -87,6 +89,7 @@ public class Game extends JPanel implements Runnable{
 	public void setup(){
 		this.addMouseListener(mouseH);
 		this.addMouseMotionListener(mouseH);
+		this.addKeyListener(keyH);
 		this.setBackground(Color.black);
 
 		gameState = menuState;
@@ -126,17 +129,7 @@ public class Game extends JPanel implements Runnable{
 					}
 					cardBoard[i][j] = new GuardianCard(this, image, new Rectangle(x,y,sizeWidthCard, sizeHeightCard), x, y);
 				}else{
-					//cardBoard[i][j] = randomCard(x, y);
-					BufferedImage image = null;
-
-					try {
-						image = ImageIO.read(new File("assets/cards/cardYellow.png"));
-					} catch (IOException e) {
-						System.out.println("erreur dans le load de l'image");
-						e.printStackTrace();
-					}
-					
-					cardBoard[i][j] =  new TreasureCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+					cardBoard[i][j] = randomCard(x, y);
 				}
 			}
 			
@@ -193,12 +186,13 @@ public class Game extends JPanel implements Runnable{
 				}
 				diceHasRolled = true;
 				canRoll = false;
+				Game.mouseH.leftClickedOnceTime = false;
 				
 			}
 			if(diceHasRolled){
-				currentCard.update(dices, stage);
 				canMove = true;
 				diceHasRolled = false;
+				currentCard.update(dices, stage);
 			}
 			selectedClass.update();
 		}
@@ -275,7 +269,7 @@ public class Game extends JPanel implements Runnable{
 
 	public boolean moveIsOk(Coordonnees coord){
 		boolean isOk = false;
-		if(coord.estDansPlateau() && coord.ligne -1 == currentPos.ligne || coord.colonne -1 == currentPos.colonne){
+		if(coord.estDansPlateau() && coord.ligne - 1 == currentPos.ligne ^ coord.colonne -1 == currentPos.colonne){
 			isOk = true;
 		}
 
@@ -305,7 +299,7 @@ public class Game extends JPanel implements Runnable{
 					System.out.println("erreur dans le load de l'image");
 					e.printStackTrace();
 				}
-				returnedCard = new EnnemyCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				returnedCard = new EnnemyCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, stage);
 				break;
 			case 2:
 				try {

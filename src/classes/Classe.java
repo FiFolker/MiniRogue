@@ -65,4 +65,21 @@ public class Classe {
 		this.stats.replace(key, this.stats.get(key)+value);
 	}
 
+	public void damageReceived(int damage, boolean armor){
+		if(armor){
+			while(this.stats.get(armorString) > 0 && damage > 0){
+				System.out.println(damage + " avant");
+				substractStat(armorString, 1);
+				damage --;
+				System.out.println(damage + " après");
+			}
+		}
+		substractStat(lifeString, damage);
+		
+	}
+
+	public void substractStat(String key, int value){
+		this.stats.replace(key, this.stats.get(key)-value);
+	}
+
 }
