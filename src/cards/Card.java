@@ -1,14 +1,15 @@
 package cards;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import dices.Dice;
 import main.Game;
 
 public class Card {
@@ -17,11 +18,13 @@ public class Card {
 	BufferedImage image;
 	BufferedImage currentImage;
 	public Rectangle hitbox;
+	Game game;
 	int x,y;
 	private int zoom = 15;
 	public boolean isReveal = false;
 
-	public Card(BufferedImage image, Rectangle hitbox, int x, int y) {
+	public Card(Game game, BufferedImage image, Rectangle hitbox, int x, int y) {
+		this.game = game;
 		try {
 			backCard = ImageIO.read(new File("assets/cards/backCard.png"));
 		} catch (IOException e) {
@@ -55,5 +58,7 @@ public class Card {
 			g2.drawImage(currentImage, x, y, hitbox.width, hitbox.height, null);
 		}
 	}
+
+	public void update(ArrayList<Dice> dices, int stage) {}
 	
 }

@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-import main.Dice;
+import dices.Dice;
 import main.Game;
 import main.Utils;
 

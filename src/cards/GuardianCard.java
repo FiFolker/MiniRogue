@@ -7,10 +7,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import main.Game;
+
 public class GuardianCard extends Card{
 
-    public GuardianCard(BufferedImage image, Rectangle hitbox, int x, int y) {
-        super(image, hitbox, x, y);
+    public GuardianCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y) {
+        super(game, image, hitbox, x, y);
 
         try {
             backCard = ImageIO.read(new File("assets/cards/guardianBackCard.png"));

@@ -21,6 +21,8 @@ public class GUI {
 		g2.setColor(Color.white);
 		g2.setFont(game.title);
 		g2.drawString("Etage n°"+game.stage+"/"+game.totalStage, game.getWidth()/2, 40);
+		g2.setFont(game.secondTitle);
+		g2.drawString("Zone n°"+game.zone+"/"+game.zonePerStage[game.stage-1], game.getWidth()/2, 80);
 		g2.drawLine(xLine, 0, xLine, game.getHeight());
 		g2.setFont(game.sansSerif);
 		game.selectedClass.drawCard(g2, 25, 25);

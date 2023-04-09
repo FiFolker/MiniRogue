@@ -3,10 +3,12 @@ package cards;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import main.Game;
+
 public class ObjectCard extends Card{
 
-    public ObjectCard(BufferedImage image, Rectangle hitbox, int x, int y) {
-        super(image, hitbox, x, y);
+    public ObjectCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y) {
+        super(game, image, hitbox, x, y);
         //TODO Auto-generated constructor stub
     }
     
