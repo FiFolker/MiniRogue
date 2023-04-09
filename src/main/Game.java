@@ -34,6 +34,7 @@ import dices.DungeonDice;
 
 public class Game extends JPanel implements Runnable{
 
+	// IMPORTATION DE CLASSES UTILES AU JEU
 	JFrame frame;
 	Thread gameThread;
 	public static MouseHandler mouseH = new MouseHandler();
@@ -41,7 +42,7 @@ public class Game extends JPanel implements Runnable{
 	Classe[] classes = new Classe[4];
 	Card cardHovered = null;
 	Menu menu;
-	Classe selectedClass;
+	public Classe selectedClass;
 	GUI gui = new GUI(this);
 	Button diceButton;
 	Coordonnees currentPos;
@@ -50,6 +51,7 @@ public class Game extends JPanel implements Runnable{
 
 	public static final int SCREEN_WIDTH = 1280;
 
+	// VARIABLE DE JEU
 	public int gameState; 
 	public final int menuState = 0;
 	public final int playState = 1;
@@ -70,6 +72,7 @@ public class Game extends JPanel implements Runnable{
 	int sizeWidthCard = 202;
 	int sizeHeightCard = 250;
 
+	// FPS
 	int FPS = 60;
 
 	public Game(JFrame frame) {
@@ -197,6 +200,7 @@ public class Game extends JPanel implements Runnable{
 				canMove = true;
 				diceHasRolled = false;
 			}
+			selectedClass.update();
 		}
 		if(mouseH.leftClickedOnceTime){
 			mouseH.leftClickedOnceTime = false;
@@ -208,7 +212,7 @@ public class Game extends JPanel implements Runnable{
 	public void movementOnTheBoard(){
 		for(int col=0;col<cardBoard.length;col++){
 			for(int lig=0;lig<cardBoard[col].length;lig++){
-				if(cardBoard[col][lig].isClicked() && !cardBoard[col][lig].isReveal && moveIsOk(new Coordonnees(lig, col))){// && canMove
+				if(cardBoard[col][lig].isClicked() && !cardBoard[col][lig].isReveal && moveIsOk(new Coordonnees(lig, col)) && canMove){// 
 					cardBoard[col][lig].revealCard();
 					
 					currentPos.ligne = lig;

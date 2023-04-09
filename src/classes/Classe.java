@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import dices.CharacterDice;
 import dices.Dice;
 import main.Game;
 import main.Utils;
@@ -15,23 +16,27 @@ public class Classe {
 	BufferedImage icon;
 	String name;
 	String info;
-	public int xp = 0;
 	public int xpRequired = 6;
-	public int level = 0;
 	public int size = 128;
 	public HashMap<String, Integer> stats;
+	public String lifeString = "Vie";
+	public String foodString = "Nourriture";
+	public String armorString = "Armure";
+	public String moneyString = "Argent";
+	public String levelString = "Niveau";
+	public String xpString = "XP";
 
 	public Classe(Game game, BufferedImage icon, String name, int life, int food, int armor, int money) {
 		this.game = game;
 		this.icon = icon;
 		this.name = name;
 		stats = new HashMap<>();
-		stats.put("Vie", life);
-		stats.put("Nourriture", food);
-		stats.put("Armure", armor);
-		stats.put("Argent", money);
-		stats.put("Niveau", level);
-		stats.put("XP", xp);
+		stats.put(this.lifeString, life);
+		stats.put(this.foodString, food);
+		stats.put(this.armorString, armor);
+		stats.put(this.moneyString, money);
+		stats.put(this.levelString, 0);
+		stats.put(this.xpString, 0);
 		info = "Vie : " + life + " | Nourriture : " + food + " | Armure : " + armor + " | Argent : " + money; 
 	} 
 
@@ -49,11 +54,15 @@ public class Classe {
 	}
 
 	public void update(){
-		if(xp == xpRequired){
-			game.dices.add(new Dice(6));
-			level ++;
+		if(this.stats.get(xpString) == xpRequired){
+			game.dices.add(new CharacterDice());
+			this.addStat(levelString, 1);
 			xpRequired += xpRequired*2;
 		}
+	}
+
+	public void addStat(String key, int value){
+		this.stats.replace(key, this.stats.get(key)+value);
 	}
 
 }

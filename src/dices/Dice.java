@@ -28,7 +28,7 @@ public class Dice {
 	}
 
 	public void roll(){
-		value = rand.nextInt(maxValue);
+		value = rand.nextInt(maxValue-1)+1;
 	}
 
 	public void draw(Graphics2D g2, int x, int y){
