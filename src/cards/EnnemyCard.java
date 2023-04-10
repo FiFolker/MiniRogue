@@ -1,11 +1,10 @@
 package cards;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Random;
 
 import dices.CharacterDice;
 import dices.CurseDice;
@@ -13,15 +12,20 @@ import dices.Dice;
 import dices.DungeonDice;
 import dices.PoisonDice;
 import ennemy.Ennemy;
+import main.Coordonnees;
 import main.Game;
 import main.Utils;
 
-public class EnnemyCard extends Card{
+public class EnnemyCard extends UpdateOnRoll{
 
 	public Ennemy ennemy;
+	String playerAttack = " ";
+	String ennemyAttack = " ";
+	String result = "Combat En Cours ...";
 
-	public EnnemyCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y, int stage) {
-		super(game, image, hitbox, x, y);
+	public EnnemyCard(Game game, Rectangle hitbox, int x, int y, int stage, Coordonnees coord) {
+		super(game, hitbox, x, y, coord);
+		image = Utils.loadImage("assets/cards/cardRed.png");
 		name = "Carte Monstre";
 		int rng = Utils.randomNumber(0, 1);
 		if(rng == 0){
@@ -60,61 +64,92 @@ public class EnnemyCard extends Card{
 	}
 
 	@Override
-	public void updateOnRoll(ArrayList<Dice> dices, int stage){
+	public void updateOnRoll(){
 		int playerDamage = 0;
-		System.out.println(ennemy.name + " Vous attaque");
-		for(Dice d : dices){
-			if(d.getClass() == CharacterDice.class){
-				playerDamage += d.value;
-				while(d.value >= 5){
-					d.roll();
+		ennemyAttack = " ";
+		playerAttack = " ";
+		if(ennemy.life>0){
+			for(CharacterDice d : game.characterDices){
+				if(d instanceof CharacterDice){
 					playerDamage += d.value;
-					System.out.println(d.value + " : " + playerDamage);
-				}
-			}
-		}
-		System.out.println("Vous avez fait " + playerDamage + " dégats\nL'ennemi à " + (ennemy.life-playerDamage) + "/" + ennemy.totalLife + " pv");
-		ennemy.life -= playerDamage;
-		if(ennemy.life > 0){
-			for(Dice d : dices){
-				if(d.getClass() == DungeonDice.class){
-					switch(d.value){
-						case 1:
-							System.out.println("Attaque ennemi loupé ! ");
-							break;
-						case 2:
-						case 3:
-						case 4:
-						case 5:
-							System.out.println("Attaque ennemi réussi ! " + ennemy.damage + " dégats");
-							game.selectedClass.damageReceived(ennemy.damage, true);
-							if(ennemy.applicableDice != null){
-								game.dices.add(ennemy.applicableDice);
-							}
-							break;
-						case 6:
-							System.out.println("Attaque ennemi Parfaite ! " + ennemy.damage + " dégats");
-							game.selectedClass.damageReceived(ennemy.damage, false);
-							if(ennemy.applicableDice != null){
-								game.dices.add(ennemy.applicableDice);
-							}
-							break;
+					System.out.println("avant la boucle " + d.value + " : " + playerDamage);
+					while(d.value >= 5){
+						d.roll();
+						playerDamage += d.value;
+						System.out.println(d.value + " : " + playerDamage);
 					}
 				}
 			}
+			playerAttack = "Vous avez fait " + playerDamage + " dégâts";
+			ennemy.life -= playerDamage;
+		}
+		
+		if(ennemy.life > 0){
+			actionEnnemy(game.dungeonDice.value);
+			game.diceHasRolled = false;
+			game.canMove = false;
 		}else{
-			System.out.println("Bravo vous avez terrasé " + ennemy.name);
+			game.diceHasRolled = false;
+			result = "Bravo vous avez terrasé " + ennemy.name;
 			game.selectedClass.addStat(game.selectedClass.xpString, ennemy.reward);
+			hasTakenReward = true;
+			
+		}
+	}
+
+	public void actionEnnemy(int value){
+		switch(value){
+			case 1:
+				ennemyAttack = "Attaque ennemi loupé ! ";
+				break;
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+				ennemyAttack = "Attaque ennemi réussi ! " + ennemy.damage + " dégâts";
+				game.selectedClass.damageReceived(ennemy.damage, true);
+				addDice();
+				break;
+			case 6:
+				ennemyAttack = "Attaque ennemi Parfaite ! " + ennemy.damage + " dégâts";
+				game.selectedClass.damageReceived(ennemy.damage, false);
+				addDice();
+				break;
+		}
+	}
+
+	public void addDice(){
+		if(ennemy.applicableDice != null){
+			if(ennemy.applicableDice instanceof CurseDice){
+				game.curseDices.add((CurseDice)ennemy.applicableDice);
+			}
+			if(ennemy.applicableDice instanceof PoisonDice){
+				game.poisonDices.add((PoisonDice)ennemy.applicableDice);
+			}
 		}
 	}
 
 	@Override
-	public void additionalDraw(Graphics2D g2, int x, int y){
+	public void drawAdditional(Graphics2D g2, int x, int y) {
 		g2.setColor(Color.white);
+		Font defaultFont = g2.getFont();
 		g2.drawString(ennemy.name, x-(int)Utils.textToRectangle2D(ennemy.name, g2).getWidth()/2, y);
 		g2.drawString("PV : " + ennemy.life+"/"+ennemy.totalLife, x-(int)Utils.textToRectangle2D("PV : " + ennemy.life+"/"+ennemy.totalLife, g2).getWidth()/2, y+30);
 		g2.drawString("Dégats : " + Integer.toString(ennemy.damage), x-(int)Utils.textToRectangle2D("Dégats : " + Integer.toString(ennemy.damage), g2).getWidth()/2, y+60);
-		g2.drawString("Récompense : "+ Integer.toString(ennemy.reward), x-(int)Utils.textToRectangle2D("Récompense : "+ Integer.toString(ennemy.reward), g2).getWidth()/2, y+90);
+		g2.drawString("Récompense : "+ Integer.toString(ennemy.reward) + " XP", x-(int)Utils.textToRectangle2D("Récompense : "+ Integer.toString(ennemy.reward)+ " XP", g2).getWidth()/2 , y+90);
+		
+		g2.drawLine(0, y+110, game.gui.xLine, y+110);
+		g2.setFont(game.sansSerif);
+		g2.drawString("Combat", x-(int)Utils.textToRectangle2D("Combat", g2).getWidth()/2, y+130);
+		g2.setFont(defaultFont);
+		g2.drawString(playerAttack, x-(int)Utils.textToRectangle2D(playerAttack, g2).getWidth()/2, y+150);
+		g2.setColor(Color.red);
+		g2.drawString(ennemyAttack, x-(int)Utils.textToRectangle2D(ennemyAttack, g2).getWidth()/2, y+170);
+		g2.setColor(Color.white);
+		g2.drawString(result, x-(int)Utils.textToRectangle2D(result, g2).getWidth()/2, y+190);
+
+
 	}
+
 
 }

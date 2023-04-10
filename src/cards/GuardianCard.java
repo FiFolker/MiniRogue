@@ -7,19 +7,17 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import main.Coordonnees;
 import main.Game;
+import main.Utils;
 
 public class GuardianCard extends Card{
 
-    public GuardianCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y) {
-        super(game, image, hitbox, x, y);
+    public GuardianCard(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
+        super(game, hitbox, x, y, coord);
         name = "Carte Guardien";
-
-        try {
-            backCard = ImageIO.read(new File("assets/cards/guardianBackCard.png"));
-        } catch (IOException e) {
-			System.out.println("erreur dans le load de la BackCard du Guardian" + e);
-        }
+        backCard = Utils.loadImage("assets/cards/guardianBackCard.png");
+        image = Utils.loadImage("assets/cards/cardRed.png");
         currentImage = backCard;
     }
     

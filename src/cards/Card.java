@@ -1,43 +1,41 @@
 package cards;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
-import dices.Dice;
+import main.Coordonnees;
 import main.Game;
+import main.IUpdateAndDraw;
 import main.Utils;
 
-public class Card {
+public class Card implements IUpdateAndDraw{
 
 	BufferedImage backCard;
 	BufferedImage image;
 	BufferedImage currentImage;
-	String name = "defaultCard";
+	public String name = "defaultCard";
 	public Rectangle hitbox;
+	public Coordonnees coord;
 	Game game;
 	int x,y;
 	private int zoom = 15;
 	public boolean isReveal = false;
+	boolean hasTakenReward = false;
 
-	public Card(Game game, BufferedImage image, Rectangle hitbox, int x, int y) {
+	public Card(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
 		this.game = game;
-		try {
-			backCard = ImageIO.read(new File("assets/cards/backCard.png"));
-		} catch (IOException e) {
-			System.out.println("erreur dans le load de la BackCard " + e);
-		}
+		
+		backCard = Utils.loadImage("assets/cards/backCard.png");
+		image = Utils.loadImage("assets/cards/cardBlue.png");
 		currentImage = backCard;
-		this.image = image;
+		this.coord = coord;
 		this.hitbox = hitbox;
 		this.x = x;
 		this.y = y;
 	}
+
 
 	public boolean isHover(){
 		return hitbox.contains(Game.mouseH.location);
@@ -52,8 +50,12 @@ public class Card {
 		isReveal = true;
 	}
 
+	@Override
+	public void update(){}
+
+	@Override
 	public void draw(Graphics2D g2){
-		
+		g2.setColor(Color.white);
 		if(isHover()){
 			g2.drawImage(currentImage, x-zoom/2, y-zoom/2, hitbox.width+zoom, hitbox.height+zoom, null);
 		}else{
@@ -62,9 +64,5 @@ public class Card {
 		g2.drawString(name, x + hitbox.width/2 - (int)Utils.textToRectangle2D(name, g2).getWidth()/2 , y + 30);
 	}
 
-	public void updateOnRoll(ArrayList<Dice> dices, int stage) {}
-	public void updateAlways(){}
-
-	public void additionalDraw(Graphics2D g2, int x, int y){}
 	
 }

@@ -3,7 +3,7 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class GUI {
+public class GUI implements IUpdateAndDraw{
 	
 	Game game;
 	public int xLine = 300;
@@ -16,10 +16,12 @@ public class GUI {
 
 	}
 
+	@Override
 	public void update(){
 		
 	}
-
+	
+	@Override
 	public void draw(Graphics2D g2){
 		g2.setColor(Color.white);
 		g2.setFont(game.title);
@@ -34,9 +36,9 @@ public class GUI {
 		int yStatsbyStat = game.selectedClass.size*2;
 		for(String s : game.selectedClass.stats.keySet()){
 			if(s.equals("XP")){
-				g2.drawString(s + " : " + game.selectedClass.stats.get(s) +"/"+game.selectedClass.xpRequired, 10, yStatsbyStat);
+				g2.drawString(s + " : " + game.selectedClass.stats.get(s) +" / "+game.selectedClass.xpRequired, 10, yStatsbyStat);
 			}else{
-				g2.drawString(s + " : " + game.selectedClass.stats.get(s), 10, yStatsbyStat);
+				g2.drawString(s + " : " + game.selectedClass.stats.get(s) + " / "+game.selectedClass.maxStats.get(s), 10, yStatsbyStat);
 			}
 			yStatsbyStat += 20;
 		}

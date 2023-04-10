@@ -8,9 +8,11 @@ import java.util.HashMap;
 
 import dices.Dice;
 import main.Button;
+import main.Coordonnees;
 import main.Game;
+import main.Utils;
 
-public class FireCampCard extends Card{
+public class FireCampCard extends UpdateAlways{
 
 	HashMap<String, Button> listButtons;
 	final String xpButton = "xpButton";
@@ -19,10 +21,9 @@ public class FireCampCard extends Card{
 	int width = 200;
 	int height = 50;
 	int gap = 10;
-	boolean hasTaken = false;
-
-	public FireCampCard(Game game, BufferedImage image, Rectangle hitbox, int x, int y) {
-		super(game, image, hitbox, x, y);
+	public FireCampCard(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
+		super(game, hitbox, x, y, coord);
+		image = Utils.loadImage("assets/cards/cardBlue.png");
 		name = "Carte Feu de Camp";
 		listButtons = new HashMap<>();
 		setup();
@@ -41,9 +42,10 @@ public class FireCampCard extends Card{
 
 	@Override
 	public void updateAlways(){
-		game.canRoll = false;
+		game.diceHasRolled = true;
 		for(String str : listButtons.keySet()){
-			if(listButtons.get(str).isClicked() && !hasTaken){
+			if(listButtons.get(str).isClicked()){
+				listButtons.get(str).isSelected = true;
 				switch(str){
 					case xpButton:
 						game.selectedClass.addStat(game.selectedClass.xpString, 1);
@@ -55,18 +57,18 @@ public class FireCampCard extends Card{
 						game.selectedClass.addStat(game.selectedClass.lifeString, 2);
 						break;
 				}
-				hasTaken = true;
+				hasTakenReward = true;
 				game.canMove = true;
 				Game.mouseH.leftClickedOnceTime = false;
 			}
 		}
 	}
-	
+
 	@Override
-	public void additionalDraw(Graphics2D g2, int x, int y){
+	public void drawAdditional(Graphics2D g2, int x, int y) {
 		for(Button b : listButtons.values()){
 			b.draw(g2);
 		}
-	}	
+	}
 
 }

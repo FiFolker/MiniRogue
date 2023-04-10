@@ -34,9 +34,6 @@ public class Dice {
 	public void draw(Graphics2D g2, int x, int y){
 		g2.drawString(name, x, y);
 		g2.drawString(Integer.toString(value), x + (int)Utils.textToRectangle2D(name, g2).getWidth()/2, y+(int)Utils.textToRectangle2D(name, g2).getHeight());
-
 	}
-
-	
 	
 }

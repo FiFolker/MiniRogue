@@ -8,13 +8,14 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 
-public class Button {
+public class Button implements IUpdateAndDraw{
 
 	public Rectangle button;
 	Polygon icon;
 	BufferedImage image;
 	String toolTipMessage;
 	String buttonText;
+	public boolean isSelected = false;
 
 	public Button(Rectangle rect, String text){
 		this.button = rect;
@@ -37,14 +38,17 @@ public class Button {
 		this.icon = poly;
 	}
 
+	@Override
 	public void update(){
 		
 	}
-
+	@Override
 	public void draw(Graphics2D g2){
 		
 		if(inCollision()){
 			g2.setColor(Color.gray);
+		}else if(isSelected){
+			g2.setColor(Color.green);
 		}else{
 			g2.setColor(Color.white);
 		}

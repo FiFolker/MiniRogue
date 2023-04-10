@@ -64,11 +64,12 @@ public class Classe {
 
 	public void update(){
 		if(this.stats.get(xpString) == xpRequired && this.stats.get(levelString) < this.maxStats.get(levelString)){
-			game.dices.add(new CharacterDice());
+			game.characterDices.add(new CharacterDice());
 			this.addStat(levelString, 1);
 			xpRequired += xpRequired*2;
 		}else if(this.stats.get(xpString) >= this.maxStats.get(xpString)){
 			this.stats.replace(xpString, this.maxStats.get(xpString));
+			xpRequired = 23;
 			this.addStat(lifeString, 1);
 		}
 		if(this.stats.get(lifeString) <= 0){

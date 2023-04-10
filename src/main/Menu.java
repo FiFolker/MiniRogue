@@ -7,7 +7,7 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.HashMap;
 
-public class Menu {
+public class Menu implements IUpdateAndDraw{
 
 	Game game;
 
@@ -39,6 +39,7 @@ public class Menu {
 		buttons.put(rightButton, new Button(rightRect, new Polygon(new int[]{rightRect.x, rightRect.x+rightRect.width, rightRect.x}, new int[]{rightRect.y, rightRect.y+rightRect.height/2, rightRect.y+rightRect.height}, 3)));
 	}
 
+	@Override
 	public void update(){
 		for(String s: buttons.keySet()){
 			if(buttons.get(s).isClicked()){
@@ -47,7 +48,8 @@ public class Menu {
 					case playButton:
 						game.gameState = game.playState;
 						game.selectedClass = game.classes[game.currentClasse];
-						game.loadCards();
+						game.loadGame();
+						game.loadBoardCards();
 						break;
 					case exitButton:
 						System.exit(0);
@@ -74,6 +76,7 @@ public class Menu {
 		}
 	}
 	
+	@Override
 	public void draw(Graphics2D g2){
 		g2.setFont(game.title);
 		g2.drawString("MINI ROGUE", Utils.getXforCenteredText("MINI ROGUE", g2), 400);

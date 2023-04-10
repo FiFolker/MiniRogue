@@ -5,12 +5,12 @@ public class Coordonnees {
 	/**
 	 * Numéro de la ligne.
 	 */
-	int ligne;
+	public int ligne;
 	
 	/**
 	 * Numéro de la colonne.
 	 */
-	int colonne;
+	public int colonne;
 
 	/**
 	 * Nombre de lignes du plateau.

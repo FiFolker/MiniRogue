@@ -7,12 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -30,8 +26,10 @@ import classes.Classe;
 import controls.KeyHandler;
 import controls.MouseHandler;
 import dices.CharacterDice;
+import dices.CurseDice;
 import dices.Dice;
 import dices.DungeonDice;
+import dices.PoisonDice;
 
 public class Game extends JPanel implements Runnable{
 
@@ -39,17 +37,21 @@ public class Game extends JPanel implements Runnable{
 	JFrame frame;
 	Thread gameThread;
 	public static MouseHandler mouseH = new MouseHandler();
-	public static KeyHandler keyH = new KeyHandler();
+	public KeyHandler keyH = new KeyHandler();
 	Card[][] cardBoard = new Card[3][3];
 	Classe[] classes = new Classe[4];
 	Card cardHovered = null;
 	Menu menu;
+	Lose lose;
 	public Classe selectedClass;
 	public GUI gui = new GUI(this);
 	Button diceButton;
-	Coordonnees currentPos;
-	Card currentCard;
-	public ArrayList<Dice> dices = new ArrayList<>();
+	public Coordonnees currentPos;
+	public Card currentCard;
+	public ArrayList<CharacterDice> characterDices = new ArrayList<>();
+	public ArrayList<CurseDice> curseDices = new ArrayList<>();
+	public ArrayList<PoisonDice> poisonDices = new ArrayList<>();
+	public DungeonDice dungeonDice= new DungeonDice();
 
 	public static final int SCREEN_WIDTH = 1280;
 
@@ -63,7 +65,7 @@ public class Game extends JPanel implements Runnable{
 	public Font secondTitle = new Font("Sans-Serif", Font.PLAIN, 28);
 	BufferedImage token;
 	int currentClasse = 0;
-	int stage = 1;
+	public int stage = 1;
 	int totalStage = 4;
 	int zone = 1;
 	int[] zonePerStage = {2, 2, 3, 3};
@@ -71,7 +73,8 @@ public class Game extends JPanel implements Runnable{
 	int leftPos = 450;
 	public boolean diceHasRolled = false;
 	public boolean canMove = false;
-	public boolean canRoll = true;
+	public int choicePlaceX  = gui.xLine/2;
+	public int choicePlaceY  = gui.yChoice+30;
 	int sizeWidthCard = 202;
 	int sizeHeightCard = 250;
 
@@ -88,6 +91,8 @@ public class Game extends JPanel implements Runnable{
 	}
 
 	public void setup(){
+		this.setFocusable(true);
+
 		this.addMouseListener(mouseH);
 		this.addMouseMotionListener(mouseH);
 		this.addKeyListener(keyH);
@@ -95,42 +100,41 @@ public class Game extends JPanel implements Runnable{
 
 		gameState = menuState;
 		diceButton = new Button(new Rectangle(655, 850, 200, 50), "Lancer Dé");
-		dices.add(new CharacterDice());
-		dices.add(new DungeonDice());
-		try {
-			token = ImageIO.read(new File("assets/jeton/player.png"));
-			classes[0] = new Classe(this, ImageIO.read(new File("assets/classes/rogue.png")), "Voleur", 7, 3, 0, 8);
-			classes[1] = new Classe(this, ImageIO.read(new File("assets/classes/mage.png")), "Magicien", 4, 5, 0, 3);
-			classes[2] = new Classe(this, ImageIO.read(new File("assets/classes/swordman.png")), "Epeiste", 10, 3, 3, 5);
-			classes[3] = new Classe(this, ImageIO.read(new File("assets/classes/adventurer.png")), "Aventurier", 10, 3, 3, 5);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		loadGame();
 
 		menu = new Menu(this);
+		lose = new Lose(this);
 	}
 
-	public void loadCards(){
+	public void loadGame(){
+		stage = 1;
+		zone = 1;
+
+		characterDices.clear();
+		characterDices.add(new CharacterDice());
+
+		token = Utils.loadImage("assets/jeton/player.png");
+		classes[0] = new Classe(this, Utils.loadImage("assets/classes/rogue.png"), "Voleur", 7, 3, 0, 8);
+		classes[1] = new Classe(this, Utils.loadImage("assets/classes/mage.png"), "Magicien", 4, 5, 0, 3);
+		classes[2] = new Classe(this, Utils.loadImage("assets/classes/swordman.png"), "Epeiste", 10, 3, 3, 5);
+		classes[3] = new Classe(this, Utils.loadImage("assets/classes/adventurer.png"), "Aventurier", 10, 3, 3, 5);
+	
+	}
+
+	public void loadBoardCards(){
 		
 		currentPos = new Coordonnees(0, 0);
-		for(int i = 0;i<cardBoard.length; i++){
-			for(int j=0; j<cardBoard[i].length;j++){
+		for(int lig = 0;lig<cardBoard.length; lig++){
+			for(int col=0; col<cardBoard[lig].length;col++){
 				
 
-				int x = leftPos+(i*sizeWidthCard)+10;
-				int y = topPos+(j*sizeHeightCard)+10;
-				if(i == cardBoard.length-1 && j == cardBoard[i].length-1){
-					BufferedImage image = null;
-					try {
-						image = ImageIO.read(new File("assets/cards/cardRed.png"));
-					} catch (IOException e) {
-						System.out.println("erreur dans le load de l'image");
-						e.printStackTrace();
-					}
-					cardBoard[i][j] = new GuardianCard(this, image, new Rectangle(x,y,sizeWidthCard, sizeHeightCard), x, y);
+				int x = leftPos+(col*sizeWidthCard)+10;
+				int y = topPos+(lig*sizeHeightCard)+10;
+				if(lig == cardBoard.length-1 && col == cardBoard[lig].length-1){
+					cardBoard[lig][col] = new GuardianCard(this, new Rectangle(x,y,sizeWidthCard, sizeHeightCard), x, y, new Coordonnees(lig, col));
 				}else{
-					cardBoard[i][j] = randomCard(x, y);
+					cardBoard[lig][col] = randomCard(x, y, new Coordonnees(lig, col));
 				}
 			}
 			
@@ -162,7 +166,6 @@ public class Game extends JPanel implements Runnable{
 			lastTime = currentTime;
 
 			if(delta >= 1){
-				
 				update();
 				repaint();
 				delta --;
@@ -183,60 +186,54 @@ public class Game extends JPanel implements Runnable{
 
 			selectedClass.update();
 
-			currentCard.updateAlways();
 
-			if(diceButton.isClicked() && canRoll){ // lancé de dé
-				for(Dice d : dices){
+			if(diceButton.isClicked() ^ keyH.spacePressed && !diceHasRolled){ // lancé de dé
+				for(CharacterDice d : characterDices){
 					d.roll();
 				}
-				diceHasRolled = true;
-				canRoll = false;				
-			}
 
-			if(diceHasRolled){ // si le dé a été lancé
-				currentCard.updateOnRoll(dices, stage);
-
-				if(currentCard.getClass() == EnnemyCard.class){
-					EnnemyCard e = (EnnemyCard)currentCard;
-					if(e.ennemy.life > 0){
-						diceHasRolled = false;
-						canRoll = true;
-					}else{
-						canMove = true;
-						diceHasRolled = false;
-					}
-				}else{
-					canMove = true;
-					diceHasRolled = false;
+				for(CurseDice d : curseDices ){
+					d.roll();
 				}
+
+				dungeonDice.roll();
+
+
+				diceHasRolled = true;
+				canMove = true;
+				keyH.spacePressed = false;
 			}
 
+			currentCard.update();
+
+		}else if(gameState == loseState){
+			lose.update();
 		}
 		if(mouseH.leftClickedOnceTime){
 			mouseH.leftClickedOnceTime = false;
 		}
-
 		
 	}
 
+
 	public void movementOnTheBoard(){
-		for(int col=0;col<cardBoard.length;col++){
-			for(int lig=0;lig<cardBoard[col].length;lig++){
-				if(cardBoard[col][lig].isClicked() && !cardBoard[col][lig].isReveal && moveIsOk(new Coordonnees(lig, col)) && canMove){// 
-					cardBoard[col][lig].revealCard();
+		for(int lig=0;lig<cardBoard.length;lig++){
+			for(int col=0;col<cardBoard[lig].length;col++){
+				if(cardBoard[lig][col].isClicked() && !cardBoard[lig][col].isReveal && moveIsOk(new Coordonnees(lig, col)) && canMove){// 
+					cardBoard[lig][col].revealCard();
 					
 					currentPos.ligne = lig;
 					currentPos.colonne = col;
 					canMove = false;
-					canRoll = true;
+					diceHasRolled = false;
 
-					currentCard = cardBoard[currentPos.colonne][currentPos.ligne];
+					currentCard = cardBoard[currentPos.ligne][currentPos.colonne];
 
-					if(col == cardBoard.length-1 && lig == cardBoard[col].length - 1){
+					if(lig == cardBoard.length-1 && col == cardBoard[lig].length - 1){
 						if(zone == zonePerStage[stage-1] && stage < totalStage){
 							stage ++;
 							zone = 1;
-							loadCards();
+							loadBoardCards();
 						}else if(zone < zonePerStage[stage-1]){
 							if(selectedClass.stats.get(selectedClass.foodString) > 0){
 								selectedClass.substractStat(selectedClass.foodString, 1);
@@ -245,7 +242,7 @@ public class Game extends JPanel implements Runnable{
 								selectedClass.substractStat(selectedClass.lifeString, 3);
 							}
 							zone ++;
-							loadCards();
+							loadBoardCards();
 						}
 						
 					}
@@ -260,17 +257,16 @@ public class Game extends JPanel implements Runnable{
 		g2.setColor(Color.white);
 		if(gameState == menuState){
 			menu.draw(g2);
-		}
-		if(gameState == playState){
-
+		}else if(gameState == playState){
+			cardHovered = null;
 			if(cardBoard[0] != null){
 				for(int col=0;col<cardBoard.length;col++){
 					for(int lig=0;lig<cardBoard[col].length;lig++){
-						if(!cardBoard[col][lig].isHover()){
-							cardBoard[col][lig].draw(g2);
+						if(!cardBoard[lig][col].isHover()){
+							cardBoard[lig][col].draw(g2);
 						}
-						if(cardBoard[col][lig].isHover()){
-							cardHovered = cardBoard[col][lig];
+						if(cardBoard[lig][col].isHover()){
+							cardHovered = cardBoard[lig][col];
 						}
 					}
 				}
@@ -282,20 +278,30 @@ public class Game extends JPanel implements Runnable{
 
 			int xDice = 10;
 
-			for(Dice d : dices){
+			for(CharacterDice d : characterDices){
 				d.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
 				xDice += Utils.textToRectangle2D(d.name, g2).getWidth() + 10;
 			}
 
+			dungeonDice.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
+			xDice += Utils.textToRectangle2D(dungeonDice.name, g2).getWidth() + 10;
+			for(PoisonDice d : poisonDices){
+				d.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
+				xDice += Utils.textToRectangle2D(d.name, g2).getWidth() + 10;
+			}
+			for(CurseDice d : curseDices){
+				d.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
+				xDice += Utils.textToRectangle2D(d.name, g2).getWidth() + 10;
+			}
 
 			g2.drawImage(selectedClass.icon, currentCard.hitbox.x + currentCard.hitbox.width - 80,
 			currentCard.hitbox.y + currentCard.hitbox.height - 80, 64, 64, null);
 
 			diceButton.draw(g2);
 
-			currentCard.additionalDraw(g2, gui.xLine/2, gui.yChoice+30);
-
 			gui.draw(g2);
+		}else if(gameState == loseState){
+			lose.draw(g2);
 		}
 	}
 
@@ -309,91 +315,37 @@ public class Game extends JPanel implements Runnable{
 	}
 	
 
-	public Card randomCard(int x, int y){
+	public Card randomCard(int x, int y, Coordonnees coord){
 		Card returnedCard = null;
-		BufferedImage image = null;
+
 		int rng = Utils.randomNumber(0, 7);
 		switch(rng){
 			case 0:
-				try {
-					image = ImageIO.read(new File("assets/cards/cardGray.png"));
-				} catch (IOException e) {
-					System.out.println("erreur dans le load de l'image");
-					e.printStackTrace();
-				}
-				returnedCard = new BurialCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				returnedCard = new BurialCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);
 				break;
 			case 1:
-				try {
-					image = ImageIO.read(new File("assets/cards/cardRed.png"));
-				} catch (IOException e) {
-					System.out.println("erreur dans le load de l'image");
-					e.printStackTrace();
-				}
-				returnedCard = new EnnemyCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, stage);
+				returnedCard = new EnnemyCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, stage, coord);
 				break;
 			case 2:
-				try {
-					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
-				} catch (IOException e) {
-					System.out.println("erreur dans le load de l'image");
-					e.printStackTrace();
-				}
-				returnedCard = new FireCampCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				returnedCard = new FireCampCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);
 				break;
 			case 3:
-				try {
-					image = ImageIO.read(new File("assets/cards/cardGreen.png"));
-				} catch (IOException e) {
-					System.out.println("erreur dans le load de l'image");
-					e.printStackTrace();
-				}
-				returnedCard = new MerchantCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				returnedCard = new MerchantCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);
 				break;
 			case 4:
-				try {
-					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
-				} catch (IOException e) {
-					System.out.println("erreur dans le load de l'image");
-					e.printStackTrace();
-				}
-				returnedCard = new ObjectCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				returnedCard = new ObjectCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);
 				break;
 			case 5:
-				try {
-					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
-				} catch (IOException e) {
-					System.out.println("erreur dans le load de l'image");
-					e.printStackTrace();
-				}
-				returnedCard = new SanctuaryCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				returnedCard = new SanctuaryCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);
 				break;
 			case 6:
-				try {
-					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
-				} catch (IOException e) {
-					System.out.println("erreur dans le load de l'image");
-					e.printStackTrace();
-				}
-				returnedCard = new TrapCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				returnedCard = new TrapCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);
 				break;
 			case 7:
-				try {
-					image = ImageIO.read(new File("assets/cards/cardYellow.png"));
-				} catch (IOException e) {
-					System.out.println("erreur dans le load de l'image");
-					e.printStackTrace();
-				}
-				returnedCard = new TreasureCard(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				returnedCard = new TreasureCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);
 				break;
 			default:
-				try {
-					image = ImageIO.read(new File("assets/cards/cardBlue.png"));
-				} catch (IOException e) {
-					System.out.println("erreur dans le load de l'image");
-					e.printStackTrace();
-				}
-				returnedCard = new Card(this, image, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y);
+				returnedCard = new Card(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);
 				break;
 		}
 
