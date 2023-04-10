@@ -1,13 +1,34 @@
 package dices;
 
+import main.Game;
+
 public class PoisonDice extends Dice{
 
-	public PoisonDice(int maxValue) {
+	Game game;
+	public boolean hasBeenApplied = false;
+
+	public PoisonDice(int maxValue, Game game) {
 		super(maxValue);
+		this.game = game;
 	}
-	public PoisonDice() {
+	public PoisonDice(Game game) {
 		super(2);
+		this.game = game;
 		name = "Dé de Poison";
 	}
 	
+	@Override
+	public void roll() {
+		super.roll();
+		hasBeenApplied = false;
+	}
+
+	public void poisonEffect(){
+		if(!hasBeenApplied){
+			game.selectedClass.substractStat(game.selectedClass.lifeString, 1);
+			hasBeenApplied = true;
+		}
+		
+	}
+
 }

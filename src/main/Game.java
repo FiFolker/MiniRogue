@@ -27,7 +27,6 @@ import controls.KeyHandler;
 import controls.MouseHandler;
 import dices.CharacterDice;
 import dices.CurseDice;
-import dices.Dice;
 import dices.DungeonDice;
 import dices.PoisonDice;
 
@@ -35,23 +34,23 @@ public class Game extends JPanel implements Runnable{
 
 	// IMPORTATION DE CLASSES UTILES AU JEU
 	JFrame frame;
-	Thread gameThread;
-	public static MouseHandler mouseH = new MouseHandler();
-	public KeyHandler keyH = new KeyHandler();
-	Card[][] cardBoard = new Card[3][3];
-	Classe[] classes = new Classe[4];
-	Card cardHovered = null;
-	Menu menu;
-	Lose lose;
-	public Classe selectedClass;
-	public GUI gui = new GUI(this);
-	Button diceButton;
-	public Coordonnees currentPos;
-	public Card currentCard;
-	public ArrayList<CharacterDice> characterDices = new ArrayList<>();
-	public ArrayList<CurseDice> curseDices = new ArrayList<>();
-	public ArrayList<PoisonDice> poisonDices = new ArrayList<>();
-	public DungeonDice dungeonDice= new DungeonDice();
+	transient Thread gameThread;
+	public static transient MouseHandler mouseH = new MouseHandler();
+	public transient KeyHandler keyH = new KeyHandler();
+	transient Card[][] cardBoard = new Card[3][3];
+	transient Classe[] classes = new Classe[4];
+	transient Card cardHovered = null;
+	transient Menu menu;
+	transient Lose lose;
+	public transient Classe selectedClass;
+	public transient GUI gui = new GUI(this);
+	transient Button diceButton;
+	public transient Coordonnees currentPos;
+	public transient Card currentCard;
+	public transient ArrayList<CharacterDice> characterDices = new ArrayList<>();
+	public transient CurseDice curseDice = null;
+	public transient PoisonDice poisonDice = null;
+	public transient DungeonDice dungeonDice= new DungeonDice();
 
 	public static final int SCREEN_WIDTH = 1280;
 
@@ -63,7 +62,7 @@ public class Game extends JPanel implements Runnable{
 	public Font sansSerif = new Font("Sans-Serif", Font.BOLD, 15);
 	public Font title = new Font("Sans-Serif", Font.BOLD, 48);
 	public Font secondTitle = new Font("Sans-Serif", Font.PLAIN, 28);
-	BufferedImage token;
+	transient BufferedImage token;
 	int currentClasse = 0;
 	public int stage = 1;
 	int totalStage = 4;
@@ -184,7 +183,6 @@ public class Game extends JPanel implements Runnable{
 		}else if (gameState == playState){
 			movementOnTheBoard();
 
-			selectedClass.update();
 
 
 			if(diceButton.isClicked() ^ keyH.spacePressed && !diceHasRolled){ // lancé de dé
@@ -192,8 +190,18 @@ public class Game extends JPanel implements Runnable{
 					d.roll();
 				}
 
-				for(CurseDice d : curseDices ){
-					d.roll();
+				if(curseDice != null){
+					curseDice.roll();
+					if(curseDice.value == 2){
+						curseDice.curseEffect();
+					}
+				}
+
+				if(poisonDice != null){
+					poisonDice.roll();
+					if(poisonDice.value == 2 ){
+						poisonDice.poisonEffect();
+					}
 				}
 
 				dungeonDice.roll();
@@ -203,6 +211,8 @@ public class Game extends JPanel implements Runnable{
 				canMove = true;
 				keyH.spacePressed = false;
 			}
+
+			selectedClass.update();
 
 			currentCard.update();
 
@@ -229,25 +239,30 @@ public class Game extends JPanel implements Runnable{
 
 					currentCard = cardBoard[currentPos.ligne][currentPos.colonne];
 
-					if(lig == cardBoard.length-1 && col == cardBoard[lig].length - 1){
-						if(zone == zonePerStage[stage-1] && stage < totalStage){
-							stage ++;
-							zone = 1;
-							loadBoardCards();
-						}else if(zone < zonePerStage[stage-1]){
-							if(selectedClass.stats.get(selectedClass.foodString) > 0){
-								selectedClass.substractStat(selectedClass.foodString, 1);
-							}
-							if(selectedClass.stats.get(selectedClass.foodString) == 0 ){
-								selectedClass.substractStat(selectedClass.lifeString, 3);
-							}
-							zone ++;
-							loadBoardCards();
-						}
-						
-					}
+					goDownstair(lig, col);
+					
 				}
 			}
+		}
+	}
+
+	public void goDownstair(int lig, int col){
+		if(lig == cardBoard.length-1 && col == cardBoard[lig].length - 1){
+			if(zone == zonePerStage[stage-1] && stage < totalStage){
+				stage ++;
+				zone = 1;
+				loadBoardCards();
+			}else if(zone < zonePerStage[stage-1]){
+				if(selectedClass.stats.get(selectedClass.foodString) > 0){
+					selectedClass.substractStat(selectedClass.foodString, 1);
+				}
+				if(selectedClass.stats.get(selectedClass.foodString) == 0 ){
+					selectedClass.substractStat(selectedClass.lifeString, 3);
+				}
+				zone ++;
+				loadBoardCards();
+			}
+			
 		}
 	}
 
@@ -285,15 +300,17 @@ public class Game extends JPanel implements Runnable{
 
 			dungeonDice.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
 			xDice += Utils.textToRectangle2D(dungeonDice.name, g2).getWidth() + 10;
-			for(PoisonDice d : poisonDices){
-				d.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
-				xDice += Utils.textToRectangle2D(d.name, g2).getWidth() + 10;
-			}
-			for(CurseDice d : curseDices){
-				d.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
-				xDice += Utils.textToRectangle2D(d.name, g2).getWidth() + 10;
-			}
 
+			if(curseDice != null){
+				curseDice.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
+				xDice += Utils.textToRectangle2D(curseDice.name, g2).getWidth() + 10;
+			}
+			
+			if(poisonDice != null){
+				poisonDice.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
+			}
+			
+			
 			g2.drawImage(selectedClass.icon, currentCard.hitbox.x + currentCard.hitbox.width - 80,
 			currentCard.hitbox.y + currentCard.hitbox.height - 80, 64, 64, null);
 

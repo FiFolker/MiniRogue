@@ -31,32 +31,32 @@ public class EnnemyCard extends UpdateOnRoll{
 		if(rng == 0){
 			switch(stage){ // malédiction
 				case 1:
-					ennemy = new Ennemy("Rat Géant", 6, 2, 1, null);
+					ennemy = new Ennemy("Rat Géant", 6, 2, 1, new CurseDice(game));
 					break;
 				case 2:
-					ennemy = new Ennemy("Soldat Squelette", 9, 4, 2, null);
+					ennemy = new Ennemy("Soldat Squelette", 9, 4, 2, new CurseDice(game));
 					break;
 				case 3:
-					ennemy = new Ennemy("Serpent Ailé", 12, 6, 2, new CurseDice());
+					ennemy = new Ennemy("Serpent Ailé", 12, 6, 2, new CurseDice(game));
 					break;
 				case 4:
-					ennemy = new Ennemy("Garde Maudit", 15, 8, 4, new CurseDice());
+					ennemy = new Ennemy("Garde Maudit", 15, 8, 4, new CurseDice(game));
 					break;
 	
 			}
 		}else if(rng == 1){ // poison
 			switch(stage){
 				case 1:
-					ennemy = new Ennemy("Araignée Géante", 6, 2, 1, null);
+					ennemy = new Ennemy("Araignée Géante", 6, 2, 1, new PoisonDice(game));
 					break;
 				case 2:
-					ennemy = new Ennemy("Gobelin", 9, 4, 2, null);
+					ennemy = new Ennemy("Gobelin", 9, 4, 2, new PoisonDice(game));
 					break;
 				case 3:
-					ennemy = new Ennemy("Arbalétrier", 12, 6, 2, new PoisonDice());
+					ennemy = new Ennemy("Arbalétrier", 12, 6, 2, new PoisonDice(game));
 					break;
 				case 4:
-					ennemy = new Ennemy("Garde du Roi", 15, 8, 4, new PoisonDice());
+					ennemy = new Ennemy("Garde du Roi", 15, 8, 4, new PoisonDice(game));
 					break;
 	
 			}
@@ -72,11 +72,9 @@ public class EnnemyCard extends UpdateOnRoll{
 			for(CharacterDice d : game.characterDices){
 				if(d instanceof CharacterDice){
 					playerDamage += d.value;
-					System.out.println("avant la boucle " + d.value + " : " + playerDamage);
 					while(d.value >= 5){
 						d.roll();
 						playerDamage += d.value;
-						System.out.println(d.value + " : " + playerDamage);
 					}
 				}
 			}
@@ -121,10 +119,10 @@ public class EnnemyCard extends UpdateOnRoll{
 	public void addDice(){
 		if(ennemy.applicableDice != null){
 			if(ennemy.applicableDice instanceof CurseDice){
-				game.curseDices.add((CurseDice)ennemy.applicableDice);
+				game.curseDice = (CurseDice)ennemy.applicableDice;
 			}
 			if(ennemy.applicableDice instanceof PoisonDice){
-				game.poisonDices.add((PoisonDice)ennemy.applicableDice);
+				game.poisonDice = (PoisonDice)ennemy.applicableDice;
 			}
 		}
 	}
