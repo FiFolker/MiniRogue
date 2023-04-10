@@ -11,13 +11,13 @@ public abstract class UpdateAlways extends Card {
     public UpdateAlways(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
         super(game, hitbox, x, y, coord);
     }
-    public abstract void drawAdditional(Graphics2D g2, int x, int y);
+    public abstract void drawAdditional(Graphics2D g2);
     public abstract void updateAlways();
 
     @Override
     public void update() {
         super.update();
-        if(game.currentPos.equals(this.coord) && !hasTakenReward){
+        if(game.currentPos.equals(this.coord) && !isFinish){
             updateAlways();
         }
     }
@@ -26,7 +26,7 @@ public abstract class UpdateAlways extends Card {
     public void draw(Graphics2D g2) {
         super.draw(g2);
         if(game.currentPos.equals(this.coord)){
-            drawAdditional(g2, game.choicePlaceX, game.choicePlaceY);
+            drawAdditional(g2);
         }
     }
 

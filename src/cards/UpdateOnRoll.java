@@ -17,13 +17,13 @@ public abstract class UpdateOnRoll extends Card{
 
     public abstract void updateOnRoll();
 
-    public abstract void drawAdditional(Graphics2D g2, int x, int y);
+    public abstract void drawAdditional(Graphics2D g2);
 
     @Override
     public void update() {
         // TODO Auto-generated method stub
         super.update();
-        if(game.currentPos.equals(this.coord) && !hasTakenReward && game.diceHasRolled){
+        if(game.currentPos.equals(this.coord) && !isFinish && game.diceHasRolled){
             updateOnRoll();
         }
     }
@@ -34,7 +34,7 @@ public abstract class UpdateOnRoll extends Card{
         // TODO Auto-generated method stub
         super.draw(g2);
         if(game.currentPos.equals(this.coord)){
-            drawAdditional(g2, game.choicePlaceX, game.choicePlaceY);
+            drawAdditional(g2);
         }
     }
 }

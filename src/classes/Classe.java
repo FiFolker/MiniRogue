@@ -27,6 +27,8 @@ public class Classe {
 	public String levelString = "Niveau";
 	public String xpString = "XP";
 
+	// TABLEAU DE 2 POTIONS et 1 OBJET ici et 2 SPELL
+
 	public Classe(Game game, BufferedImage icon, String name, int life, int food, int armor, int money) {
 		this.game = game;
 		this.icon = icon;

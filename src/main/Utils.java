@@ -32,5 +32,10 @@ public class Utils {
 		}
 		return image;
 	}
+
+	public static void drawDice(Graphics2D g2, int x, int y, int value){
+		g2.drawRect(x, y, 20, 20);
+		g2.drawString(Integer.toString(value), x+7, y+(int)Utils.textToRectangle2D(Integer.toString(value), g2).getHeight());
+	}
     
 }

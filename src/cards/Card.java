@@ -22,7 +22,7 @@ public class Card implements IUpdateAndDraw{
 	int x,y;
 	private int zoom = 15;
 	public boolean isReveal = false;
-	boolean hasTakenReward = false;
+	boolean isFinish = false;
 
 	public Card(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
 		this.game = game;

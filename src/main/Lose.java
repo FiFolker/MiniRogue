@@ -3,12 +3,13 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import cards.Card;
 import cards.EnnemyCard;
+import cards.TrapCard;
 
 public class Lose implements IUpdateAndDraw {
 	
 	Game game;
-	EnnemyCard e;
 
 	public Lose(Game game){
 		this.game = game;
@@ -29,10 +30,14 @@ public class Lose implements IUpdateAndDraw {
 		g2.setFont(game.secondTitle);
 		g2.drawString("Appuyer sur ECHAP pour relancer", Utils.getXforCenteredText("Appuyer sur ECHAP pour relancer", g2), game.getHeight()/2 + 50);
 		g2.setFont(game.sansSerif);
-		if(game.currentCard.getClass() == EnnemyCard.class){
-			e = (EnnemyCard)game.currentCard;
+		if(game.currentCard instanceof EnnemyCard){
+			EnnemyCard e = (EnnemyCard)game.currentCard;
+			g2.drawString("Vous avez été tué par " + e.ennemy.name, Utils.getXforCenteredText("Vous avez été tué par " + e.ennemy.name, g2), game.getHeight()/2 + 70);
+		}else if(game.currentCard instanceof TrapCard){
+			g2.drawString("Vous êtes tombé dans un piège !", Utils.getXforCenteredText("Vous êtes tombé dans un piège !", g2), game.getHeight()/2 + 70);
+		}else if(game.poisonDice != null){
+			g2.drawString("Vous êtes mort de poison !", Utils.getXforCenteredText("Vous êtes mort de poison !", g2), game.getHeight()/2 + 70);
 		}
-		g2.drawString("Vous avez été tué par " + e.ennemy.name, Utils.getXforCenteredText("Vous avez été tué par " + e.ennemy.name, g2), game.getHeight()/2 + 70);
 	}
 
 }

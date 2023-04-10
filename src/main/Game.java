@@ -110,6 +110,9 @@ public class Game extends JPanel implements Runnable{
 		stage = 1;
 		zone = 1;
 
+		curseDice = null;
+		poisonDice = null;
+
 		characterDices.clear();
 		characterDices.add(new CharacterDice());
 
@@ -140,6 +143,7 @@ public class Game extends JPanel implements Runnable{
 			
 		}
 		currentCard = cardBoard[0][0];
+		currentPos = new Coordonnees(0, 0);
 		cardBoard[0][0].revealCard();
 	}
 
@@ -238,32 +242,32 @@ public class Game extends JPanel implements Runnable{
 					diceHasRolled = false;
 
 					currentCard = cardBoard[currentPos.ligne][currentPos.colonne];
-
-					goDownstair(lig, col);
+					if(lig == cardBoard.length-1 && col == cardBoard[lig].length - 1){
+						goDownstair();
+					}
 					
 				}
 			}
 		}
 	}
 
-	public void goDownstair(int lig, int col){
-		if(lig == cardBoard.length-1 && col == cardBoard[lig].length - 1){
-			if(zone == zonePerStage[stage-1] && stage < totalStage){
-				stage ++;
-				zone = 1;
-				loadBoardCards();
-			}else if(zone < zonePerStage[stage-1]){
-				if(selectedClass.stats.get(selectedClass.foodString) > 0){
-					selectedClass.substractStat(selectedClass.foodString, 1);
-				}
-				if(selectedClass.stats.get(selectedClass.foodString) == 0 ){
-					selectedClass.substractStat(selectedClass.lifeString, 3);
-				}
-				zone ++;
-				loadBoardCards();
+	public void goDownstair(){
+		if(zone == zonePerStage[stage-1] && stage < totalStage){
+			stage ++;
+			zone = 1;
+			loadBoardCards();
+		}else if(zone < zonePerStage[stage-1]){
+			if(selectedClass.stats.get(selectedClass.foodString) > 0){
+				selectedClass.substractStat(selectedClass.foodString, 1);
 			}
-			
+			if(selectedClass.stats.get(selectedClass.foodString) == 0 ){
+				selectedClass.substractStat(selectedClass.lifeString, 3);
+			}
+			zone ++;
+			loadBoardCards();
 		}
+		
+		
 	}
 
 	public void paintComponent(Graphics g){

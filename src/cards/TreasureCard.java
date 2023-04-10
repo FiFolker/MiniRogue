@@ -57,7 +57,7 @@ public class TreasureCard extends UpdateOnRoll{
 					result += "+8 de gold";
 					break;
 			}
-			hasTakenReward = true;
+			isFinish = true;
 		}else{
 			result = "Échec ... Vous avez échoué au test de compétence";
 		}
@@ -65,8 +65,8 @@ public class TreasureCard extends UpdateOnRoll{
 
 
 	@Override
-	public void drawAdditional(Graphics2D g2, int x, int y) {
-		g2.drawString(result, x-(int)Utils.textToRectangle2D(result, g2).getWidth()/2, y);
+	public void drawAdditional(Graphics2D g2) {
+		g2.drawString(result, game.choicePlaceX-(int)Utils.textToRectangle2D(result, g2).getWidth()/2, game.choicePlaceY);
 	}
 	
 }

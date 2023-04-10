@@ -1,5 +1,6 @@
 package dices;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Random;
 
@@ -32,8 +33,9 @@ public class Dice {
 	}
 
 	public void draw(Graphics2D g2, int x, int y){
+		g2.setColor(Color.white);
 		g2.drawString(name, x, y);
-		g2.drawString(Integer.toString(value), x + (int)Utils.textToRectangle2D(name, g2).getWidth()/2, y+(int)Utils.textToRectangle2D(name, g2).getHeight());
+		Utils.drawDice(g2, x+(int)Utils.textToRectangle2D(name, g2).getWidth()/2, y+10, value);
 	}
 	
 }

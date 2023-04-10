@@ -57,7 +57,7 @@ public class FireCampCard extends UpdateAlways{
 						game.selectedClass.addStat(game.selectedClass.lifeString, 2);
 						break;
 				}
-				hasTakenReward = true;
+				isFinish = true;
 				game.canMove = true;
 				Game.mouseH.leftClickedOnceTime = false;
 			}
@@ -65,7 +65,7 @@ public class FireCampCard extends UpdateAlways{
 	}
 
 	@Override
-	public void drawAdditional(Graphics2D g2, int x, int y) {
+	public void drawAdditional(Graphics2D g2) {
 		for(Button b : listButtons.values()){
 			b.draw(g2);
 		}

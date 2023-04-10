@@ -31,10 +31,10 @@ public class EnnemyCard extends UpdateOnRoll{
 		if(rng == 0){
 			switch(stage){ // malédiction
 				case 1:
-					ennemy = new Ennemy("Rat Géant", 6, 2, 1, new CurseDice(game));
+					ennemy = new Ennemy("Rat Géant", 6, 2, 1, null);
 					break;
 				case 2:
-					ennemy = new Ennemy("Soldat Squelette", 9, 4, 2, new CurseDice(game));
+					ennemy = new Ennemy("Soldat Squelette", 9, 4, 2, null);
 					break;
 				case 3:
 					ennemy = new Ennemy("Serpent Ailé", 12, 6, 2, new CurseDice(game));
@@ -47,10 +47,10 @@ public class EnnemyCard extends UpdateOnRoll{
 		}else if(rng == 1){ // poison
 			switch(stage){
 				case 1:
-					ennemy = new Ennemy("Araignée Géante", 6, 2, 1, new PoisonDice(game));
+					ennemy = new Ennemy("Araignée Géante", 6, 2, 1, null);
 					break;
 				case 2:
-					ennemy = new Ennemy("Gobelin", 9, 4, 2, new PoisonDice(game));
+					ennemy = new Ennemy("Gobelin", 9, 4, 2, null);
 					break;
 				case 3:
 					ennemy = new Ennemy("Arbalétrier", 12, 6, 2, new PoisonDice(game));
@@ -70,12 +70,10 @@ public class EnnemyCard extends UpdateOnRoll{
 		playerAttack = " ";
 		if(ennemy.life>0){
 			for(CharacterDice d : game.characterDices){
-				if(d instanceof CharacterDice){
+				playerDamage += d.value;
+				while(d.value >= 5){
+					d.roll();
 					playerDamage += d.value;
-					while(d.value >= 5){
-						d.roll();
-						playerDamage += d.value;
-					}
 				}
 			}
 			playerAttack = "Vous avez fait " + playerDamage + " dégâts";
@@ -90,7 +88,7 @@ public class EnnemyCard extends UpdateOnRoll{
 			game.diceHasRolled = false;
 			result = "Bravo vous avez terrasé " + ennemy.name;
 			game.selectedClass.addStat(game.selectedClass.xpString, ennemy.reward);
-			hasTakenReward = true;
+			isFinish = true;
 			
 		}
 	}
@@ -128,23 +126,23 @@ public class EnnemyCard extends UpdateOnRoll{
 	}
 
 	@Override
-	public void drawAdditional(Graphics2D g2, int x, int y) {
+	public void drawAdditional(Graphics2D g2) {
 		g2.setColor(Color.white);
 		Font defaultFont = g2.getFont();
-		g2.drawString(ennemy.name, x-(int)Utils.textToRectangle2D(ennemy.name, g2).getWidth()/2, y);
-		g2.drawString("PV : " + ennemy.life+"/"+ennemy.totalLife, x-(int)Utils.textToRectangle2D("PV : " + ennemy.life+"/"+ennemy.totalLife, g2).getWidth()/2, y+30);
-		g2.drawString("Dégats : " + Integer.toString(ennemy.damage), x-(int)Utils.textToRectangle2D("Dégats : " + Integer.toString(ennemy.damage), g2).getWidth()/2, y+60);
-		g2.drawString("Récompense : "+ Integer.toString(ennemy.reward) + " XP", x-(int)Utils.textToRectangle2D("Récompense : "+ Integer.toString(ennemy.reward)+ " XP", g2).getWidth()/2 , y+90);
+		g2.drawString(ennemy.name, game.choicePlaceX-(int)Utils.textToRectangle2D(ennemy.name, g2).getWidth()/2, game.choicePlaceY);
+		g2.drawString("PV : " + ennemy.life+"/"+ennemy.totalLife, game.choicePlaceX-(int)Utils.textToRectangle2D("PV : " + ennemy.life+"/"+ennemy.totalLife, g2).getWidth()/2, game.choicePlaceY+30);
+		g2.drawString("Dégats : " + Integer.toString(ennemy.damage), game.choicePlaceX-(int)Utils.textToRectangle2D("Dégats : " + Integer.toString(ennemy.damage), g2).getWidth()/2, game.choicePlaceY+60);
+		g2.drawString("Récompense : "+ Integer.toString(ennemy.reward) + " XP", game.choicePlaceX-(int)Utils.textToRectangle2D("Récompense : "+ Integer.toString(ennemy.reward)+ " XP", g2).getWidth()/2 , game.choicePlaceY+90);
 		
-		g2.drawLine(0, y+110, game.gui.xLine, y+110);
+		g2.drawLine(0, game.choicePlaceY+110, game.gui.xLine, game.choicePlaceY+110);
 		g2.setFont(game.sansSerif);
-		g2.drawString("Combat", x-(int)Utils.textToRectangle2D("Combat", g2).getWidth()/2, y+130);
+		g2.drawString("Combat", game.choicePlaceX-(int)Utils.textToRectangle2D("Combat", g2).getWidth()/2, game.choicePlaceY+130);
 		g2.setFont(defaultFont);
-		g2.drawString(playerAttack, x-(int)Utils.textToRectangle2D(playerAttack, g2).getWidth()/2, y+150);
+		g2.drawString(playerAttack, game.choicePlaceX-(int)Utils.textToRectangle2D(playerAttack, g2).getWidth()/2, game.choicePlaceY+150);
 		g2.setColor(Color.red);
-		g2.drawString(ennemyAttack, x-(int)Utils.textToRectangle2D(ennemyAttack, g2).getWidth()/2, y+170);
+		g2.drawString(ennemyAttack, game.choicePlaceX-(int)Utils.textToRectangle2D(ennemyAttack, g2).getWidth()/2, game.choicePlaceY+170);
 		g2.setColor(Color.white);
-		g2.drawString(result, x-(int)Utils.textToRectangle2D(result, g2).getWidth()/2, y+190);
+		g2.drawString(result, game.choicePlaceX-(int)Utils.textToRectangle2D(result, g2).getWidth()/2, game.choicePlaceY+190);
 
 
 	}
