@@ -89,7 +89,12 @@ public class Fight implements IUpdateAndDraw{
 		Font defaultFont = g2.getFont();
 		g2.drawString(ennemy.name, game.choicePlaceX-(int)Utils.textToRectangle2D(ennemy.name, g2).getWidth()/2, game.choicePlaceY);
 		g2.drawString("PV : " + ennemy.life+"/"+ennemy.totalLife, game.choicePlaceX-(int)Utils.textToRectangle2D("PV : " + ennemy.life+"/"+ennemy.totalLife, g2).getWidth()/2, game.choicePlaceY+30);
-		g2.drawString("Dégats : " + Integer.toString(ennemy.damage), game.choicePlaceX-(int)Utils.textToRectangle2D("Dégats : " + Integer.toString(ennemy.damage), g2).getWidth()/2, game.choicePlaceY+60);
+		if(ennemy.applicableDice != null){
+			g2.drawString("Dégats : " + Integer.toString(ennemy.damage) + " + " + ennemy.applicableDice.name, game.choicePlaceX-(int)Utils.textToRectangle2D("Dégats : " + Integer.toString(ennemy.damage) + " + " + ennemy.applicableDice.name, g2).getWidth()/2, game.choicePlaceY+60);
+		}else{
+			g2.drawString("Dégats : " + Integer.toString(ennemy.damage), game.choicePlaceX-(int)Utils.textToRectangle2D("Dégats : " + Integer.toString(ennemy.damage), g2).getWidth()/2, game.choicePlaceY+60);
+		}
+		
 		g2.drawString("Récompense : "+ Integer.toString(ennemy.reward) + " XP", game.choicePlaceX-(int)Utils.textToRectangle2D("Récompense : "+ Integer.toString(ennemy.reward)+ " XP", g2).getWidth()/2 , game.choicePlaceY+90);
 		
 		g2.drawLine(0, game.choicePlaceY+110, game.gui.xLine, game.choicePlaceY+110);

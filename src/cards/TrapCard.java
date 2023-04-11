@@ -46,13 +46,13 @@ public class TrapCard extends UpdateOnRoll{
 			case2 = "Plancher piégé -" + game.stage + " PV | +2 XP";
 			case3 = "Trappe -3 PV et -1 Zone | +1 Perception";
 
-			rewards[0] = new RewardOrPenalty(game, game.selectedClass.xpString, 1, 1);
-			rewards[1] = new RewardOrPenalty(game, game.selectedClass.xpString, 1, 2);
-			rewards[2] = new RewardOrPenalty(game, new PerceptionPotion(game), 3);
+			rewards[0] = new RewardOrPenalty(game, game.selectedClass.xpString, 1);
+			rewards[1] = new RewardOrPenalty(game, game.selectedClass.xpString, 1);
+			rewards[2] = new RewardOrPenalty(game, new PerceptionPotion(game));
 
-			penalties[0] = new RewardOrPenalty(game, new PoisonDice(game), game.selectedClass.lifeString, 1, 1);
-			penalties[1] = new RewardOrPenalty(game, game.selectedClass.lifeString, game.stage, 2);
-			penalties[2] = new RewardOrPenalty(game, game.selectedClass.lifeString, 3, 3);
+			penalties[0] = new RewardOrPenalty(game, new PoisonDice(game), game.selectedClass.lifeString, 1);
+			penalties[1] = new RewardOrPenalty(game, game.selectedClass.lifeString, game.stage);
+			penalties[2] = new RewardOrPenalty(game, game.selectedClass.lifeString, 3);
 
 			isFall = true;
 		}else if(rng == 1){
@@ -60,13 +60,13 @@ public class TrapCard extends UpdateOnRoll{
 			case2 = "Brume acide -1 Armure | +1 Armure";
 			case3 = "Pendules -"+game.stage+" PV et Poison | +1 Perception";
 
-			rewards[0] = new RewardOrPenalty(game, new HolyWater(game),  1);
-			rewards[1] = new RewardOrPenalty(game, game.selectedClass.armorString, 1, 2);
-			rewards[2] = new RewardOrPenalty(game, new PerceptionPotion(game), 3);
+			rewards[0] = new RewardOrPenalty(game, new HolyWater(game));
+			rewards[1] = new RewardOrPenalty(game, game.selectedClass.armorString, 1);
+			rewards[2] = new RewardOrPenalty(game, new PerceptionPotion(game));
 
-			penalties[0] = new RewardOrPenalty(game, game.selectedClass.foodString, game.stage, 1);
-			penalties[1] = new RewardOrPenalty(game, game.selectedClass.armorString, 1, 2);
-			penalties[2] = new RewardOrPenalty(game, new PoisonDice(game), game.selectedClass.lifeString, game.stage, 3);
+			penalties[0] = new RewardOrPenalty(game, game.selectedClass.foodString, game.stage);
+			penalties[1] = new RewardOrPenalty(game, game.selectedClass.armorString, 1);
+			penalties[2] = new RewardOrPenalty(game, new PoisonDice(game), game.selectedClass.lifeString, game.stage);
 
 		}
 	}

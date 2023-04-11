@@ -15,43 +15,48 @@ public class RewardOrPenalty {
 	public String key;
 	Potion potion;
 	Dice dice;
-	int rewardCase;
 	Game game;
 	public String result;
+	public String rewardString;
+	public String penaltyString;
 	private String currentCase;
 	private final String statsCase = "statsCase";
 	private final String diceAndStatsCase = "diceAndStatsCase";
 	private final String diceCase = "diceCase";
 	private final String potionCase = "potionCase";
 
-	public RewardOrPenalty(Game game, String key, int value, int rewardCase){
+	public RewardOrPenalty(Game game, String key, int value){
 		this.game = game;
 		this.value = value;
 		this.key = key;
-		this.rewardCase = rewardCase;
+		rewardString = "+ " + value + " " + key;
+		penaltyString = "- " + value + " " + key;
 		currentCase = statsCase;
 	}
 
-	public RewardOrPenalty(Game game, Potion potion, int rewardCase){
+	public RewardOrPenalty(Game game, Potion potion){
 		this.game = game;
 		this.potion = potion;
-		this.rewardCase = rewardCase;
+		rewardString = "+ " + potion.name ;
+		penaltyString = "- " + potion.name ;
 		currentCase = potionCase;
 	}
 
-	public RewardOrPenalty(Game game, Dice dice, int rewardCase){
+	public RewardOrPenalty(Game game, Dice dice){
 		this.game = game;
 		this.dice = dice;
-		this.rewardCase = rewardCase;
+		penaltyString = "+ " + dice.name ;
+		rewardString = "- " + dice.name ;
 		currentCase = diceCase;
 	}
 
-	public RewardOrPenalty(Game game, Dice dice, String key, int value, int rewardCase){
+	public RewardOrPenalty(Game game, Dice dice, String key, int value){
 		this.game = game;
 		this.dice = dice;
 		this.value = value;
 		this.key = key;
-		this.rewardCase = rewardCase;
+		rewardString = "+ " + dice.name + " + " + value + " " +key;
+		penaltyString = "+ " + dice.name + " - " + value + " " +key;
 		currentCase = statsCase;
 	}
 
