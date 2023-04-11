@@ -29,6 +29,7 @@ import dices.CharacterDice;
 import dices.CurseDice;
 import dices.DungeonDice;
 import dices.PoisonDice;
+import potions.FirePotion;
 
 public class Game extends JPanel implements Runnable{
 
@@ -72,6 +73,7 @@ public class Game extends JPanel implements Runnable{
 	int leftPos = 450;
 	public boolean diceHasRolled = false;
 	public boolean canMove = false;
+	public boolean inFight = false;
 	public int choicePlaceX  = gui.xLine/2;
 	public int choicePlaceY  = gui.yChoice+30;
 	int sizeWidthCard = 202;
@@ -187,7 +189,11 @@ public class Game extends JPanel implements Runnable{
 		}else if (gameState == playState){
 			movementOnTheBoard();
 
-
+			if(currentCard instanceof EnnemyCard){
+				inFight = true;
+			}else{
+				inFight = false;
+			}
 
 			if(diceButton.isClicked() ^ keyH.spacePressed && !diceHasRolled){ // lancé de dé
 				for(CharacterDice d : characterDices){
@@ -321,6 +327,8 @@ public class Game extends JPanel implements Runnable{
 			diceButton.draw(g2);
 
 			gui.draw(g2);
+
+			selectedClass.draw(g2);
 		}else if(gameState == loseState){
 			lose.draw(g2);
 		}

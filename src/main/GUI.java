@@ -9,7 +9,11 @@ public class GUI implements IUpdateAndDraw{
 	public int xLine = 300;
 	int yStats = 212;
 	int yInv = 406;
+	public int yPotions = yInv +35;
+	public int yObject = yInv +75;
 	public int yChoice = 546;
+	public String potions = "Potions :";
+	public String object = "Objet :";
 
 	public GUI(Game game){
 		this.game = game;
@@ -44,8 +48,8 @@ public class GUI implements IUpdateAndDraw{
 		}
 		g2.drawLine(0,  yInv - 20, xLine, yInv - 20);
 		g2.drawString("Inventaire", xLine/2-(int)Utils.textToRectangle2D("Inventaire", g2).getWidth()/2, yInv);
-		g2.drawString("Potions :", 10, yInv + 25);
-		g2.drawString("Objets :", 10, yInv+75);
+		g2.drawString(potions, 10, yPotions);
+		g2.drawString(object, 10, yObject);
 		g2.drawLine(0,  yChoice-20, xLine, yChoice-20);
 		g2.drawString("Interaction", xLine/2-(int)Utils.textToRectangle2D("Interaction", g2).getWidth()/2, yChoice);
 

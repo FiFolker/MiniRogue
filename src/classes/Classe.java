@@ -6,9 +6,9 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import dices.CharacterDice;
-import dices.Dice;
 import main.Game;
 import main.Utils;
+import potions.Potion;
 
 public class Classe {
 	
@@ -16,6 +16,7 @@ public class Classe {
 	public BufferedImage icon;
 	String name;
 	String info;
+	public int damage = 0;
 	public int xpRequired = 6;
 	public int size = 128;
 	public HashMap<String, Integer> stats;
@@ -26,6 +27,8 @@ public class Classe {
 	public String moneyString = "Argent";
 	public String levelString = "Niveau";
 	public String xpString = "XP";
+	public String damageString = "damage";
+	public Potion[] potions = new Potion[2];
 
 	// TABLEAU DE 2 POTIONS et 1 OBJET ici et 2 SPELL
 
@@ -53,8 +56,8 @@ public class Classe {
 
 	public void drawIcon(Graphics2D g2, int x, int y){
 		g2.drawImage(icon, x, y, size, size, null);
-		g2.drawString(info, (int)Utils.getXforCenteredText(info, g2), y+size+20);
-		g2.drawString(name, (int)Utils.getXforCenteredText(name, g2), y-10);
+		g2.drawString(info, Utils.getXforCenteredText(info, g2), y+size+20);
+		g2.drawString(name, Utils.getXforCenteredText(name, g2), y-10);
 	}
 
 	public void drawCard(Graphics2D g2, int x, int y){
@@ -76,6 +79,11 @@ public class Classe {
 		}
 		if(this.stats.get(lifeString) <= 0){
 			game.gameState = game.loseState;
+		}
+		int i = 0;
+		while(i < potions.length && potions[i] != null ){
+			potions[i].update();
+			i++;
 		}
 	}
 
@@ -102,6 +110,16 @@ public class Classe {
 			this.stats.replace(key, this.stats.get(key)-1);
 			value --;
 		}
+	}
+
+	public void draw(Graphics2D g2){
+		int i = 0;
+		while(i < potions.length && potions[i] != null ){
+			potions[i].draw(g2);
+			i++;
+		}
+		
+		
 	}
 
 }

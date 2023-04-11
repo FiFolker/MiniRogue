@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 
 
 public class Button implements IUpdateAndDraw{
@@ -16,6 +17,7 @@ public class Button implements IUpdateAndDraw{
 	String toolTipMessage;
 	String buttonText;
 	public boolean isSelected = false;
+	public boolean showRect = true;
 
 	public Button(Rectangle rect, String text){
 		this.button = rect;
@@ -27,10 +29,11 @@ public class Button implements IUpdateAndDraw{
 		this.image = image;
 	}
 
-	public Button(Rectangle rect, BufferedImage image, String desc){
+	public Button(Rectangle rect, BufferedImage image, String desc, boolean showRectangle){
 		this.button = rect;
 		this.image = image;
 		this.toolTipMessage = desc;
+		this.showRect = showRectangle;
 	}
 
 	public Button(Rectangle rect, Polygon poly){
@@ -53,7 +56,9 @@ public class Button implements IUpdateAndDraw{
 			g2.setColor(Color.white);
 		}
 		
-		g2.draw(button);
+		if(showRect){
+			g2.draw(button);
+		}
 
 		if(buttonText != null){
 			int tempX = button.x + button.width/2;
@@ -72,7 +77,7 @@ public class Button implements IUpdateAndDraw{
 		if(toolTipMessage != null && inCollision()){
 			g2.setColor(Color.blue);
 			g2.setFont(new Font("test", Font.BOLD, 14));
-			g2.drawString(toolTipMessage, Game.mouseH.x, Game.mouseH.y - 56);
+			g2.drawString(toolTipMessage, button.x, button.y);
 		}
 
 	}

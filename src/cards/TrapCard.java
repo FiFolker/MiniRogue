@@ -40,7 +40,6 @@ public class TrapCard extends UpdateOnRoll{
 
 	public void setup(){ // TO DO THE POTION EFFECT
 		int rng = Utils.randomNumber(0, 1);
-		System.out.println(rng);
 		if(rng == 0){
 			case1 = "Pics vénéneux -1 PV et Poison | +1 XP";
 			case2 = "Plancher piégé -" + game.stage + " PV | +2 XP";

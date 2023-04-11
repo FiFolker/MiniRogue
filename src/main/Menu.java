@@ -7,6 +7,8 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.HashMap;
 
+import potions.FirePotion;
+
 public class Menu implements IUpdateAndDraw{
 
 	Game game;
@@ -48,6 +50,8 @@ public class Menu implements IUpdateAndDraw{
 					case playButton:
 						game.gameState = game.playState;
 						game.selectedClass = game.classes[game.currentClasse];
+						game.selectedClass.potions[0] = new FirePotion(game);
+						game.selectedClass.potions[1] = new FirePotion(game);
 						game.loadGame();
 						game.loadBoardCards();
 						break;

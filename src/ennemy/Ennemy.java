@@ -10,6 +10,7 @@ public class Ennemy {
     public int damage;
     public Dice applicableDice;
     public int totalLife;
+    public boolean canFight = true;
 
     public Ennemy(String name, int life, int damage, int reward, Dice applicableDice){
         this.life = life;
