@@ -88,7 +88,7 @@ public class Button implements IUpdateAndDraw{
 	}
 
 	public boolean isClicked(){
-		return inCollision() && Game.mouseH.leftClickedOnceTime && enable;
+		return inCollision() && Game.mouseH.leftClicked && enable;
 	}
 
 	

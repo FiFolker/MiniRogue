@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.security.auth.callback.ConfirmationCallback;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -187,7 +188,7 @@ public class Game extends JPanel implements Runnable{
 	public void update(){
 		if(gameState == menuState){
 			menu.update();
-		}else if (gameState == playState){
+		}else if (gameState == playState && !selectedClass.replacePotionBox){
 			movementOnTheBoard();
 
 			if(currentCard instanceof EnnemyCard){
@@ -238,9 +239,7 @@ public class Game extends JPanel implements Runnable{
 		}else if(gameState == loseState){
 			lose.update();
 		}
-		if(mouseH.leftClickedOnceTime){
-			mouseH.leftClickedOnceTime = false;
-		}
+		
 		
 	}
 
@@ -362,7 +361,7 @@ public class Game extends JPanel implements Runnable{
 
 	public boolean moveIsOk(Coordonnees coord){
 		boolean isOk = false;
-		if(coord.estDansPlateau() && coord.ligne - 1 == currentPos.ligne ^ coord.colonne -1 == currentPos.colonne){
+		if(coord.estDansPlateau() && coord.ligne - 1 == currentPos.ligne && coord.colonne == currentPos.colonne || coord.ligne == currentPos.ligne && coord.colonne -1 == currentPos.colonne){
 			isOk = true;
 		}
 		return isOk;

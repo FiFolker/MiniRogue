@@ -25,7 +25,7 @@ public abstract class Potion implements IUpdateAndDraw{
 	public int size = 32;
 	int i = 0;
 	
-	BufferedImage icon;
+	public BufferedImage icon;
 	Game game;
 
 	public Potion(Game game, BufferedImage icon){

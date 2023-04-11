@@ -2,11 +2,13 @@ package classes;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import dices.CharacterDice;
+import main.Button;
 import main.Game;
 import main.Utils;
 import potions.HolyWater;
@@ -30,10 +32,12 @@ public class Classe {
 	public String levelString = "Niveau";
 	public String xpString = "XP";
 	public String damageString = "damage";
+	public boolean replacePotionBox = false;
+	Potion replacePotion;
 	public ArrayList<Potion> potions = new ArrayList<>();
 	boolean error = false;
 	String errorString;
-	int i1 = 0;
+	int timer = 0;
 
 	// TABLEAU DE 2 POTIONS et 1 OBJET ici et 2 SPELL
 
@@ -127,13 +131,53 @@ public class Classe {
 			g2.setColor(Color.red);
 			g2.setFont(game.sansSerif);
 			g2.drawString(errorString, (game.getWidth() - game.gui.xLine)/2 + (int)Utils.textToRectangle2D(errorString, g2).getWidth()/5, 830);
-			i1++;
-			if(i1 >= 120){
-				i1 = 0;
+			timer++;
+			if(timer >= 120){
+				timer = 0;
 				error = false;
 			}
 		}
+
+		if(replacePotionBox){
+			replacePotionBoxChoice(g2, replacePotion);
+		}
 		
+	}
+
+	public void replacePotionBoxChoice(Graphics2D g2, Potion potion){
+		Rectangle box = new Rectangle((game.getWidth() - game.gui.xLine)/2-50, game.getHeight()/2-150, 400, 200);
+			g2.draw(box);
+			g2.setColor(Color.black);
+			g2.fillRect(box.x+1, box.y+1, box.width-1, box.height-1);
+			g2.setColor(Color.white);
+			g2.drawString("Choisissez la Potion à jeter", box.x + box.width/2 -(int)Utils.textToRectangle2D("Choisissez la Potion à jeter", g2).getWidth()/2, box.y + 20);
+
+			g2.drawString("Nouvelle Potion : ", box.x + box.width/2 -(int)Utils.textToRectangle2D("Nouvelle Potion : ", g2).getWidth()/2, box.y + 40);
+			g2.drawImage(potion.icon, box.x + box.width/2 - potion.potionButton.button.width/2, box.y + box.height/2 - potion.potionButton.button.height - 20, null);
+			g2.drawString("Potions actuel : ", box.x + box.width/2 -(int)Utils.textToRectangle2D("Potions actuel : ", g2).getWidth()/2, box.y + 110);
+
+			Button firstPotion = new Button(new Rectangle(box.x + box.width/2 - potions.get(0).potionButton.button.width - 5, box.y + box.height/2 + 20, potions.get(0).potionButton.button.width, potions.get(0).potionButton.button.height), potions.get(0).icon);
+			Button secondPotion = new Button(new Rectangle(box.x + box.width/2 + 5, box.y + box.height/2+ 20, potions.get(1).potionButton.button.width, potions.get(1).potionButton.button.height), potions.get(1).icon);
+
+			Button cancelButton = new Button(new Rectangle(box.x + box.width/2 - 50, box.y + box.height - 35, 100, 25), "Annuler");
+
+			firstPotion.draw(g2);
+			secondPotion.draw(g2);
+			cancelButton.draw(g2);
+
+			if(firstPotion.isClicked()){
+				removePotion(potions.get(0));
+				potion.potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(game.selectedClass.potions.size());
+				addPotion(potion);
+				replacePotionBox = false;
+			}else if(secondPotion.isClicked()){
+				removePotion(potions.get(1));
+				potion.potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(game.selectedClass.potions.size());
+				addPotion(potion);
+				replacePotionBox = false;
+			}else if(cancelButton.isClicked()){
+				replacePotionBox = false;
+			}
 	}
 
     public void addPotion(Potion potion) {
@@ -141,14 +185,18 @@ public class Classe {
 			if(!potions.isEmpty()){
 				if(potions.get(potions.size()-1).getClass() != potion.getClass()){
 					potions.add(potion);
+					System.out.println(potions.size());
 				}else{
 					error = true;
 					errorString = "Vous ne pouvez posséder qu'une seule potion par type !";
 				}
 			}else{
 				potions.add(potion);
-			}
-			
+				System.out.println(potions.size());
+			}	
+		}else if(potions.size() == 2 && potions.get(0).getClass() != potion.getClass() && potions.get(1).getClass() != potion.getClass()){
+			replacePotion = potion;
+			replacePotionBox = true;
 		}
     }
 

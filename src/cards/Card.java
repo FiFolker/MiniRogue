@@ -44,7 +44,7 @@ public class Card implements IUpdateAndDraw{
 	}
 
 	public boolean isClicked(){
-		return isHover() && Game.mouseH.leftClickedOnceTime;
+		return isHover() && Game.mouseH.leftClicked;
 	}
 
 	public void revealCard(){

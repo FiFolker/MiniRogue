@@ -70,6 +70,7 @@ public class Menu implements IUpdateAndDraw{
 						}else{
 							game.currentClasse ++;
 						}
+						Game.mouseH.leftClicked = false;
 						break;
 					case leftButton:
 						if(game.currentClasse-1 < 0){
@@ -77,6 +78,7 @@ public class Menu implements IUpdateAndDraw{
 						}else{
 							game.currentClasse --;
 						}
+						Game.mouseH.leftClicked = false;
 						break;
 				}
 				Game.mouseH.leftClickedOnceTime = false;
