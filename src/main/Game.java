@@ -227,7 +227,7 @@ public class Game extends JPanel implements Runnable{
 				keyH.spacePressed = false;
 			}
 
-			if(canMove){
+			if(currentCard.isFinish){
 				revealNextCard();
 			}
 

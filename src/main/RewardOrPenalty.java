@@ -6,6 +6,7 @@ import dices.Dice;
 import dices.DungeonDice;
 import dices.PoisonDice;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import potions.Potion;
 
@@ -15,6 +16,7 @@ public class RewardOrPenalty {
 	public String key;
 	Potion potion;
 	Dice dice;
+	ArrayList<Dice> dices;
 	Game game;
 	public String result;
 	public String rewardString;
@@ -50,6 +52,21 @@ public class RewardOrPenalty {
 		currentCase = diceCase;
 	}
 
+	public RewardOrPenalty(Game game, ArrayList<Dice> dices){
+		this.game = game;
+		this.dices = dices;
+
+		penaltyString = "";
+		rewardString = "";
+		
+		for(Dice d : dices){
+			penaltyString += " + " + d.name ;
+			rewardString += " - " + d.name ;
+		}
+		
+		currentCase = diceCase;
+	}
+
 	public RewardOrPenalty(Game game, Dice dice, String key, int value){
 		this.game = game;
 		this.dice = dice;
@@ -64,20 +81,20 @@ public class RewardOrPenalty {
 		switch(currentCase){
 			case statsCase:
 				game.selectedClass.addStat(key, value);
-				result = "+ " + value + " " + key;
+				result = rewardString;
 				break;
 			case potionCase:
 				game.selectedClass.addPotion(potion);
-				result = "+ " + potion.name;
+				result = rewardString;
 				break;
 			case diceCase:
 				applyDice();
-				result = "+ " + dice.name;
+				result = rewardString;
 				break;
 			case diceAndStatsCase:
 				applyDice();
 				game.selectedClass.addStat(key, value);
-				result = "+ " + dice.name + " + " + value + " " +key;
+				result = rewardString;
 				break;
 			default:
 		}
@@ -87,32 +104,42 @@ public class RewardOrPenalty {
 		switch(currentCase){
 			case statsCase:
 				game.selectedClass.substractStat(key, value);
-				result = "- " + value + " " + key;
+				result = penaltyString;
 				break;
 			case potionCase:
 				game.selectedClass.removePotion(potion);
-				result = "+ " + potion.name;
+				result = penaltyString;
 				break;
 			case diceCase:
 				applyDice();
-				result = "+ " + dice.name;
+				result = penaltyString;
 				break;
 			case diceAndStatsCase:
 				applyDice();
 				game.selectedClass.substractStat(key, value);
-				result = "+ " + dice.name + " - " + value + " " +key;
+				result = penaltyString;
 				break;
 			default:
 		}
 	}
 
 	public void applyDice(){
-		if(dice instanceof CurseDice){
-			game.curseDice = (CurseDice)dice;
-		}else if(dice instanceof PoisonDice){
-			game.poisonDice = (PoisonDice)dice;
-		}else if(dice instanceof CharacterDice){
-			game.characterDices.add((CharacterDice)dice);
+		if(dices == null ){
+			convertDice(dice);
+		}else{
+			for(Dice d : dices){
+				convertDice(d);
+			}
+		}
+	}
+
+	public void convertDice(Dice d){
+		if(d instanceof CurseDice){
+			game.curseDice = (CurseDice)d;
+		}else if(d instanceof PoisonDice){
+			game.poisonDice = (PoisonDice)d;
+		}else if(d instanceof CharacterDice){
+			game.characterDices.add((CharacterDice)d);
 		}
 	}
 	

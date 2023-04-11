@@ -16,6 +16,7 @@ public class Button implements IUpdateAndDraw{
 	BufferedImage image;
 	String toolTipMessage;
 	String buttonText;
+	public boolean enable = true;
 	public boolean isSelected = false;
 	public boolean showRect = true;
 
@@ -87,7 +88,7 @@ public class Button implements IUpdateAndDraw{
 	}
 
 	public boolean isClicked(){
-		return inCollision() && Game.mouseH.leftClickedOnceTime;
+		return inCollision() && Game.mouseH.leftClickedOnceTime && enable;
 	}
 
 	

@@ -15,6 +15,7 @@ public class Card implements IUpdateAndDraw{
 	BufferedImage backCard;
 	BufferedImage image;
 	BufferedImage currentImage;
+	String result = "Lancez les dé ...";
 	public String name = "defaultCard";
 	public Rectangle hitbox;
 	public Coordonnees coord;

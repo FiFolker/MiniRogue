@@ -27,7 +27,6 @@ public class TrapCard extends UpdateOnRoll{
 	RewardOrPenalty[] rewards = new RewardOrPenalty[3];
 	RewardOrPenalty[] penalties = new RewardOrPenalty[3];
 
-	String result = " ";
 	String details  = "";
 
 	public TrapCard(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
@@ -130,21 +129,7 @@ public class TrapCard extends UpdateOnRoll{
 	@Override
 	public void drawAdditional(Graphics2D g2) {
 
-		Utils.drawDice(g2, 10, game.choicePlaceY, 1);
-		Utils.drawDice(g2, 35, game.choicePlaceY, 2);
-		
-		g2.drawString(case1, 60, game.choicePlaceY+(int)Utils.textToRectangle2D(case1, g2).getHeight());
-
-		Utils.drawDice(g2, 10, game.choicePlaceY+30, 3);
-		Utils.drawDice(g2, 35, game.choicePlaceY+30, 4);
-
-		g2.drawString(case2, 60, game.choicePlaceY+30+(int)Utils.textToRectangle2D(case2, g2).getHeight());
-
-
-		Utils.drawDice(g2, 10, game.choicePlaceY+60, 5);
-		Utils.drawDice(g2, 35, game.choicePlaceY+60, 6);
-
-		g2.drawString(case3, 60, game.choicePlaceY+60+(int)Utils.textToRectangle2D(case3, g2).getHeight());
+		Utils.drawThreeDicePossibilities(game, g2, new String[]{case1, case2, case3});
 
 		if(isTrap){
 			g2.setColor(Color.red);

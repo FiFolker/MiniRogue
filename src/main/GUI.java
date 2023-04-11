@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 public class GUI implements IUpdateAndDraw{
 	
 	Game game;
-	public int xLine = 300;
+	public int xLine = 320;
 	int yStats = 212;
 	int yInv = 406;
 	public int yPotions = yInv +35;

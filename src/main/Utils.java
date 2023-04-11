@@ -52,4 +52,42 @@ public class Utils {
 		g2.drawString(Integer.toString(value), x+7, y+(int)Utils.textToRectangle2D(Integer.toString(value), g2).getHeight());
 	}
     
+	public static void drawSixDicePossibilities(Game game, Graphics2D g2, String[] text){
+		Utils.drawDice(g2, 10, game.choicePlaceY, 1);
+		g2.drawString(text[0], 40, game.choicePlaceY+(int)Utils.textToRectangle2D(text[0], g2).getHeight());
+
+		Utils.drawDice(g2, 10, game.choicePlaceY + 30, 2);
+		g2.drawString(text[1], 40, game.choicePlaceY+30+(int)Utils.textToRectangle2D(text[1], g2).getHeight());
+
+		Utils.drawDice(g2, 10, game.choicePlaceY+60, 3);
+		g2.drawString(text[2], 40, game.choicePlaceY+60+(int)Utils.textToRectangle2D(text[2], g2).getHeight());
+
+		Utils.drawDice(g2, 30 + (int)Utils.textToRectangle2D(text[0], g2).getWidth() + 20, game.choicePlaceY, 4);
+		g2.drawString(text[3], 30 + (int)Utils.textToRectangle2D(text[0], g2).getWidth() + 50, game.choicePlaceY+(int)Utils.textToRectangle2D(text[3], g2).getHeight());
+
+		Utils.drawDice(g2,  30 + (int)Utils.textToRectangle2D(text[1], g2).getWidth() + 20, game.choicePlaceY+30, 5);
+		g2.drawString(text[4], 30 + (int)Utils.textToRectangle2D(text[1], g2).getWidth() + 50, game.choicePlaceY+30+(int)Utils.textToRectangle2D(text[4], g2).getHeight());
+
+		Utils.drawDice(g2,  30 + (int)Utils.textToRectangle2D(text[2], g2).getWidth() + 20, game.choicePlaceY+60, 6);
+		g2.drawString(text[5], 30 + (int)Utils.textToRectangle2D(text[2], g2).getWidth() + 50, game.choicePlaceY+60+(int)Utils.textToRectangle2D(text[5], g2).getHeight());
+	}
+
+	public static void drawThreeDicePossibilities(Game game, Graphics2D g2, String[] text){
+		Utils.drawDice(g2, 10, game.choicePlaceY, 1);
+		Utils.drawDice(g2, 35, game.choicePlaceY, 2);
+		
+		g2.drawString(text[0], 60, game.choicePlaceY+(int)Utils.textToRectangle2D(text[0], g2).getHeight());
+
+		Utils.drawDice(g2, 10, game.choicePlaceY+30, 3);
+		Utils.drawDice(g2, 35, game.choicePlaceY+30, 4);
+
+		g2.drawString(text[1], 60, game.choicePlaceY+30+(int)Utils.textToRectangle2D(text[1], g2).getHeight());
+
+
+		Utils.drawDice(g2, 10, game.choicePlaceY+60, 5);
+		Utils.drawDice(g2, 35, game.choicePlaceY+60, 6);
+
+		g2.drawString(text[2], 60, game.choicePlaceY+60+(int)Utils.textToRectangle2D(text[2], g2).getHeight());
+	}
+
 }

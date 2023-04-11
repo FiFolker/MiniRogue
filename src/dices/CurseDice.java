@@ -17,7 +17,7 @@ public class CurseDice extends Dice{
 	public CurseDice(Game game) {
 		super(2);
 		this.game = game;
-		color = Color.pink;
+		color = new Color(83, 33, 112);
 		name = "Dé de Malédiction";
 	}
 
