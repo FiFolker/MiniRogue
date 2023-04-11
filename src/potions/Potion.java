@@ -15,13 +15,14 @@ public abstract class Potion implements IUpdateAndDraw{
 	public int effectValue;
 	public String effectKey;
 	public String name;
+	public String info;
 	public Rectangle rect;
 	public String errorString;
 	boolean error = false;
-	Button potionButton;
+	public Button potionButton;
 	public int currentNumber = 0;
 	public static int number = 0;
-	int size = 32;
+	public int size = 32;
 	int i = 0;
 	
 	BufferedImage icon;
@@ -35,27 +36,10 @@ public abstract class Potion implements IUpdateAndDraw{
 	}
 
 	public void addButtton(){
-		potionButton = new Button(new Rectangle(62 + 20 + (size+size/2)*(currentNumber-1), game.gui.yPotions-size/2, size, size), icon, name, false);
+		potionButton = new Button(new Rectangle(62 + 20 + (size+size/2)*(game.selectedClass.potions.size()), game.gui.yPotions-size/2, size, size), icon, info, false);
 	}
 
 	public abstract void applyEffect();
-
-	public static void removePotion(Potion potion){
-		number --;
-		int i = 0;
-		while(i < potion.game.selectedClass.potions.length && potion.game.selectedClass.potions[i] != null && potion.game.selectedClass.potions[i] != potion){
-			i++;
-		}
-		if(potion.game.selectedClass.potions[i] == potion){
-			potion.game.selectedClass.potions[i] = null;
-		}
-		if(i == 0 && potion.game.selectedClass.potions[1] != null){
-			potion.game.selectedClass.potions[0] = potion.game.selectedClass.potions[1];
-			potion.game.selectedClass.potions[0].currentNumber = Potion.number;
-			potion.game.selectedClass.potions[0].potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(potion.currentNumber-1);
-			potion.game.selectedClass.potions[1] = null;
-		}
-	}
 
 	@Override
 	public void draw(Graphics2D g2) {
@@ -64,9 +48,9 @@ public abstract class Potion implements IUpdateAndDraw{
 		if(error){
 			g2.setColor(Color.red);
 			g2.setFont(game.sansSerif);
-			g2.drawString(errorString, 10, game.gui.yPotions + (int)Utils.textToRectangle2D(errorString, g2).getHeight() + 10);
+			g2.drawString(errorString, (game.getWidth() - game.gui.xLine)/2 - (int)Utils.textToRectangle2D(errorString, g2).getWidth()/16, 830);
 			i ++;
-			if(i >= 60){
+			if(i >= 180){
 				i = 0;
 				error = false;
 			}

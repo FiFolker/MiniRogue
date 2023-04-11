@@ -8,7 +8,8 @@ public class HolyWater extends Potion {
 
 	public HolyWater(Game game) {
 		super(game, Utils.loadImage("assets/potions/holyWater.png"));
-		name = "Eau Bénite soigne vos afflictions";
+		info = "Eau Bénite soigne vos afflictions";
+		name = "Eau Bénite";
 		addButtton();
 	}
 
@@ -16,7 +17,7 @@ public class HolyWater extends Potion {
 	public void applyEffect() {
 		game.curseDice = null;
 		game.poisonDice = null;
-		Potion.removePotion(this);
+		game.selectedClass.removePotion(this);
 	}
 	
 }

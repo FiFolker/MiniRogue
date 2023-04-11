@@ -12,7 +12,8 @@ public class FrostedPotion extends Potion {
 
 	public FrostedPotion(Game game) {
 		super(game, Utils.loadImage("assets/potions/frostedPotion.png"));
-		name = "Givre l'ennemi pendant 1 tour";
+		info = "Givre l'ennemi pendant 1 tour";
+		name = "Potion de Givre";
 		addButtton();
 	}
 
@@ -21,7 +22,7 @@ public class FrostedPotion extends Potion {
 		if(game.inFight){
 			EnnemyCard e = (EnnemyCard)game.currentCard;
 			e.ennemy.canFight = false;
-			Potion.removePotion(this);
+			game.selectedClass.removePotion(this);
 		}else{
 			error = true;
             errorString = "Vous devez être en combat pour utiliser cette potion ! ";

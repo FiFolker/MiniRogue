@@ -9,7 +9,8 @@ public class LifePotion extends Potion {
 
     public LifePotion(Game game) {
         super(game, Utils.loadImage("assets/potions/lifePotion.png"));
-        name = "Vie +6 PV";
+        info = "Vie +6 PV";
+        name = "Potion de Vie";
         effectValue = 6;
         addButtton();
     }
@@ -17,7 +18,7 @@ public class LifePotion extends Potion {
     @Override
     public void applyEffect() {
         game.selectedClass.addStat(game.selectedClass.lifeString, effectValue);
-        Potion.removePotion(this);
+        game.selectedClass.removePotion(this);
     }
     
 }

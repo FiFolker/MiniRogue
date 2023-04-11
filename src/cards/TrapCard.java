@@ -11,21 +11,21 @@ import dices.Dice;
 import dices.PoisonDice;
 import main.Coordonnees;
 import main.Game;
+import main.RewardOrPenalty;
 import main.Utils;
+import potions.HolyWater;
+import potions.PerceptionPotion;
+import potions.Potion;
 
 public class TrapCard extends UpdateOnRoll{
 
 	String case1;
 	String case2;
 	String case3;
-	String[] key = new String[3];
-	int[] penalty = new int[3];
-	String[] rewardKey = new String[3];
-	int[] rewardValue = new int[3];
-	Dice applicableDice = null;
-	int caseApplicableDice;
 	boolean isTrap = false;
 	boolean isFall = false;
+	RewardOrPenalty[] rewards = new RewardOrPenalty[3];
+	RewardOrPenalty[] penalties = new RewardOrPenalty[3];
 
 	String result = " ";
 	String details  = "";
@@ -34,7 +34,7 @@ public class TrapCard extends UpdateOnRoll{
 		super(game, hitbox, x, y, coord);
 		name = "Carte Piège";
 		image = Utils.loadImage("assets/cards/cardBlue.png");
-		
+		needSkillTest = true;
 		setup();
 
 	}
@@ -46,46 +46,28 @@ public class TrapCard extends UpdateOnRoll{
 			case2 = "Plancher piégé -" + game.stage + " PV | +2 XP";
 			case3 = "Trappe -3 PV et -1 Zone | +1 Perception";
 
-			key[0] = game.selectedClass.lifeString;
-			key[1] = game.selectedClass.lifeString;
-			key[2] = game.selectedClass.lifeString;
+			rewards[0] = new RewardOrPenalty(game, game.selectedClass.xpString, 1, 1);
+			rewards[1] = new RewardOrPenalty(game, game.selectedClass.xpString, 1, 2);
+			rewards[2] = new RewardOrPenalty(game, new PerceptionPotion(game), 3);
 
-			penalty[0] = 1;
-			penalty[1] = game.stage;
-			penalty[2] = 3;
-			
-			rewardValue[0] = 1;
-			rewardValue[1] = 2;
-			rewardValue[2] = 1;
+			penalties[0] = new RewardOrPenalty(game, new PoisonDice(game), game.selectedClass.lifeString, 1, 1);
+			penalties[1] = new RewardOrPenalty(game, game.selectedClass.lifeString, game.stage, 2);
+			penalties[2] = new RewardOrPenalty(game, game.selectedClass.lifeString, 3, 3);
 
-			rewardKey[0] = game.selectedClass.xpString;
-			rewardKey[1] = game.selectedClass.xpString;
-			rewardKey[2] = game.selectedClass.xpString;
-			caseApplicableDice = 1;
 			isFall = true;
-			applicableDice = new PoisonDice(game);
 		}else if(rng == 1){
 			case1 = "Horde de rats -"+game.stage+" Nourriture | +1 Eau Bénite";
 			case2 = "Brume acide -1 Armure | +1 Armure";
 			case3 = "Pendules -"+game.stage+" PV et Poison | +1 Perception";
 
-			key[0] = game.selectedClass.foodString;
-			key[1] = game.selectedClass.armorString;
-			key[2] = game.selectedClass.lifeString;
+			rewards[0] = new RewardOrPenalty(game, new HolyWater(game),  1);
+			rewards[1] = new RewardOrPenalty(game, game.selectedClass.armorString, 1, 2);
+			rewards[2] = new RewardOrPenalty(game, new PerceptionPotion(game), 3);
 
-			penalty[0] = game.stage;
-			penalty[1] = 1;
-			penalty[2] = game.stage;
+			penalties[0] = new RewardOrPenalty(game, game.selectedClass.foodString, game.stage, 1);
+			penalties[1] = new RewardOrPenalty(game, game.selectedClass.armorString, 1, 2);
+			penalties[2] = new RewardOrPenalty(game, new PoisonDice(game), game.selectedClass.lifeString, game.stage, 3);
 
-			rewardValue[0] = 1;
-			rewardValue[1] = 1;
-			rewardValue[2] = 1;
-
-			rewardKey[0] = game.selectedClass.xpString;
-			rewardKey[1] = game.selectedClass.armorString;
-			rewardKey[2] = game.selectedClass.xpString;
-			caseApplicableDice = 3;
-			applicableDice = new PoisonDice(game);
 		}
 	}
 
@@ -103,26 +85,22 @@ public class TrapCard extends UpdateOnRoll{
 			switch(game.dungeonDice.value){
 				case 1:
 				case 2:
-					details += "-" + penalty[0] + " " + key[0];
-					applicateDice(1);
-					game.selectedClass.substractStat(key[0], penalty[0]);
+					penalties[0].penalty();
+					details += penalties[0].result;
 					break;
 				case 3:
 				case 4:
-					details += "-" + penalty[1] + " " + key[1];
-					applicateDice(2);
-					game.selectedClass.substractStat(key[1], penalty[1]);
+					penalties[1].penalty();
+					details += penalties[1].result;
 					break;
 				case 5:
 				case 6:
-					details += "-" + penalty[2] + " " + key[2];
+					penalties[2].penalty();
+					details += penalties[2].result;	
 					if(isFall){
 						details += " -1 Zone";
 						game.goDownstair();
 					}
-
-					game.selectedClass.substractStat(key[2], penalty[2]);
-					applicateDice(3);
 					break;
 			}
 		}else{
@@ -130,31 +108,23 @@ public class TrapCard extends UpdateOnRoll{
 			switch(game.dungeonDice.value){
 				case 1:
 				case 2:
-					details += "+" + rewardValue[0] + " " + rewardKey[0];
-					game.selectedClass.addStat(rewardKey[0], rewardValue[0]);
+					rewards[0].reward();
+					details += rewards[0].result;
 					break;
 				case 3:
 				case 4:
-					details += "+" + rewardValue[1] + " " + rewardKey[1];
-					game.selectedClass.addStat(rewardKey[1], rewardValue[1]);
-
+					rewards[1].reward();
+					details += rewards[1].result;
 					break;
 				case 5:
 				case 6:
-					details += "+" + rewardValue[2] + " " + rewardKey[2];
-					game.selectedClass.addStat(rewardKey[2], rewardValue[2]);
+					rewards[2].reward();
+					details += rewards[2].result;
 					break;
 			}
 		}
 		isFinish = true;
 		
-	}
-
-	public void applicateDice(int caseApp){
-		if(applicableDice != null && applicableDice instanceof PoisonDice && caseApplicableDice == caseApp){
-			game.poisonDice = (PoisonDice)applicableDice;
-			details += " +1 dé de poison";
-		}
 	}
 
 	@Override

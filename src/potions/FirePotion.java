@@ -12,7 +12,8 @@ public class FirePotion extends Potion {
 
 	public FirePotion(Game game){
 		super(game, Utils.loadImage("assets/potions/firePotion.png"));
-		name = "Feu 7 dégâts";
+		info = "Feu 7 dégâts";
+		name = "Potion de Feu";
 		effectValue = 7;
 		addButtton();
 	}
@@ -22,7 +23,7 @@ public class FirePotion extends Potion {
 		if(game.inFight){
 			EnnemyCard e = (EnnemyCard)game.currentCard;
 			e.ennemy.life -= effectValue;
-			Potion.removePotion(this);
+			game.selectedClass.removePotion(this);
 		}else{
 			error = true;
             errorString = "Vous devez être en combat pour utiliser cette potion ! ";

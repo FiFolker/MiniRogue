@@ -12,7 +12,8 @@ public class PoisonPotion extends Potion{
 
     public PoisonPotion(Game game) {
         super(game, Utils.loadImage("assets/potions/poisonPotion.png"));
-        name = "Poison 4 dégâts par tour";
+        info = "Poison 4 dégâts par tour";
+        name = "Potion de Poison";
         addButtton();
     }
 
@@ -21,7 +22,7 @@ public class PoisonPotion extends Potion{
         if(game.inFight){
             EnnemyCard e = (EnnemyCard)game.currentCard;
             e.ennemy.poisonEffect = true;
-            Potion.removePotion(this);
+            game.selectedClass.removePotion(this);
         }else{
             error = true;
             errorString = "Vous devez être en combat pour utiliser cette potion ! ";
