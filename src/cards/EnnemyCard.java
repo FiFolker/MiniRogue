@@ -49,6 +49,8 @@ public class EnnemyCard extends UpdateOnRoll{
 				case 4:
 					ennemy = new Ennemy("Garde Maudit", 15, 8, 4, new CurseDice(game));
 					break;
+				default:
+					ennemy = new Ennemy("Default", 1, 0, 0, null);
 	
 			}
 		}else if(rng == 1){ // poison
@@ -65,6 +67,8 @@ public class EnnemyCard extends UpdateOnRoll{
 				case 4:
 					ennemy = new Ennemy("Garde du Roi", 15, 8, 4, new PoisonDice(game));
 					break;
+				default:
+					ennemy = new Ennemy("Default", 1, 0, 0, null);
 	
 			}
 		}

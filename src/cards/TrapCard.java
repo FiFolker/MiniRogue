@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import dices.CharacterDice;
 import dices.Dice;
@@ -182,6 +183,8 @@ public class TrapCard extends UpdateOnRoll{
 		}
 		g2.drawString(result, game.choicePlaceX-(int)Utils.textToRectangle2D(result, g2).getWidth()/2, game.choicePlaceY+110);
 		g2.drawString(details, game.choicePlaceX-(int)Utils.textToRectangle2D(details, g2).getWidth()/2, game.choicePlaceY+130);
+
+		
 	}
 	
 }

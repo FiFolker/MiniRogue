@@ -258,6 +258,8 @@ public class Game extends JPanel implements Runnable{
 	}
 
 	public void goDownstair(){
+		currentPos.ligne = 0;
+		currentPos.colonne = 0;
 		if(zone == zonePerStage[stage-1] && stage < totalStage){
 			stage ++;
 			zone = 1;

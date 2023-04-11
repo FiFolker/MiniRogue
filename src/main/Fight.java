@@ -10,52 +10,82 @@ import dices.PoisonDice;
 import ennemy.Ennemy;
 
 public class Fight implements IUpdateAndDraw{
-    
-    Game game;
-    Ennemy ennemy;
-    String playerAttack = " ";
+	
+	Game game;
+	Ennemy ennemy;
+	String playerAttack = " ";
 	String ennemyAttack = " ";
+	String historique = "";
 	String result = "Combat En Cours ...";
+	int turn = 0;
+	int currentTurn = Integer.MIN_VALUE;
 
-    public Fight(Game game, Ennemy ennemy){
-        this.game = game;
-        this.ennemy = ennemy;
-    }
+	public Fight(Game game, Ennemy ennemy){
+		this.game = game;
+		this.ennemy = ennemy;
+	}
 
-    @Override
-    public void update() {
-        ennemyAttack = " ";
+	@Override
+	public void update() {
+		ennemyAttack = " ";
 		playerAttack = " ";
+		historique = "";
 		game.selectedClass.damage = 0;
-		if(ennemy.life>0){
+		if(ennemy.life>0){ // tour joueur
+
+			if(ennemy.poisonEffect){
+                game.selectedClass.damage += 4;
+				historique += " +4P ";
+            }
+
 			for(CharacterDice d : game.characterDices){
 				game.selectedClass.damage += d.value;
+				historique += " +"+d.value;
 				while(d.value >= 5 && ennemy.life-game.selectedClass.damage > 0){
 					d.roll();
 					game.selectedClass.damage += d.value;
+					historique += " +"+d.value;
 				}
+				
+				
 			}
-			playerAttack = "Vous avez fait " + game.selectedClass.damage + " dégâts";
+
 			ennemy.life -= game.selectedClass.damage;
+			playerAttack = "Vous avez fait " + game.selectedClass.damage + " dégâts";
+
 		}
 		
-		if(ennemy.life > 0){
+		if(!ennemy.canFight && currentTurn == Integer.MIN_VALUE){
+			currentTurn = turn;
+		}
+
+		if(turn - currentTurn == 1){
+			currentTurn = Integer.MIN_VALUE;
+			ennemy.canFight = true;
+		}
+
+		if(!ennemy.canFight){
+			ennemyAttack = "L'ennemi est gelé !";
+			game.diceHasRolled = false;
+		}
+
+		if(ennemy.life > 0 && ennemy.canFight){ // tour ennemi
 			actionEnnemy(game.dungeonDice.value);
 			game.diceHasRolled = false;
 			game.canMove = false;
-		}else{
+		}else if(ennemy.life <= 0){
 			game.diceHasRolled = false;
 			result = "Bravo vous avez terrasé " + ennemy.name;
 			game.selectedClass.addStat(game.selectedClass.xpString, ennemy.reward);
 			game.currentCard.isFinish = true;
 			game.inFight = false;
-			
 		}
-    }
+		turn ++;
+	}
 
-    @Override
-    public void draw(Graphics2D g2) {
-        g2.setColor(Color.white);
+	@Override
+	public void draw(Graphics2D g2) {
+		g2.setColor(Color.white);
 		Font defaultFont = g2.getFont();
 		g2.drawString(ennemy.name, game.choicePlaceX-(int)Utils.textToRectangle2D(ennemy.name, g2).getWidth()/2, game.choicePlaceY);
 		g2.drawString("PV : " + ennemy.life+"/"+ennemy.totalLife, game.choicePlaceX-(int)Utils.textToRectangle2D("PV : " + ennemy.life+"/"+ennemy.totalLife, g2).getWidth()/2, game.choicePlaceY+30);
@@ -71,9 +101,11 @@ public class Fight implements IUpdateAndDraw{
 		g2.drawString(ennemyAttack, game.choicePlaceX-(int)Utils.textToRectangle2D(ennemyAttack, g2).getWidth()/2, game.choicePlaceY+170);
 		g2.setColor(Color.white);
 		g2.drawString(result, game.choicePlaceX-(int)Utils.textToRectangle2D(result, g2).getWidth()/2, game.choicePlaceY+190);
-    }
+		g2.drawString("Historique Dégâts", game.choicePlaceX-(int)Utils.textToRectangle2D("Historique Dégâts", g2).getWidth()/2, game.choicePlaceY+220);
+		g2.drawString(historique, game.choicePlaceX-(int)Utils.textToRectangle2D(historique, g2).getWidth()/2, game.choicePlaceY+240);
+	}
 
-    public void actionEnnemy(int value){
+	public void actionEnnemy(int value){
 		switch(value){
 			case 1:
 				ennemyAttack = "Attaque ennemi loupé ! ";
@@ -91,10 +123,12 @@ public class Fight implements IUpdateAndDraw{
 				game.selectedClass.damageReceived(ennemy.damage, false);
 				addDice();
 				break;
+			default:
+				
 		}
 	}
 
-    public void addDice(){
+	public void addDice(){
 		if(ennemy.applicableDice != null){
 			if(ennemy.applicableDice instanceof CurseDice){
 				game.curseDice = (CurseDice)ennemy.applicableDice;
@@ -105,6 +139,6 @@ public class Fight implements IUpdateAndDraw{
 		}
 	}
 
-    
+	
 
 }

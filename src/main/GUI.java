@@ -10,7 +10,7 @@ public class GUI implements IUpdateAndDraw{
 	int yStats = 212;
 	int yInv = 406;
 	public int yPotions = yInv +35;
-	public int yObject = yInv +75;
+	public int yObject = yInv +85;
 	public int yChoice = 546;
 	public String potions = "Potions :";
 	public String object = "Objet :";

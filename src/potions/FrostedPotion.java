@@ -1,19 +1,18 @@
 package potions;
 
-
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 import cards.EnnemyCard;
-import main.Button;
 import main.Game;
 import main.Utils;
+import main.Button;
 
-public class FirePotion extends Potion {
+public class FrostedPotion extends Potion {
 
-	public FirePotion(Game game){
-		super(game, Utils.loadImage("assets/potions/firePotion.png"));
-		name = "Feu 7 dégâts";
-		effectValue = 7;
+	public FrostedPotion(Game game) {
+		super(game, Utils.loadImage("assets/potions/frostedPotion.png"));
+		name = "Givre l'ennemi pendant 1 tour";
 		potionButton = new Button(new Rectangle(62 + 20 + (size+size/2)*(currentNumber-1), game.gui.yPotions-size/2, size, size), icon, name, false);
 
 	}
@@ -22,14 +21,12 @@ public class FirePotion extends Potion {
 	public void applyEffect() {
 		if(game.inFight){
 			EnnemyCard e = (EnnemyCard)game.currentCard;
-			e.ennemy.life -= effectValue;
+			e.ennemy.canFight = false;
 			Potion.removePotion(this);
 		}else{
 			error = true;
             errorString = "Vous devez être en combat pour utiliser cette potion ! ";
-			System.out.println("Vous devez être en combat pour utiliser cette potion !");
 		}
-		
 	}
-
+	
 }

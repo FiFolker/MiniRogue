@@ -77,7 +77,7 @@ public class Button implements IUpdateAndDraw{
 		if(toolTipMessage != null && inCollision()){
 			g2.setColor(Color.blue);
 			g2.setFont(new Font("test", Font.BOLD, 14));
-			g2.drawString(toolTipMessage, button.x, button.y);
+			g2.drawString(toolTipMessage, button.x + button.width/2 - (int)Utils.textToRectangle2D(toolTipMessage, g2).getWidth()/2, button.y - 5);
 		}
 
 	}

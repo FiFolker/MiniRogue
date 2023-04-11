@@ -1,5 +1,6 @@
 package potions;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -15,10 +16,13 @@ public abstract class Potion implements IUpdateAndDraw{
 	public String effectKey;
 	public String name;
 	public Rectangle rect;
+	public String errorString;
+	boolean error = false;
 	Button potionButton;
 	public int currentNumber = 0;
 	public static int number = 0;
 	int size = 32;
+	int i = 0;
 	
 	BufferedImage icon;
 	Game game;
@@ -52,7 +56,18 @@ public abstract class Potion implements IUpdateAndDraw{
 
 	@Override
 	public void draw(Graphics2D g2) {
+		
 		potionButton.draw(g2);
+		if(error){
+			g2.setColor(Color.red);
+			g2.setFont(game.sansSerif);
+			g2.drawString(errorString, 10, game.gui.yPotions + (int)Utils.textToRectangle2D(errorString, g2).getHeight() + 10);
+			i ++;
+			if(i >= 60){
+				i = 0;
+				error = false;
+			}
+		}
 	}
 
 	@Override
