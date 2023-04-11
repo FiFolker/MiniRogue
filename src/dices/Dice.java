@@ -12,6 +12,7 @@ public class Dice {
 	Random rand = new Random();
 	public int value;
 	public String name = "dé";
+	Color color;
 
 	public Dice(int maxValue, String name){
 		this.maxValue = maxValue;
@@ -35,7 +36,7 @@ public class Dice {
 	public void draw(Graphics2D g2, int x, int y){
 		g2.setColor(Color.white);
 		g2.drawString(name, x, y);
-		Utils.drawDice(g2, x+(int)Utils.textToRectangle2D(name, g2).getWidth()/2, y+10, value);
+		Utils.drawDice(g2, x+(int)Utils.textToRectangle2D(name, g2).getWidth()/2, y+10, value, color);
 	}
 	
 }

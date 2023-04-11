@@ -1,5 +1,7 @@
 package dices;
 
+import java.awt.Color;
+
 public class CharacterDice extends Dice{
 
 	public CharacterDice(int maxValue) {
@@ -8,6 +10,7 @@ public class CharacterDice extends Dice{
 
 	public CharacterDice() {
         super(6);
+		color = Color.white;
 		name = "Dé Personnage";
     }
 

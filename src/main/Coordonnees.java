@@ -27,7 +27,7 @@ public class Coordonnees {
 	 * @param numLigne numéro de la ligne
 	 * @param numColonne numéro de la colonne
 	 */
-	Coordonnees(int numLigne, int numColonne) {
+	public Coordonnees(int numLigne, int numColonne) {
 		ligne = numLigne;
 		colonne = numColonne;
 	}

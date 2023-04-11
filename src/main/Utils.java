@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -35,6 +36,19 @@ public class Utils {
 
 	public static void drawDice(Graphics2D g2, int x, int y, int value){
 		g2.drawRect(x, y, 20, 20);
+		g2.drawString(Integer.toString(value), x+7, y+(int)Utils.textToRectangle2D(Integer.toString(value), g2).getHeight());
+	}
+
+	public static void drawDice(Graphics2D g2, int x, int y, int value, Color color){
+		g2.setColor(Color.white);
+		g2.drawRect(x, y, 20, 20);
+		g2.setColor(color);
+		g2.fillRect(x+1, y+1, 19, 19);
+		if(color.equals(Color.white)){
+			g2.setColor(Color.black);
+		}else{
+			g2.setColor(Color.white);
+		}
 		g2.drawString(Integer.toString(value), x+7, y+(int)Utils.textToRectangle2D(Integer.toString(value), g2).getHeight());
 	}
     

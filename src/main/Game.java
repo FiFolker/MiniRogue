@@ -227,6 +227,10 @@ public class Game extends JPanel implements Runnable{
 				keyH.spacePressed = false;
 			}
 
+			if(canMove){
+				revealNextCard();
+			}
+
 			selectedClass.update();
 
 			currentCard.update();
@@ -244,7 +248,7 @@ public class Game extends JPanel implements Runnable{
 	public void movementOnTheBoard(){
 		for(int lig=0;lig<cardBoard.length;lig++){
 			for(int col=0;col<cardBoard[lig].length;col++){
-				if(cardBoard[lig][col].isClicked() && !cardBoard[lig][col].isReveal && moveIsOk(new Coordonnees(lig, col)) && canMove){// 
+				if(cardBoard[lig][col].isClicked() && moveIsOk(new Coordonnees(lig, col)) && canMove){// 
 					cardBoard[lig][col].revealCard();
 					
 					currentPos.ligne = lig;
@@ -305,6 +309,10 @@ public class Game extends JPanel implements Runnable{
 			}
 
 			if(cardHovered != null){
+				if(cardHovered.isReveal){ // le subtefurge AKA la solution D
+					g2.setColor(Color.black);
+					g2.fillRect(0, gui.yChoice+20, gui.xLine, this.getHeight());
+				}
 				cardHovered.draw(g2);
 			}
 
@@ -341,12 +349,22 @@ public class Game extends JPanel implements Runnable{
 		}
 	}
 
+	public void revealNextCard(){
+		Coordonnees coordRight = new Coordonnees(currentPos.ligne, currentPos.colonne+1);
+		Coordonnees coordBot = new Coordonnees(currentPos.ligne+1, currentPos.colonne);
+		if(coordBot.estDansPlateau()){
+			cardBoard[coordBot.ligne][coordBot.colonne].revealCard();
+		}
+		if(coordRight.estDansPlateau()){
+			cardBoard[coordRight.ligne][coordRight.colonne].revealCard();
+		}
+	}
+
 	public boolean moveIsOk(Coordonnees coord){
 		boolean isOk = false;
 		if(coord.estDansPlateau() && coord.ligne - 1 == currentPos.ligne ^ coord.colonne -1 == currentPos.colonne){
 			isOk = true;
 		}
-
 		return isOk;
 	}
 	

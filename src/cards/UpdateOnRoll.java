@@ -33,7 +33,7 @@ public abstract class UpdateOnRoll extends Card{
     public void draw(Graphics2D g2) {
         // TODO Auto-generated method stub
         super.draw(g2);
-        if(game.currentPos.equals(this.coord)){
+        if(game.currentPos.equals(this.coord) || isHover() && isReveal ){
             drawAdditional(g2);
         }
     }

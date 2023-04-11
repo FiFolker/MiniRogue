@@ -1,5 +1,7 @@
 package dices;
 
+import java.awt.Color;
+
 import main.Game;
 
 public class CurseDice extends Dice{
@@ -15,6 +17,7 @@ public class CurseDice extends Dice{
 	public CurseDice(Game game) {
 		super(2);
 		this.game = game;
+		color = Color.pink;
 		name = "Dé de Malédiction";
 	}
 

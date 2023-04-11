@@ -25,7 +25,7 @@ public abstract class UpdateAlways extends Card {
     @Override
     public void draw(Graphics2D g2) {
         super.draw(g2);
-        if(game.currentPos.equals(this.coord)){
+        if(game.currentPos.equals(this.coord) || isHover() && isReveal){
             drawAdditional(g2);
         }
     }

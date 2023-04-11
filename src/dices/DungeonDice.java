@@ -1,5 +1,7 @@
 package dices;
 
+import java.awt.Color;
+
 public class DungeonDice extends Dice{
 
 	public DungeonDice(int maxValue) {
@@ -9,6 +11,7 @@ public class DungeonDice extends Dice{
 
 	public DungeonDice() {
 		super(6);
+		color = Color.black;
 		name = "Dé Donjon";
 	}
 	

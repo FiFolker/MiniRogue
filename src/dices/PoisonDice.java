@@ -1,5 +1,7 @@
 package dices;
 
+import java.awt.Color;
+
 import main.Game;
 
 public class PoisonDice extends Dice{
@@ -14,6 +16,7 @@ public class PoisonDice extends Dice{
 	public PoisonDice(Game game) {
 		super(2);
 		this.game = game;
+		color = Color.green;
 		name = "Dé de Poison";
 	}
 	
