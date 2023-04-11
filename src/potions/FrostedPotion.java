@@ -13,8 +13,7 @@ public class FrostedPotion extends Potion {
 	public FrostedPotion(Game game) {
 		super(game, Utils.loadImage("assets/potions/frostedPotion.png"));
 		name = "Givre l'ennemi pendant 1 tour";
-		potionButton = new Button(new Rectangle(62 + 20 + (size+size/2)*(currentNumber-1), game.gui.yPotions-size/2, size, size), icon, name, false);
-
+		addButtton();
 	}
 
 	@Override

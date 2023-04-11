@@ -74,6 +74,7 @@ public class Game extends JPanel implements Runnable{
 	public boolean diceHasRolled = false;
 	public boolean canMove = false;
 	public boolean inFight = false;
+	public boolean perceptionEffect = false;
 	public int choicePlaceX  = gui.xLine/2;
 	public int choicePlaceY  = gui.yChoice+30;
 	int sizeWidthCard = 202;
@@ -196,9 +197,13 @@ public class Game extends JPanel implements Runnable{
 			}
 
 			if(diceButton.isClicked() ^ keyH.spacePressed && !diceHasRolled){ // lancé de dé
-				for(CharacterDice d : characterDices){
-					d.roll();
+				if(!perceptionEffect){
+					for(CharacterDice d : characterDices){
+						d.roll();
+					}
 				}
+				perceptionEffect = false;
+				
 
 				if(curseDice != null){
 					curseDice.roll();

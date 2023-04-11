@@ -13,8 +13,7 @@ public class PoisonPotion extends Potion{
     public PoisonPotion(Game game) {
         super(game, Utils.loadImage("assets/potions/poisonPotion.png"));
         name = "Poison 4 dégâts par tour";
-        potionButton = new Button(new Rectangle(62 + 20 + (size+size/2)*(currentNumber-1), game.gui.yPotions-size/2, size, size), icon, name, false);
-
+        addButtton();
     }
 
     @Override

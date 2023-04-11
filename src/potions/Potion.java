@@ -32,7 +32,10 @@ public abstract class Potion implements IUpdateAndDraw{
 		this.icon = icon;
 		number ++;
 		currentNumber = number;
+	}
 
+	public void addButtton(){
+		potionButton = new Button(new Rectangle(62 + 20 + (size+size/2)*(currentNumber-1), game.gui.yPotions-size/2, size, size), icon, name, false);
 	}
 
 	public abstract void applyEffect();

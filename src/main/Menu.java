@@ -10,6 +10,9 @@ import java.util.HashMap;
 import dices.PoisonDice;
 import potions.FirePotion;
 import potions.FrostedPotion;
+import potions.HolyWater;
+import potions.LifePotion;
+import potions.PerceptionPotion;
 import potions.PoisonPotion;
 
 public class Menu implements IUpdateAndDraw{
@@ -53,9 +56,8 @@ public class Menu implements IUpdateAndDraw{
 					case playButton:
 						game.gameState = game.playState;
 						game.selectedClass = game.classes[game.currentClasse];
-						game.selectedClass.potions[0] = new FrostedPotion(game);
-						game.selectedClass.potions[1] = new FrostedPotion(game);
-						// game.selectedClass.potions[1] = new PoisonPotion(game);
+						game.selectedClass.potions[0] = new PerceptionPotion(game);
+						game.selectedClass.potions[1] = new PerceptionPotion(game);
 						game.loadGame();
 						game.loadBoardCards();
 						break;

@@ -20,7 +20,7 @@ public class TreasureCard extends UpdateOnRoll{
 		super(game, hitbox, x, y, coord);
 		name = "Carte Trésor";
 		image = Utils.loadImage("assets/cards/cardYellow.png");
-
+		needSkillTest = true;
 	}
 
 	@Override

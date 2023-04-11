@@ -23,6 +23,7 @@ public class Card implements IUpdateAndDraw{
 	private int zoom = 15;
 	public boolean isReveal = false;
 	public boolean isFinish = false;
+	public boolean needSkillTest = false;
 
 	public Card(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
 		this.game = game;

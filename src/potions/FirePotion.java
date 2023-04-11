@@ -14,8 +14,7 @@ public class FirePotion extends Potion {
 		super(game, Utils.loadImage("assets/potions/firePotion.png"));
 		name = "Feu 7 dégâts";
 		effectValue = 7;
-		potionButton = new Button(new Rectangle(62 + 20 + (size+size/2)*(currentNumber-1), game.gui.yPotions-size/2, size, size), icon, name, false);
-
+		addButtton();
 	}
 
 	@Override
