@@ -2,11 +2,7 @@ package cards;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 
 import dices.CurseDice;
 import dices.PoisonDice;
@@ -27,6 +23,7 @@ public class GuardianCard extends UpdateOnRoll{
 	int life;
 	int damage;
 	int reward;
+	int timer = 0;
 
 	public GuardianCard(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
 		super(game, hitbox, x, y, coord);
@@ -83,11 +80,19 @@ public class GuardianCard extends UpdateOnRoll{
 	@Override
 	public void updateOnRoll() {
 		fight.update();
+		
 	}
 
 	@Override
 	public void drawAdditional(Graphics2D g2) {
 		fight.draw(g2);
+		if(!game.inFight && game.currentCard.equals(this)){
+			timer ++;
+			if(timer  >= 120){
+				game.goDownstair();
+				timer = 0;
+			}
+		}
 	}
 	
 }

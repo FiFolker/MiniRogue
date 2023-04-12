@@ -3,8 +3,8 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import cards.Card;
 import cards.EnnemyCard;
+import cards.GuardianCard;
 import cards.TrapCard;
 
 public class Lose implements IUpdateAndDraw {
@@ -33,6 +33,9 @@ public class Lose implements IUpdateAndDraw {
 		if(game.currentCard instanceof EnnemyCard){
 			EnnemyCard e = (EnnemyCard)game.currentCard;
 			g2.drawString("Vous avez été tué par " + e.ennemy.name, Utils.getXforCenteredText("Vous avez été tué par " + e.ennemy.name, g2), game.getHeight()/2 + 70);
+		}else if(game.currentCard instanceof GuardianCard){
+			GuardianCard g = (GuardianCard)game.currentCard;
+			g2.drawString("Vous avez été tué par " + g.ennemy.name, Utils.getXforCenteredText("Vous avez été tué par " + g.ennemy.name, g2), game.getHeight()/2 + 70);
 		}else if(game.currentCard instanceof TrapCard){
 			g2.drawString("Vous êtes tombé dans un piège !", Utils.getXforCenteredText("Vous êtes tombé dans un piège !", g2), game.getHeight()/2 + 70);
 		}else if(game.poisonDice != null){

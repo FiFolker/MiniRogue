@@ -189,12 +189,8 @@ public class Game extends JPanel implements Runnable{
 		if(gameState == menuState){
 			menu.update();
 		}else if (gameState == playState && !selectedClass.replacePotionBox){
+			movementOnTheBoard();
 
-			if(currentCard instanceof EnnemyCard || currentCard instanceof GuardianCard){
-				inFight = true;
-			}else{
-				inFight = false;
-			}
 
 			if(diceButton.isClicked() ^ keyH.spacePressed && !diceHasRolled){ // lancé de dé
 				if(!perceptionEffect){
@@ -227,11 +223,10 @@ public class Game extends JPanel implements Runnable{
 				keyH.spacePressed = false;
 			}
 
-			if(currentCard.isFinish){
+			if(currentCard.isFinish && !currentCard.coord.equals(new Coordonnees(2, 2))){
 				revealNextCard();
 			}
 
-			movementOnTheBoard();
 
 			selectedClass.update();
 
@@ -257,6 +252,12 @@ public class Game extends JPanel implements Runnable{
 					diceHasRolled = false;
 
 					currentCard = cardBoard[currentPos.ligne][currentPos.colonne];
+					if(currentCard instanceof EnnemyCard || currentCard instanceof GuardianCard){
+						inFight = true;
+					}else{
+						inFight = false;
+					}
+
 					if(lig == cardBoard.length-1 && col == cardBoard[lig].length - 1){
 						goDownstair();
 					}
@@ -267,15 +268,18 @@ public class Game extends JPanel implements Runnable{
 	}
 
 	public void goDownstair(){
-		currentPos.ligne = 0;
-		currentPos.colonne = 0;
+		
 		if(zone == zonePerStage[stage-1] && stage < totalStage){
 			if(!inFight){
+				currentPos.ligne = 0;
+				currentPos.colonne = 0;
 				stage ++;
 				zone = 1;
 				loadBoardCards();
 			}
 		}else if(zone < zonePerStage[stage-1]){
+			currentPos.ligne = 0;
+			currentPos.colonne = 0;
 			if(selectedClass.stats.get(selectedClass.foodString) > 0){
 				selectedClass.substractStat(selectedClass.foodString, 1);
 			}
@@ -285,7 +289,7 @@ public class Game extends JPanel implements Runnable{
 			zone ++;
 			loadBoardCards();
 		}
-		
+		currentCard = cardBoard[currentPos.ligne][currentPos.colonne];
 		
 	}
 

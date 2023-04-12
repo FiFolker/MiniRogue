@@ -31,9 +31,7 @@ public class EnnemyCard extends UpdateOnRoll{
 		image = Utils.loadImage("assets/cards/cardRed.png");
 		name = "Carte Monstre";
 		result = "Combat En Cours ...";
-		setupEnnemy(
-			
-		);
+		setupEnnemy();
 	}
 
 	public void setupEnnemy(){
