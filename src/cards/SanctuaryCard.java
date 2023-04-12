@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import dices.CurseDice;
 import dices.Dice;
 import dices.PoisonDice;
+import effect.Blessing;
 import main.Coordonnees;
 import main.Game;
 import main.RewardOrPenalty;
@@ -36,6 +37,7 @@ public class SanctuaryCard extends UpdateOnRoll{
 		possibilitiesString[5] = "petite foi";
 
 		rewards[0] = new RewardOrPenalty(game, game.selectedClass.lifeString, 2);
+		rewards[0].addEffect(new Blessing(game));
 		rewards[1] = new RewardOrPenalty(game, game.selectedClass.lifeString, 1);
 		rewards[2] = new RewardOrPenalty(game, game.selectedClass.lifeString, 1);
 

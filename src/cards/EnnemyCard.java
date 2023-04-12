@@ -11,6 +11,7 @@ import dices.CurseDice;
 import dices.Dice;
 import dices.DungeonDice;
 import dices.PoisonDice;
+import effect.ArmorPiercing;
 import ennemy.Ennemy;
 import main.Coordonnees;
 import main.Fight;
@@ -23,52 +24,59 @@ public class EnnemyCard extends UpdateOnRoll{
 	Fight fight;
 	String playerAttack = " ";
 	String ennemyAttack = " ";
-	String result = "Combat En Cours ...";
+	
 
-	public EnnemyCard(Game game, Rectangle hitbox, int x, int y, int stage, Coordonnees coord) {
+	public EnnemyCard(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
 		super(game, hitbox, x, y, coord);
 		image = Utils.loadImage("assets/cards/cardRed.png");
 		name = "Carte Monstre";
-		setup(stage);
+		result = "Combat En Cours ...";
+		setupEnnemy(
+			
+		);
 	}
 
-	public void setup(int stage){
+	public void setupEnnemy(){
 		
 		int rng = Utils.randomNumber(0, 1);
 		if(rng == 0){
-			switch(stage){ // malédiction
+			switch(game.stage){ // malédiction
 				case 1:
-					ennemy = new Ennemy("Rat Géant", 6, 2, 1, null);
+					ennemy = new Ennemy(game, "Rat Géant", 6, 2, 1, null);
+					ennemy.addEffect(new ArmorPiercing(game, ennemy));
 					break;
 				case 2:
-					ennemy = new Ennemy("Soldat Squelette", 9, 4, 2, null);
+					ennemy = new Ennemy(game, "Soldat Squelette", 9, 4, 2, null);
+					ennemy.addEffect(new ArmorPiercing(game, ennemy));
 					break;
 				case 3:
-					ennemy = new Ennemy("Serpent Ailé", 12, 6, 2, new CurseDice(game));
+					ennemy = new Ennemy(game, "Serpent Ailé", 12, 6, 2, new CurseDice(game));
 					break;
 				case 4:
-					ennemy = new Ennemy("Garde Maudit", 15, 8, 4, new CurseDice(game));
+					ennemy = new Ennemy(game, "Garde Maudit", 15, 8, 4, new CurseDice(game));
 					break;
 				default:
-					ennemy = new Ennemy("Default", 1, 0, 0, null);
+					ennemy = new Ennemy(game, "Default", 1, 0, 0, null);
 	
 			}
 		}else if(rng == 1){ // poison
-			switch(stage){
+			switch(game.stage){
 				case 1:
-					ennemy = new Ennemy("Araignée Géante", 6, 2, 1, null);
+					ennemy = new Ennemy(game, "Araignée Géante", 6, 2, 1, null);
+					ennemy.addEffect(new ArmorPiercing(game, ennemy));
 					break;
 				case 2:
-					ennemy = new Ennemy("Gobelin", 9, 4, 2, null);
+					ennemy = new Ennemy(game, "Gobelin", 9, 4, 2, null);
+					ennemy.addEffect(new ArmorPiercing(game, ennemy));
 					break;
 				case 3:
-					ennemy = new Ennemy("Arbalétrier", 12, 6, 2, new PoisonDice(game));
+					ennemy = new Ennemy(game, "Arbalétrier", 12, 6, 2, new PoisonDice(game));
 					break;
 				case 4:
-					ennemy = new Ennemy("Garde du Roi", 15, 8, 4, new PoisonDice(game));
+					ennemy = new Ennemy(game, "Garde du Roi", 15, 8, 4, new PoisonDice(game));
 					break;
 				default:
-					ennemy = new Ennemy("Default", 1, 0, 0, null);
+					ennemy = new Ennemy(game, "Default", 1, 0, 0, null);
 	
 			}
 		}

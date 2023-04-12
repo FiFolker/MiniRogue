@@ -38,6 +38,7 @@ public class Classe {
 	boolean error = false;
 	String errorString;
 	int timer = 0;
+	public String playerAttack = "";
 
 	// TABLEAU DE 2 POTIONS et 1 OBJET ici et 2 SPELL
 
@@ -103,8 +104,8 @@ public class Classe {
 		}
 	}
 
-	public void damageReceived(int damage, boolean armor){
-		if(armor){
+	public void damageReceived(int damage, boolean pierceTheArmor){
+		if(!pierceTheArmor){
 			while(this.stats.get(armorString) > 0 && damage > 0){
 				substractStat(armorString, 1);
 				damage --;

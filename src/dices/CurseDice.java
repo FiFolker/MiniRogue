@@ -18,7 +18,7 @@ public class CurseDice extends Dice{
 		super(2);
 		this.game = game;
 		color = new Color(83, 33, 112);
-		name = "Dé de Malédiction";
+		name = "Malédiction";
 	}
 
 	@Override

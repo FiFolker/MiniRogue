@@ -13,8 +13,6 @@ public class Fight implements IUpdateAndDraw{
 	
 	Game game;
 	Ennemy ennemy;
-	String playerAttack = " ";
-	String ennemyAttack = " ";
 	String historique = "";
 	String result = "Combat En Cours ...";
 	int turn = 0;
@@ -27,8 +25,8 @@ public class Fight implements IUpdateAndDraw{
 
 	@Override
 	public void update() {
-		ennemyAttack = " ";
-		playerAttack = " ";
+		ennemy.ennemyAttack = " ";
+		game.selectedClass.playerAttack = " ";
 		historique = "";
 		game.selectedClass.damage = 0;
 		if(ennemy.life>0){ // tour joueur
@@ -51,7 +49,7 @@ public class Fight implements IUpdateAndDraw{
 			}
 
 			ennemy.life -= game.selectedClass.damage;
-			playerAttack = "Vous avez fait " + game.selectedClass.damage + " dégâts";
+			game.selectedClass.playerAttack = "Vous avez fait " + game.selectedClass.damage + " dégâts";
 
 		}
 		
@@ -65,12 +63,12 @@ public class Fight implements IUpdateAndDraw{
 		}
 
 		if(!ennemy.canFight){
-			ennemyAttack = "L'ennemi est gelé !";
+			ennemy.ennemyAttack = "L'ennemi est gelé !";
 			game.diceHasRolled = false;
 		}
 
 		if(ennemy.life > 0 && ennemy.canFight){ // tour ennemi
-			actionEnnemy(game.dungeonDice.value);
+			ennemy.actionEnnemy(game.dungeonDice.value);
 			game.diceHasRolled = false;
 			game.canMove = false;
 		}else if(ennemy.life <= 0){
@@ -78,7 +76,10 @@ public class Fight implements IUpdateAndDraw{
 			result = "Bravo vous avez terrasé " + ennemy.name;
 			game.selectedClass.addStat(game.selectedClass.xpString, ennemy.reward);
 			game.currentCard.isFinish = true;
+			game.selectedClass.playerAttack	 = " ";
+			ennemy.ennemyAttack  = " ";
 			game.inFight = false;
+			
 		}
 		turn ++;
 	}
@@ -101,48 +102,18 @@ public class Fight implements IUpdateAndDraw{
 		g2.setFont(game.sansSerif);
 		g2.drawString("Combat", game.choicePlaceX-(int)Utils.textToRectangle2D("Combat", g2).getWidth()/2, game.choicePlaceY+130);
 		g2.setFont(defaultFont);
-		g2.drawString(playerAttack, game.choicePlaceX-(int)Utils.textToRectangle2D(playerAttack, g2).getWidth()/2, game.choicePlaceY+150);
+		g2.drawString(game.selectedClass.playerAttack, game.choicePlaceX-(int)Utils.textToRectangle2D(game.selectedClass.playerAttack, g2).getWidth()/2, game.choicePlaceY+150);
 		g2.setColor(Color.red);
-		g2.drawString(ennemyAttack, game.choicePlaceX-(int)Utils.textToRectangle2D(ennemyAttack, g2).getWidth()/2, game.choicePlaceY+170);
+		g2.drawString(ennemy.ennemyAttack, game.choicePlaceX-(int)Utils.textToRectangle2D(ennemy.ennemyAttack, g2).getWidth()/2, game.choicePlaceY+170);
 		g2.setColor(Color.white);
 		g2.drawString(result, game.choicePlaceX-(int)Utils.textToRectangle2D(result, g2).getWidth()/2, game.choicePlaceY+190);
 		g2.drawString("Historique Dégâts", game.choicePlaceX-(int)Utils.textToRectangle2D("Historique Dégâts", g2).getWidth()/2, game.choicePlaceY+220);
 		g2.drawString(historique, game.choicePlaceX-(int)Utils.textToRectangle2D(historique, g2).getWidth()/2, game.choicePlaceY+240);
 	}
 
-	public void actionEnnemy(int value){
-		switch(value){
-			case 1:
-				ennemyAttack = "Attaque ennemi loupé ! ";
-				break;
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-				ennemyAttack = "Attaque ennemi réussi ! " + ennemy.damage + " dégâts";
-				game.selectedClass.damageReceived(ennemy.damage, true);
-				addDice();
-				break;
-			case 6:
-				ennemyAttack = "Attaque ennemi Parfaite ! " + ennemy.damage + " dégâts";
-				game.selectedClass.damageReceived(ennemy.damage, false);
-				addDice();
-				break;
-			default:
-				
-		}
-	}
+	
 
-	public void addDice(){
-		if(ennemy.applicableDice != null){
-			if(ennemy.applicableDice instanceof CurseDice){
-				game.curseDice = (CurseDice)ennemy.applicableDice;
-			}
-			if(ennemy.applicableDice instanceof PoisonDice){
-				game.poisonDice = (PoisonDice)ennemy.applicableDice;
-			}
-		}
-	}
+	
 
 	
 

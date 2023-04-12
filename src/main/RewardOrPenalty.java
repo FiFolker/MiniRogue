@@ -5,6 +5,8 @@ import dices.CurseDice;
 import dices.Dice;
 import dices.DungeonDice;
 import dices.PoisonDice;
+import effect.Blessing;
+import effect.Effect;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -21,6 +23,7 @@ public class RewardOrPenalty {
 	public String result;
 	public String rewardString;
 	public String penaltyString;
+	public Effect effect;
 	private String currentCase;
 	private final String statsCase = "statsCase";
 	private final String diceAndStatsCase = "diceAndStatsCase";
@@ -79,6 +82,7 @@ public class RewardOrPenalty {
 
 	public void reward(){
 		switch(currentCase){
+			case diceAndStatsCase:
 			case statsCase:
 				game.selectedClass.addStat(key, value);
 				result = rewardString;
@@ -88,15 +92,13 @@ public class RewardOrPenalty {
 				result = rewardString;
 				break;
 			case diceCase:
-				applyDice();
-				result = rewardString;
-				break;
-			case diceAndStatsCase:
-				applyDice();
-				game.selectedClass.addStat(key, value);
 				result = rewardString;
 				break;
 			default:
+		}
+		applyDice();
+		if(effect != null){
+			effect.applyEffect();
 		}
 	}
 
@@ -111,22 +113,25 @@ public class RewardOrPenalty {
 				result = penaltyString;
 				break;
 			case diceCase:
-				applyDice();
 				result = penaltyString;
 				break;
 			case diceAndStatsCase:
-				applyDice();
 				game.selectedClass.substractStat(key, value);
 				result = penaltyString;
 				break;
 			default:
 		}
+		applyDice();
+
+		if(effect != null){
+			effect.applyEffect();
+	}
 	}
 
 	public void applyDice(){
-		if(dices == null ){
+		if(dice != null ){
 			convertDice(dice);
-		}else{
+		}else if(dices != null){
 			for(Dice d : dices){
 				convertDice(d);
 			}
@@ -142,5 +147,11 @@ public class RewardOrPenalty {
 			game.characterDices.add((CharacterDice)d);
 		}
 	}
+
+    public void addEffect(Effect effect) {
+		this.effect = effect;
+		rewardString += " + " + effect.name;
+		penaltyString += " - " + effect.name;
+    }
 	
 }

@@ -67,7 +67,7 @@ public class Game extends JPanel implements Runnable{
 	transient BufferedImage token;
 	int currentClasse = 0;
 	public int stage = 1;
-	int totalStage = 4;
+	public int totalStage = 4;
 	int zone = 1;
 	int[] zonePerStage = {2, 2, 3, 3};
 	int topPos = 50;
@@ -189,9 +189,8 @@ public class Game extends JPanel implements Runnable{
 		if(gameState == menuState){
 			menu.update();
 		}else if (gameState == playState && !selectedClass.replacePotionBox){
-			movementOnTheBoard();
 
-			if(currentCard instanceof EnnemyCard){
+			if(currentCard instanceof EnnemyCard || currentCard instanceof GuardianCard){
 				inFight = true;
 			}else{
 				inFight = false;
@@ -232,6 +231,8 @@ public class Game extends JPanel implements Runnable{
 				revealNextCard();
 			}
 
+			movementOnTheBoard();
+
 			selectedClass.update();
 
 			currentCard.update();
@@ -269,9 +270,11 @@ public class Game extends JPanel implements Runnable{
 		currentPos.ligne = 0;
 		currentPos.colonne = 0;
 		if(zone == zonePerStage[stage-1] && stage < totalStage){
-			stage ++;
-			zone = 1;
-			loadBoardCards();
+			if(!inFight){
+				stage ++;
+				zone = 1;
+				loadBoardCards();
+			}
 		}else if(zone < zonePerStage[stage-1]){
 			if(selectedClass.stats.get(selectedClass.foodString) > 0){
 				selectedClass.substractStat(selectedClass.foodString, 1);
@@ -377,7 +380,7 @@ public class Game extends JPanel implements Runnable{
 				returnedCard = new BurialCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);
 				break;
 			case 1:
-				returnedCard = new EnnemyCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, stage, coord);
+				returnedCard = new EnnemyCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);
 				break;
 			case 2:
 				returnedCard = new FireCampCard(this, new Rectangle(x, y, sizeWidthCard, sizeHeightCard), x, y, coord);

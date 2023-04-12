@@ -17,7 +17,7 @@ public class PoisonDice extends Dice{
 		super(2);
 		this.game = game;
 		color = Color.green;
-		name = "Dé de Poison";
+		name = "Poison";
 	}
 	
 	@Override
