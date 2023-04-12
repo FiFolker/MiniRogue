@@ -1,6 +1,7 @@
 package potions;
 
 
+import main.ErrorDraw;
 import main.Game;
 import main.Utils;
 
@@ -20,7 +21,7 @@ public class PerceptionPotion extends Potion{
 			game.perceptionEffect = true;
 			game.selectedClass.removePotion(this);
 		}else{
-			error = true;
+			ErrorDraw.errorState = true;
 			errorString = "Vous devez l'utiliser sur une carte nécéssitant un test de compétence où si vous êtes aveuglé !";
 		}
 	}

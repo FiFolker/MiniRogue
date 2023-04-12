@@ -14,7 +14,7 @@ public class Button implements IUpdateAndDraw{
 	public Rectangle button;
 	Polygon icon;
 	BufferedImage image;
-	String toolTipMessage;
+	public String toolTipMessage;
 	String buttonText;
 	public boolean enable = true;
 	public boolean isSelected = false;

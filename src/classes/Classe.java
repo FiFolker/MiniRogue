@@ -186,14 +186,12 @@ public class Classe {
 			if(!potions.isEmpty()){
 				if(potions.get(potions.size()-1).getClass() != potion.getClass()){
 					potions.add(potion);
-					System.out.println(potions.size());
 				}else{
 					error = true;
 					errorString = "Vous ne pouvez posséder qu'une seule potion par type !";
 				}
 			}else{
 				potions.add(potion);
-				System.out.println(potions.size());
 			}	
 		}else if(potions.size() == 2 && potions.get(0).getClass() != potion.getClass() && potions.get(1).getClass() != potion.getClass()){
 			replacePotion = potion;

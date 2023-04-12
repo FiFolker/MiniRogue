@@ -9,7 +9,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import javax.security.auth.callback.ConfirmationCallback;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -80,6 +79,9 @@ public class Game extends JPanel implements Runnable{
 	public int choicePlaceY  = gui.yChoice+30;
 	int sizeWidthCard = 202;
 	int sizeHeightCard = 250;
+
+	// STATIC 
+	public static Font defaultFont = new Font("Dialog", Font.PLAIN, 12);
 
 	// FPS
 	int FPS = 60;
@@ -300,6 +302,9 @@ public class Game extends JPanel implements Runnable{
 		if(gameState == menuState){
 			menu.draw(g2);
 		}else if(gameState == playState){
+			g2.setFont(Game.defaultFont);
+			gui.draw(g2);
+
 			cardHovered = null;
 			if(cardBoard[0] != null){
 				for(int col=0;col<cardBoard.length;col++){
@@ -347,7 +352,6 @@ public class Game extends JPanel implements Runnable{
 
 			diceButton.draw(g2);
 
-			gui.draw(g2);
 
 			selectedClass.draw(g2);
 		}else if(gameState == loseState){
@@ -358,11 +362,18 @@ public class Game extends JPanel implements Runnable{
 	public void revealNextCard(){
 		Coordonnees coordRight = new Coordonnees(currentPos.ligne, currentPos.colonne+1);
 		Coordonnees coordBot = new Coordonnees(currentPos.ligne+1, currentPos.colonne);
+
 		if(coordBot.estDansPlateau()){
 			cardBoard[coordBot.ligne][coordBot.colonne].revealCard();
 		}
 		if(coordRight.estDansPlateau()){
 			cardBoard[coordRight.ligne][coordRight.colonne].revealCard();
+		}
+		if(coordBot.equals(new Coordonnees(2, 2)) && zone != zonePerStage[stage]){
+			cardBoard[coordBot.ligne][coordBot.colonne].unrevealCard();
+		}
+		if(coordRight.equals(new Coordonnees(2, 2)) && zone != zonePerStage[stage]){
+			cardBoard[coordRight.ligne][coordRight.colonne].unrevealCard();
 		}
 	}
 

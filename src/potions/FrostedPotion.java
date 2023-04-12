@@ -7,6 +7,7 @@ import cards.EnnemyCard;
 import main.Game;
 import main.Utils;
 import main.Button;
+import main.ErrorDraw;
 
 public class FrostedPotion extends Potion {
 
@@ -24,7 +25,7 @@ public class FrostedPotion extends Potion {
 			e.ennemy.canFight = false;
 			game.selectedClass.removePotion(this);
 		}else{
-			error = true;
+			ErrorDraw.errorState = true;
             errorString = "Vous devez être en combat pour utiliser cette potion ! ";
 		}
 	}

@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 
 import cards.EnnemyCard;
 import main.Button;
+import main.ErrorDraw;
 import main.Game;
 import main.Utils;
 
@@ -25,9 +26,8 @@ public class FirePotion extends Potion {
 			e.ennemy.life -= effectValue;
 			game.selectedClass.removePotion(this);
 		}else{
-			error = true;
-            errorString = "Vous devez être en combat pour utiliser cette potion ! ";
-			System.out.println("Vous devez être en combat pour utiliser cette potion !");
+			ErrorDraw.errorState = true;
+			errorString = "Vous devez être en combat pour utiliser cette potion ! ";
 		}
 		
 	}

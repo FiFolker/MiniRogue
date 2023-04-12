@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import main.Button;
+import main.ErrorDraw;
 import main.Game;
 import main.IUpdateAndDraw;
 import main.Utils;
@@ -18,7 +19,6 @@ public abstract class Potion implements IUpdateAndDraw{
 	public String info;
 	public Rectangle rect;
 	public String errorString;
-	boolean error = false;
 	public Button potionButton;
 	public int currentNumber = 0;
 	public static int number = 0;
@@ -45,15 +45,8 @@ public abstract class Potion implements IUpdateAndDraw{
 	public void draw(Graphics2D g2) {
 		
 		potionButton.draw(g2);
-		if(error){
-			g2.setColor(Color.red);
-			g2.setFont(game.sansSerif);
-			g2.drawString(errorString, (game.getWidth() - game.gui.xLine)/2 - (int)Utils.textToRectangle2D(errorString, g2).getWidth()/16, 830);
-			i ++;
-			if(i >= 180){
-				i = 0;
-				error = false;
-			}
+		if(ErrorDraw.errorState){
+			ErrorDraw.draw(g2, errorString, game);
 		}
 	}
 

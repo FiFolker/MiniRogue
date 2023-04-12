@@ -2,6 +2,7 @@ package potions;
 
 import cards.EnnemyCard;
 import cards.GuardianCard;
+import main.ErrorDraw;
 import main.Game;
 import main.Utils;
 
@@ -27,9 +28,8 @@ public class PoisonPotion extends Potion{
 			}
 			game.selectedClass.removePotion(this);
 		}else{
-			error = true;
+			ErrorDraw.errorState = true;
 			errorString = "Vous devez être en combat pour utiliser cette potion ! ";
-			System.out.println("Vous devez être en combat pour utiliser cette potion ! ");
 		}
 	}
 

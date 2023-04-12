@@ -104,6 +104,7 @@ public class RewardOrPenalty {
 
 	public void penalty(){
 		switch(currentCase){
+			case diceAndStatsCase:
 			case statsCase:
 				game.selectedClass.substractStat(key, value);
 				result = penaltyString;
@@ -113,10 +114,6 @@ public class RewardOrPenalty {
 				result = penaltyString;
 				break;
 			case diceCase:
-				result = penaltyString;
-				break;
-			case diceAndStatsCase:
-				game.selectedClass.substractStat(key, value);
 				result = penaltyString;
 				break;
 			default:

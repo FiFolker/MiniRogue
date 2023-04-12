@@ -52,12 +52,18 @@ public class Card implements IUpdateAndDraw{
 		isReveal = true;
 	}
 
+	public void unrevealCard(){
+		currentImage = backCard;
+		isReveal = false;
+	}
+
 	@Override
 	public void update(){}
 
 	@Override
 	public void draw(Graphics2D g2){
 		g2.setColor(Color.white);
+		g2.setFont(Game.defaultFont);
 		if(isHover()){
 			g2.drawImage(currentImage, x-zoom/2, y-zoom/2, hitbox.width+zoom, hitbox.height+zoom, null);
 		}else{
