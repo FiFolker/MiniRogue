@@ -201,6 +201,7 @@ public class Game extends JPanel implements Runnable{
 
 
 			if(diceButton.isClicked() ^ keyH.spacePressed && !diceHasRolled){ // lancé de dé
+				selectedClass.addStat(selectedClass.xpString, 1);
 				if(!perceptionEffect){
 					for(CharacterDice d : characterDices){
 						d.roll();
