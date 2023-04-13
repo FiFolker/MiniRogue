@@ -14,9 +14,10 @@ import main.Fight;
 import main.Game;
 import main.Utils;
 
-public class GuardianCard extends UpdateOnRoll{
+public class GuardianCard extends UpdateAlways{
 
 	public Ennemy ennemy;
+	RewardChoice rewardChoice;
 	Fight fight;
 	int life;
 	int damage;
@@ -35,6 +36,7 @@ public class GuardianCard extends UpdateOnRoll{
 		image = Utils.loadImage("assets/cards/cardRed.png");
 		currentImage = backCard;
 		this.isLastZone = isLastZone;
+		this.rewardChoice = new RewardChoice(game, this);
 		if(isLastZone){
 			setupEnnemy();
 		}
@@ -86,10 +88,13 @@ public class GuardianCard extends UpdateOnRoll{
 	}
 
 	@Override
-	public void updateOnRoll() {
-		if(isLastZone){
+	public void updateAlways() {
+		if(game.currentPos.equals(this.coord) && game.inFight && game.diceHasRolled && isLastZone){
 			fight.update();
-		}	
+			isFinish = false;
+		}
+		rewardChoice.update();
+		
 	}
 
 	@Override
@@ -98,11 +103,15 @@ public class GuardianCard extends UpdateOnRoll{
 			fight.draw(g2);
 		}
 		if(!game.inFight && game.currentCard.equals(this)){
-			timer ++;
-			if(timer  >= 120){
-				game.goDownstair();
-				timer = 0;
+			rewardChoice.draw(g2);
+			if(rewardChoice.hasChoiced){
+				timer ++;
+				if(timer  >= 120){
+					game.goDownstair();
+					timer = 0;
+				}
 			}
+			
 		}
 	}
 

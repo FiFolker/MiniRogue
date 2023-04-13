@@ -16,7 +16,7 @@ public class RewardOrPenalty {
 
 	public int value;
 	public String key;
-	Potion potion;
+	public Potion potion;
 	Dice dice;
 	ArrayList<Dice> dices;
 	Game game;
@@ -24,11 +24,6 @@ public class RewardOrPenalty {
 	public String rewardString;
 	public String penaltyString;
 	public Effect effect;
-	private String currentCase;
-	private final String statsCase = "statsCase";
-	private final String diceAndStatsCase = "diceAndStatsCase";
-	private final String diceCase = "diceCase";
-	private final String potionCase = "potionCase";
 
 	public RewardOrPenalty(Game game, String key, int value){
 		this.game = game;
@@ -36,7 +31,6 @@ public class RewardOrPenalty {
 		this.key = key;
 		rewardString = "+ " + value + " " + key;
 		penaltyString = "- " + value + " " + key;
-		currentCase = statsCase;
 	}
 
 	public RewardOrPenalty(Game game, Potion potion){
@@ -44,7 +38,6 @@ public class RewardOrPenalty {
 		this.potion = potion;
 		rewardString = "+ " + potion.name ;
 		penaltyString = "- " + potion.name ;
-		currentCase = potionCase;
 	}
 
 	public RewardOrPenalty(Game game, Dice dice){
@@ -52,7 +45,6 @@ public class RewardOrPenalty {
 		this.dice = dice;
 		penaltyString = "+ " + dice.name ;
 		rewardString = "- " + dice.name ;
-		currentCase = diceCase;
 	}
 
 	public RewardOrPenalty(Game game, ArrayList<Dice> dices){
@@ -67,7 +59,6 @@ public class RewardOrPenalty {
 			rewardString += " - " + d.name ;
 		}
 		
-		currentCase = diceCase;
 	}
 
 	public RewardOrPenalty(Game game, Dice dice, String key, int value){
@@ -77,52 +68,49 @@ public class RewardOrPenalty {
 		this.key = key;
 		rewardString = "+ " + dice.name + " + " + value + " " +key;
 		penaltyString = "+ " + dice.name + " - " + value + " " +key;
-		currentCase = statsCase;
+	}
+
+	public RewardOrPenalty(Game game, Potion potion, String key, int value){
+		this.game = game;
+		this.potion = potion;
+		this.value = value;
+		this.key = key;
+		rewardString = "+ " + potion.name + " / + " + value + " " +key;
+		penaltyString = "+ " + potion.name + " / - " + value + " " +key;
 	}
 
 	public void reward(){
-		switch(currentCase){
-			case diceAndStatsCase:
-			case statsCase:
-				game.selectedClass.addStat(key, value);
-				result = rewardString;
-				break;
-			case potionCase:
-				game.selectedClass.addPotion(potion);
-				result = rewardString;
-				break;
-			case diceCase:
-				result = rewardString;
-				break;
-			default:
-		}
+
+		result = rewardString;
+
 		applyDice();
 		if(effect != null){
 			effect.applyEffect();
+		}
+		if(potion != null){
+			game.selectedClass.addPotion(potion);
+
+		}
+		if(key != null){
+			game.selectedClass.addStat(key, value);
 		}
 	}
 
 	public void penalty(){
-		switch(currentCase){
-			case diceAndStatsCase:
-			case statsCase:
-				game.selectedClass.substractStat(key, value);
-				result = penaltyString;
-				break;
-			case potionCase:
-				game.selectedClass.removePotion(potion);
-				result = penaltyString;
-				break;
-			case diceCase:
-				result = penaltyString;
-				break;
-			default:
-		}
+		result = penaltyString;
+			
 		applyDice();
 
 		if(effect != null){
 			effect.applyEffect();
-	}
+		}
+		if(potion != null){
+			game.selectedClass.removePotion(potion);
+
+		}
+		if(key != null){
+			game.selectedClass.substractStat(key, value);
+		}
 	}
 
 	public void applyDice(){

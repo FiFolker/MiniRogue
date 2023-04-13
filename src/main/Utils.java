@@ -72,6 +72,13 @@ public class Utils {
 		g2.drawString(text[5], 30 + (int)Utils.textToRectangle2D(text[2], g2).getWidth() + 50, game.choicePlaceY+60+(int)Utils.textToRectangle2D(text[5], g2).getHeight());
 	}
 
+	public static void drawSixDicePossibilitiesInCol(Game game, Graphics2D g2, String[] text){
+		for(int i=0; i<text.length; i++){
+			Utils.drawDice(g2, 10, game.choicePlaceY+30*i, i+1);
+			g2.drawString(text[i], 40, game.choicePlaceY+(int)Utils.textToRectangle2D(text[i], g2).getHeight()+30*i);
+		}
+	}
+
 	public static void drawThreeDicePossibilities(Game game, Graphics2D g2, String[] text){
 		Utils.drawDice(g2, 10, game.choicePlaceY, 1);
 		Utils.drawDice(g2, 35, game.choicePlaceY, 2);
