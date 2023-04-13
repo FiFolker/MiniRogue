@@ -56,6 +56,8 @@ public class Menu implements IUpdateAndDraw{
 					case playButton:
 						game.gameState = game.playState;
 						game.selectedClass = game.classes[game.currentClasse];
+						game.selectedClass.addPotion(new FirePotion(game));
+						game.selectedClass.addPotion(new FrostedPotion(game));
 						game.loadGame();
 						game.loadBoardCards();
 						break;

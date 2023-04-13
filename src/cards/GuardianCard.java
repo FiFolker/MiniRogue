@@ -18,21 +18,26 @@ public class GuardianCard extends UpdateOnRoll{
 
 	public Ennemy ennemy;
 	Fight fight;
-	String playerAttack = " ";
-	String ennemyAttack = " ";
 	int life;
 	int damage;
 	int reward;
 	int timer = 0;
+	private boolean isLastZone;
+	public static boolean protectorHasSpawned = false;
+	public static boolean spiderHasSpawned = false;
+	public static boolean dragonHasSpawned = false;
 
-	public GuardianCard(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
+	public GuardianCard(Game game, Rectangle hitbox, int x, int y, Coordonnees coord, boolean isLastZone) {
 		super(game, hitbox, x, y, coord);
 		name = "Carte Guardien";
 		result = "Combat En Cours ...";
 		backCard = Utils.loadImage("assets/cards/guardianBackCard.png");
 		image = Utils.loadImage("assets/cards/cardRed.png");
 		currentImage = backCard;
-		setupEnnemy();
+		this.isLastZone = isLastZone;
+		if(isLastZone){
+			setupEnnemy();
+		}
 	}
 
 	public void setupEnnemy(){
@@ -61,31 +66,37 @@ public class GuardianCard extends UpdateOnRoll{
 					damage = 2;
 					reward = 2;
 			}
-			switch(rng){
-				case 1:
-					ennemy = new Ennemy(game, "Le Protecteur Du Roi", life, damage, reward, null);
-					ennemy.addEffect(new ArmorPiercing(game, ennemy));
-					break;
-				case 2:
-					ennemy = new Ennemy(game, "Le Dragon Maudit", life, damage, reward, new CurseDice(game));
-					break;
-				case 3:
-					ennemy = new Ennemy(game, "La Reigne Araignées", life, damage, reward, new PoisonDice(game));
-					break;
+			
+			if(rng == 1 && !protectorHasSpawned){
+				ennemy = new Ennemy(game, "Le Protecteur Du Roi", life, damage, reward, null);
+				GuardianCard.protectorHasSpawned = true;
+				ennemy.addEffect(new ArmorPiercing(game, ennemy));
+			}else if(rng == 2 && !dragonHasSpawned){
+				ennemy = new Ennemy(game, "Le Dragon Maudit", life, damage, reward, new CurseDice(game));
+				GuardianCard.dragonHasSpawned = true;
+			}else if(rng == 3 && !spiderHasSpawned){
+				ennemy = new Ennemy(game, "La Reigne Araignées", life, damage, reward, new PoisonDice(game));
+				GuardianCard.spiderHasSpawned = true;
+			}else if(spiderHasSpawned && rng == 3 || protectorHasSpawned && rng == 1 || dragonHasSpawned && rng == 2){
+				setupEnnemy();
 			}
+			
 		}
 		fight = new Fight(game, ennemy);
 	}
 
 	@Override
 	public void updateOnRoll() {
-		fight.update();
-		
+		if(isLastZone){
+			fight.update();
+		}	
 	}
 
 	@Override
 	public void drawAdditional(Graphics2D g2) {
-		fight.draw(g2);
+		if(isLastZone){
+			fight.draw(g2);
+		}
 		if(!game.inFight && game.currentCard.equals(this)){
 			timer ++;
 			if(timer  >= 120){
@@ -93,6 +104,12 @@ public class GuardianCard extends UpdateOnRoll{
 				timer = 0;
 			}
 		}
+	}
+
+	public static void reset() {
+		protectorHasSpawned = false;
+		dragonHasSpawned= false;
+		spiderHasSpawned = false;
 	}
 	
 }

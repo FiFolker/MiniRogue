@@ -4,6 +4,7 @@ package potions;
 import java.awt.Rectangle;
 
 import cards.EnnemyCard;
+import cards.GuardianCard;
 import main.Button;
 import main.ErrorDraw;
 import main.Game;
@@ -22,8 +23,13 @@ public class FirePotion extends Potion {
 	@Override
 	public void applyEffect() {
 		if(game.inFight){
-			EnnemyCard e = (EnnemyCard)game.currentCard;
-			e.ennemy.life -= effectValue;
+			if(game.currentCard instanceof EnnemyCard){
+				EnnemyCard e = (EnnemyCard)game.currentCard;
+				e.ennemy.life -= effectValue;
+			}else if(game.currentCard instanceof GuardianCard){
+				GuardianCard g = (GuardianCard)game.currentCard;
+				g.ennemy.life -= effectValue;
+			}
 			game.selectedClass.removePotion(this);
 		}else{
 			ErrorDraw.errorState = true;

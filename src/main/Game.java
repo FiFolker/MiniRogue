@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.security.Guard;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -43,6 +44,7 @@ public class Game extends JPanel implements Runnable{
 	transient Card cardHovered = null;
 	transient Menu menu;
 	transient Lose lose;
+	transient Win win;
 	public transient Classe selectedClass;
 	public transient GUI gui = new GUI(this);
 	transient Button diceButton;
@@ -60,6 +62,7 @@ public class Game extends JPanel implements Runnable{
 	public final int menuState = 0;
 	public final int playState = 1;
 	public final int loseState = 2;
+	public final int winState = 3;
 	public Font sansSerif = new Font("Sans-Serif", Font.BOLD, 15);
 	public Font title = new Font("Sans-Serif", Font.BOLD, 48);
 	public Font secondTitle = new Font("Sans-Serif", Font.PLAIN, 28);
@@ -110,6 +113,7 @@ public class Game extends JPanel implements Runnable{
 
 		menu = new Menu(this);
 		lose = new Lose(this);
+		win = new Win(this);
 	}
 
 	public void loadGame(){
@@ -119,11 +123,13 @@ public class Game extends JPanel implements Runnable{
 		curseDice = null;
 		poisonDice = null;
 
+		GuardianCard.reset();
+
 		characterDices.clear();
 		characterDices.add(new CharacterDice());
 
 		token = Utils.loadImage("assets/jeton/player.png");
-		classes[0] = new Classe(this, Utils.loadImage("assets/classes/rogue.png"), "Voleur", 7, 3, 0, 8);
+		classes[0] = new Classe(this, Utils.loadImage("assets/classes/rogue.png"), "Voleur", 100, 20, 20, 20);//7, 3, 0, 8
 		classes[1] = new Classe(this, Utils.loadImage("assets/classes/mage.png"), "Magicien", 4, 5, 0, 3);
 		classes[2] = new Classe(this, Utils.loadImage("assets/classes/swordman.png"), "Epeiste", 10, 3, 3, 5);
 		classes[3] = new Classe(this, Utils.loadImage("assets/classes/adventurer.png"), "Aventurier", 10, 3, 3, 5);
@@ -140,7 +146,7 @@ public class Game extends JPanel implements Runnable{
 				int x = leftPos+(col*sizeWidthCard)+10;
 				int y = topPos+(lig*sizeHeightCard)+10;
 				if(lig == cardBoard.length-1 && col == cardBoard[lig].length-1){
-					cardBoard[lig][col] = new GuardianCard(this, new Rectangle(x,y,sizeWidthCard, sizeHeightCard), x, y, new Coordonnees(lig, col));
+					cardBoard[lig][col] = new GuardianCard(this, new Rectangle(x,y,sizeWidthCard, sizeHeightCard), x, y, new Coordonnees(lig, col), zone == zonePerStage[stage-1]);
 				}else{
 					cardBoard[lig][col] = randomCard(x, y, new Coordonnees(lig, col));
 				}
@@ -236,6 +242,8 @@ public class Game extends JPanel implements Runnable{
 
 		}else if(gameState == loseState){
 			lose.update();
+		}else if(gameState == winState){
+			win.update();
 		}
 		
 		
@@ -290,6 +298,8 @@ public class Game extends JPanel implements Runnable{
 			}
 			zone ++;
 			loadBoardCards();
+		}else if(stage == totalStage && !inFight){
+			gameState = winState;
 		}
 		currentCard = cardBoard[currentPos.ligne][currentPos.colonne];
 		
@@ -356,6 +366,8 @@ public class Game extends JPanel implements Runnable{
 			selectedClass.draw(g2);
 		}else if(gameState == loseState){
 			lose.draw(g2);
+		}else if(gameState == winState){
+			win.draw(g2);
 		}
 	}
 
@@ -369,10 +381,10 @@ public class Game extends JPanel implements Runnable{
 		if(coordRight.estDansPlateau()){
 			cardBoard[coordRight.ligne][coordRight.colonne].revealCard();
 		}
-		if(coordBot.equals(new Coordonnees(2, 2)) && zone != zonePerStage[stage]){
+		if(coordBot.estDansPlateau() && coordBot.equals(new Coordonnees(2, 2)) && zone != zonePerStage[stage-1]){
 			cardBoard[coordBot.ligne][coordBot.colonne].unrevealCard();
 		}
-		if(coordRight.equals(new Coordonnees(2, 2)) && zone != zonePerStage[stage]){
+		if(coordRight.estDansPlateau() && coordRight.equals(new Coordonnees(2, 2)) && zone != zonePerStage[stage-1]){
 			cardBoard[coordRight.ligne][coordRight.colonne].unrevealCard();
 		}
 	}

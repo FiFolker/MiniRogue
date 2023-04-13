@@ -20,7 +20,6 @@ public abstract class Potion implements IUpdateAndDraw{
 	public Rectangle rect;
 	public String errorString;
 	public Button potionButton;
-	public int currentNumber = 0;
 	public static int number = 0;
 	public int size = 32;
 	int i = 0;
@@ -31,8 +30,6 @@ public abstract class Potion implements IUpdateAndDraw{
 	public Potion(Game game, BufferedImage icon){
 		this.game = game;
 		this.icon = icon;
-		number ++;
-		currentNumber = number;
 	}
 
 	public void addButtton(){

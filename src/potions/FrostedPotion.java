@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import cards.EnnemyCard;
+import cards.GuardianCard;
 import main.Game;
 import main.Utils;
 import main.Button;
@@ -21,8 +22,13 @@ public class FrostedPotion extends Potion {
 	@Override
 	public void applyEffect() {
 		if(game.inFight){
-			EnnemyCard e = (EnnemyCard)game.currentCard;
-			e.ennemy.canFight = false;
+			if(game.currentCard instanceof EnnemyCard){
+				EnnemyCard e = (EnnemyCard)game.currentCard;
+				e.ennemy.canFight = false;
+			}else if(game.currentCard instanceof GuardianCard){
+				GuardianCard g = (GuardianCard)game.currentCard;
+				g.ennemy.canFight = false;
+			}
 			game.selectedClass.removePotion(this);
 		}else{
 			ErrorDraw.errorState = true;

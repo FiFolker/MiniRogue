@@ -78,7 +78,7 @@ public class Classe {
 	}
 
 	public void update(){
-		if(this.stats.get(xpString) == xpRequired && this.stats.get(levelString) < this.maxStats.get(levelString)){
+		if(this.stats.get(xpString) >= xpRequired  && this.stats.get(xpString) <= this.maxStats.get(xpString) && this.stats.get(levelString) < this.maxStats.get(levelString)){
 			game.characterDices.add(new CharacterDice());
 			this.addStat(levelString, 1);
 			xpRequired += xpRequired*2;
@@ -158,7 +158,7 @@ public class Classe {
 			g2.drawString("Potions actuel : ", box.x + box.width/2 -(int)Utils.textToRectangle2D("Potions actuel : ", g2).getWidth()/2, box.y + 110);
 
 			Button firstPotion = new Button(new Rectangle(box.x + box.width/2 - potions.get(0).potionButton.button.width - 5, box.y + box.height/2 + 20, potions.get(0).potionButton.button.width, potions.get(0).potionButton.button.height), potions.get(0).icon);
-			Button secondPotion = new Button(new Rectangle(box.x + box.width/2 + 5, box.y + box.height/2+ 20, potions.get(1).potionButton.button.width, potions.get(1).potionButton.button.height), potions.get(1).icon);
+			Button secondPotion = new Button(new Rectangle(box.x + box.width/2 + 5, box.y + box.height/2+ 20, potions.get(potions.size()-1).potionButton.button.width, potions.get(potions.size()-1).potionButton.button.height), potions.get(potions.size()-1).icon);
 
 			Button cancelButton = new Button(new Rectangle(box.x + box.width/2 - 50, box.y + box.height - 35, 100, 25), "Annuler");
 
@@ -168,7 +168,7 @@ public class Classe {
 
 			if(firstPotion.isClicked()){
 				removePotion(potions.get(0));
-				potion.potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(game.selectedClass.potions.size());
+				potion.potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(game.selectedClass.potions.size()-1);
 				addPotion(potion);
 				replacePotionBox = false;
 			}else if(secondPotion.isClicked()){
@@ -181,7 +181,8 @@ public class Classe {
 			}
 	}
 
-    public void addPotion(Potion potion) {
+
+	public void addPotion(Potion potion) {
 		if(potions.size() < 2){
 			if(!potions.isEmpty()){
 				if(potions.get(potions.size()-1).getClass() != potion.getClass()){
@@ -209,7 +210,6 @@ public class Classe {
 			potions.remove(potion);
 		}
 		if(i == 0 && !potions.isEmpty() && potions.get(0) != null){
-			potions.get(0).currentNumber = Potion.number;
 			potions.get(0).potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(potions.size());
 		}
 	}

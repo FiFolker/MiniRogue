@@ -41,11 +41,9 @@ public class EnnemyCard extends UpdateOnRoll{
 			switch(game.stage){ // malédiction
 				case 1:
 					ennemy = new Ennemy(game, "Rat Géant", 6, 2, 1, null);
-					ennemy.addEffect(new ArmorPiercing(game, ennemy));
 					break;
 				case 2:
 					ennemy = new Ennemy(game, "Soldat Squelette", 9, 4, 2, null);
-					ennemy.addEffect(new ArmorPiercing(game, ennemy));
 					break;
 				case 3:
 					ennemy = new Ennemy(game, "Serpent Ailé", 12, 6, 2, new CurseDice(game));
@@ -61,11 +59,9 @@ public class EnnemyCard extends UpdateOnRoll{
 			switch(game.stage){
 				case 1:
 					ennemy = new Ennemy(game, "Araignée Géante", 6, 2, 1, null);
-					ennemy.addEffect(new ArmorPiercing(game, ennemy));
 					break;
 				case 2:
 					ennemy = new Ennemy(game, "Gobelin", 9, 4, 2, null);
-					ennemy.addEffect(new ArmorPiercing(game, ennemy));
 					break;
 				case 3:
 					ennemy = new Ennemy(game, "Arbalétrier", 12, 6, 2, new PoisonDice(game));
