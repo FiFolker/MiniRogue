@@ -199,6 +199,9 @@ public class Game extends JPanel implements Runnable{
 		}else if (gameState == playState && !selectedClass.replacePotionBox){
 			movementOnTheBoard();
 
+			if(keyH.escapePressed){
+				gameState = menuState;
+			}
 
 			if(diceButton.isClicked() ^ keyH.spacePressed && !diceHasRolled){ // lancé de dé
 				if(!perceptionEffect){
