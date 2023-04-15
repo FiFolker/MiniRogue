@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import dices.CharacterDice;
 import main.Button;
+import main.ErrorDraw;
 import main.Game;
 import main.Utils;
 import potions.HolyWater;
@@ -35,7 +36,6 @@ public class Classe {
 	public boolean replacePotionBox = false;
 	Potion replacePotion;
 	public ArrayList<Potion> potions = new ArrayList<>();
-	boolean error = false;
 	String errorString;
 	int timer = 0;
 	public String playerAttack = "";
@@ -132,15 +132,8 @@ public class Classe {
 			potions.get(i).draw(g2);
 			i++;
 		}
-		if(error){
-			g2.setColor(Color.red);
-			g2.setFont(game.sansSerif);
-			g2.drawString(errorString, (game.getWidth() - game.gui.xLine)/2 + (int)Utils.textToRectangle2D(errorString, g2).getWidth()/5, 830);
-			timer++;
-			if(timer >= 120){
-				timer = 0;
-				error = false;
-			}
+		if(ErrorDraw.errorState){
+			ErrorDraw.draw(g2, errorString, game);
 		}
 
 		if(replacePotionBox){
@@ -192,7 +185,6 @@ public class Classe {
 				if(potions.get(potions.size()-1).getClass() != potion.getClass()){
 					potions.add(potion);
 				}else{
-					error = true;
 					errorString = "Vous ne pouvez posséder qu'une seule potion par type !";
 				}
 			}else{
@@ -207,15 +199,23 @@ public class Classe {
 	public void removePotion(Potion potion){
 		Potion.number --;
 		int i = 0;
-		while(i < potions.size() && !potions.isEmpty() && potions.get(i) != potion){
-			i++;
+		if(!potions.contains(potion)){
+			System.out.println("test");
+			errorString = "Vous ne possédez pas " + potion.name + " !";
+			ErrorDraw.errorState = true;
+		}else{
+			System.out.println("test 2");
+			while(i < potions.size() && !potions.isEmpty() && potions.get(i) != potion){
+				i++;
+			}
+			if(potions.get(i) == potion){
+				potions.remove(potion);
+			}
+			if(i == 0 && !potions.isEmpty() && potions.get(0) != null){
+				potions.get(0).potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(potions.size());
+			}
 		}
-		if(potions.get(i) == potion){
-			potions.remove(potion);
-		}
-		if(i == 0 && !potions.isEmpty() && potions.get(0) != null){
-			potions.get(0).potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(potions.size());
-		}
+		
 	}
 
 }

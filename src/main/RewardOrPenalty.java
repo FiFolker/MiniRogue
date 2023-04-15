@@ -79,6 +79,13 @@ public class RewardOrPenalty {
 		penaltyString = "+ " + potion.name + " / - " + value + " " +key;
 	}
 
+	public RewardOrPenalty(Game game, Effect effect){
+		this.game = game;
+		this.effect = effect;
+		rewardString = "+ " + effect.name;
+		penaltyString = "- " + effect.name;
+	}
+
 	public void reward(){
 
 		result = rewardString;

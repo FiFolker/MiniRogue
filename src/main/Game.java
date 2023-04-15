@@ -332,7 +332,7 @@ public class Game extends JPanel implements Runnable{
 			if(cardHovered != null){
 				if(cardHovered.isReveal){ // le subtefurge AKA la solution D
 					g2.setColor(Color.black);
-					g2.fillRect(0, gui.yChoice+20, gui.xLine, this.getHeight());
+					g2.fillRect(0, gui.yChoice+15, gui.xLine, this.getHeight());
 				}
 				cardHovered.draw(g2);
 			}

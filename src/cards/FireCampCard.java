@@ -59,7 +59,7 @@ public class FireCampCard extends UpdateAlways{
 				}
 				isFinish = true;
 				game.canMove = true;
-				Game.mouseH.leftClickedOnceTime = false;
+				Game.mouseH.leftClicked = false;
 			}
 		}
 	}
