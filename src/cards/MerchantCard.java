@@ -13,6 +13,7 @@ import main.Game;
 import main.RewardPayant;
 import main.Utils;
 import potions.FrostedPotion;
+import potions.Potion;
 
 public class MerchantCard extends UpdateAlways{
 
@@ -35,17 +36,20 @@ public class MerchantCard extends UpdateAlways{
 	}
 
 	private void setupBuyPossibilities() {
+		RewardPayant tempRewardPayant;
 		// ACHAT
 		buyPossibilities.put(new Button(new Rectangle(centerLeft-width/2, game.choicePlaceY+20, width, height), "1 Pièce -> +1 PV"), new RewardPayant(game, game.selectedClass.lifeString, 1, 1, false));
 		buyPossibilities.put(new Button(new Rectangle(centerLeft-width/2, game.choicePlaceY+20+(gap*buyPossibilities.size()), width, height), "2 Pièces -> +1 Nourriture"), new RewardPayant(game, game.selectedClass.foodString, 1, 2, false));
 		buyPossibilities.put(new Button(new Rectangle(centerLeft-width/2, game.choicePlaceY+20+(gap*buyPossibilities.size()), width, height), "2 Pièces -> + Bénédiction"), new RewardPayant(game, new Blessing(game), 2, false));
 		buyPossibilities.put(new Button(new Rectangle(centerLeft-width/2, game.choicePlaceY+20+(gap*buyPossibilities.size()), width, height), "3 Pièces -> +4 PV"), new RewardPayant(game, game.selectedClass.lifeString, 4, 3, false));
 		buyPossibilities.put(new Button(new Rectangle(centerLeft-width/2, game.choicePlaceY+20+(gap*buyPossibilities.size()), width, height), "5 Pièces -> +1 Armure"), new RewardPayant(game, game.selectedClass.armorString, 1, 5, false));
-		buyPossibilities.put(new Button(new Rectangle(centerLeft-width/2, game.choicePlaceY+20+(gap*buyPossibilities.size()), width, height), "5 Pièces -> +1 Potion"), new RewardPayant(game, new FrostedPotion(game), 5, false));
+		tempRewardPayant = new RewardPayant(game, Potion.randomPotion(game), 5, false);
+		buyPossibilities.put(new Button(new Rectangle(centerLeft-width/2, game.choicePlaceY+20+(gap*buyPossibilities.size()), width, height), "5 Pièces -> +1 "+tempRewardPayant.potion.name), tempRewardPayant);
 		
 		// VENTE
 		buyPossibilities.put(new Button(new Rectangle(centerRight-width/2, game.choicePlaceY+20, width, height), "-1 Armure -> +3 Pièces"), new RewardPayant(game, game.selectedClass.armorString, 1, 3, true));
-		buyPossibilities.put(new Button(new Rectangle(centerRight-width/2, game.choicePlaceY+20+gap, width, height), "-1 Potion -> +3 Pièces"), new RewardPayant(game, new FrostedPotion(game), 3, true));
+		tempRewardPayant = new RewardPayant(game, Potion.randomPotion(game), 3, true);
+		buyPossibilities.put(new Button(new Rectangle(centerRight-width/2, game.choicePlaceY+20+gap, width, height), "-1 " +tempRewardPayant.potion.name+ " -> +3 Pièces"), tempRewardPayant);
 	}
 
 	@Override
@@ -56,7 +60,7 @@ public class MerchantCard extends UpdateAlways{
 				for(Map.Entry<Button, RewardPayant> entry : buyPossibilities.entrySet()){
 					Button b = entry.getKey();
 					RewardPayant buy = entry.getValue();
-					if(b.isClicked() && buy.canBuy()){
+					if(b.isClicked()){
 						buy.reward();
 						Game.mouseH.leftClicked = false;
 					}
@@ -75,11 +79,12 @@ public class MerchantCard extends UpdateAlways{
 		g2.setFont(game.sansSerif);
 		g2.drawString("Achat", centerLeft-(int)Utils.textToRectangle2D("Achat", g2).getWidth()/2, game.choicePlaceY);
 		g2.drawString("Vente", centerRight-(int)Utils.textToRectangle2D("Vente", g2).getWidth()/2, game.choicePlaceY);
-		g2.setFont(Game.defaultFont);
 
 		if(!buyPossibilities.isEmpty()){
 			for(Button b : buyPossibilities.keySet()){
+				g2.setFont(Game.defaultFont);
 				b.draw(g2);
+				buyPossibilities.get(b).draw(g2);
 			}
 		}
 		finish.draw(g2);

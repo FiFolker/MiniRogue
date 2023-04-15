@@ -39,6 +39,7 @@ public class Classe {
 	String errorString;
 	int timer = 0;
 	public String playerAttack = "";
+	ErrorDraw errorDraw = new ErrorDraw();
 
 	// TABLEAU DE 2 POTIONS et 1 OBJET ici et 2 SPELL
 
@@ -132,8 +133,8 @@ public class Classe {
 			potions.get(i).draw(g2);
 			i++;
 		}
-		if(ErrorDraw.errorState){
-			ErrorDraw.draw(g2, errorString, game);
+		if(errorDraw.errorState){
+			errorDraw.draw(g2, errorString, game);
 		}
 
 		if(replacePotionBox){
@@ -202,7 +203,7 @@ public class Classe {
 		if(!potions.contains(potion)){
 			System.out.println("test");
 			errorString = "Vous ne possédez pas " + potion.name + " !";
-			ErrorDraw.errorState = true;
+			errorDraw.errorState = true;
 		}else{
 			System.out.println("test 2");
 			while(i < potions.size() && !potions.isEmpty() && potions.get(i) != potion){

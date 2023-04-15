@@ -28,7 +28,7 @@ public class PoisonPotion extends Potion{
 			}
 			game.selectedClass.removePotion(this);
 		}else{
-			ErrorDraw.errorState = true;
+			errorDraw.errorState = true;
 			errorString = "Vous devez être en combat pour utiliser cette potion ! ";
 		}
 	}

@@ -21,6 +21,7 @@ public abstract class Potion implements IUpdateAndDraw{
 	public String errorString;
 	public Button potionButton;
 	public static int number = 0;
+	ErrorDraw errorDraw = new ErrorDraw();
 	public int size = 32;
 	int i = 0;
 	
@@ -42,8 +43,8 @@ public abstract class Potion implements IUpdateAndDraw{
 	public void draw(Graphics2D g2) {
 		
 		potionButton.draw(g2);
-		if(ErrorDraw.errorState){
-			ErrorDraw.draw(g2, errorString, game);
+		if(errorDraw.errorState){
+			errorDraw.draw(g2, errorString, game);
 		}
 	}
 
@@ -52,6 +53,33 @@ public abstract class Potion implements IUpdateAndDraw{
 		if(potionButton.isClicked()){
 			applyEffect();
 		}
+	}
+
+	public static Potion randomPotion(Game game){
+		Potion returnedPotion = null;
+		int rng = Utils.randomNumber(1, 6);
+		switch(rng){
+			case 1:
+				returnedPotion = new FirePotion(game);
+				break;
+			case 2:
+				returnedPotion = new FrostedPotion(game);
+				break;
+			case 3:
+				returnedPotion = new HolyWater(game);
+				break;
+			case 4:
+				returnedPotion = new LifePotion(game);
+				break;
+			case 5:
+				returnedPotion = new PerceptionPotion(game);
+				break;
+			case 6:
+				returnedPotion = new PoisonPotion(game);
+				break;
+			
+		}
+		return returnedPotion;
 	}
 
 }

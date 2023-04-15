@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class ErrorDraw {
-	private static int timer = 0;
-	public static boolean errorState = false;
+	private int timer = 0;
+	public boolean errorState = false;
 
 
-	public static void draw(Graphics2D g2, String errorString, Game game) {
+	public void draw(Graphics2D g2, String errorString, Game game) {
 		errorState = true;
 		if(errorState){
 			g2.setColor(Color.red);

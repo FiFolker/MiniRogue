@@ -24,6 +24,7 @@ public class SanctuaryCard extends UpdateAlways{
 	RewardOrPenalty[] rewards = new RewardOrPenalty[3];
 	RewardOrPenalty[] penalties = new RewardOrPenalty[3];
 	private boolean hasPayed;
+	ErrorDraw errorDraw = new ErrorDraw();
 
 	public SanctuaryCard(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
 		super(game, hitbox, x, y, coord);
@@ -101,7 +102,7 @@ public class SanctuaryCard extends UpdateAlways{
 				payPiece.isSelected = true;
 				hasPayed = true;
 			}else if(payPiece.isClicked() && game.selectedClass.stats.get(game.selectedClass.moneyString) <= 0 && !payPiece.isSelected){
-				ErrorDraw.errorState = true;
+				errorDraw.errorState = true;
 			}
 		}
 	}
@@ -111,8 +112,8 @@ public class SanctuaryCard extends UpdateAlways{
 		Utils.drawSixDicePossibilities(game, g2, new String[]{penalties[0].penaltyString, penalties[1].penaltyString, penalties[2].penaltyString, rewards[0].rewardString, rewards[1].rewardString, rewards[2].rewardString});
 		g2.drawString(result, game.choicePlaceX-(int)Utils.textToRectangle2D(result, g2).getWidth()/2, game.choicePlaceY+130);
 		payPiece.draw(g2);
-		if(ErrorDraw.errorState){
-			ErrorDraw.draw(g2, "Vous devez avoir de l'argent pour effectuer cette action", game);
+		if(errorDraw.errorState){
+			errorDraw.draw(g2, "Vous devez avoir de l'argent pour effectuer cette action", game);
 		}
 
 	}
