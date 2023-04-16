@@ -11,11 +11,12 @@ import dices.Dice;
 import dices.PoisonDice;
 import main.Coordonnees;
 import main.Game;
-import main.RewardOrPenalty;
 import main.Utils;
 import potions.HolyWater;
 import potions.PerceptionPotion;
 import potions.Potion;
+import rewardAndPenalty.Penalty;
+import rewardAndPenalty.Reward;
 
 public class TrapCard extends UpdateOnRoll{
 
@@ -24,8 +25,8 @@ public class TrapCard extends UpdateOnRoll{
 	String case3;
 	boolean isTrap = false;
 	boolean isFall = false;
-	RewardOrPenalty[] rewards = new RewardOrPenalty[3];
-	RewardOrPenalty[] penalties = new RewardOrPenalty[3];
+	Reward[] rewards = new Reward[3];
+	Penalty[] penalties = new Penalty[3];
 
 	String details  = "";
 
@@ -45,13 +46,13 @@ public class TrapCard extends UpdateOnRoll{
 			case2 = "Plancher piégé -" + game.stage + " PV | +2 XP";
 			case3 = "Trappe -3 PV et -1 Zone | +1 Perception";
 
-			rewards[0] = new RewardOrPenalty(game, game.selectedClass.xpString, 1);
-			rewards[1] = new RewardOrPenalty(game, game.selectedClass.xpString, 1);
-			rewards[2] = new RewardOrPenalty(game, new PerceptionPotion(game));
+			rewards[0] = new Reward(game, game.selectedClass.xpString, 1);
+			rewards[1] = new Reward(game, game.selectedClass.xpString, 1);
+			rewards[2] = new Reward(game, new PerceptionPotion(game));
 
-			penalties[0] = new RewardOrPenalty(game, new PoisonDice(game), game.selectedClass.lifeString, 1);
-			penalties[1] = new RewardOrPenalty(game, game.selectedClass.lifeString, game.stage);
-			penalties[2] = new RewardOrPenalty(game, game.selectedClass.lifeString, 3);
+			penalties[0] = new Penalty(game, new PoisonDice(game), game.selectedClass.lifeString, 1);
+			penalties[1] = new Penalty(game, game.selectedClass.lifeString, game.stage);
+			penalties[2] = new Penalty(game, game.selectedClass.lifeString, 3);
 
 			isFall = true;
 		}else if(rng == 1){
@@ -59,13 +60,13 @@ public class TrapCard extends UpdateOnRoll{
 			case2 = "Brume acide -1 Armure | +1 Armure";
 			case3 = "Pendules -"+game.stage+" PV et Poison | +1 Perception";
 
-			rewards[0] = new RewardOrPenalty(game, new HolyWater(game));
-			rewards[1] = new RewardOrPenalty(game, game.selectedClass.armorString, 1);
-			rewards[2] = new RewardOrPenalty(game, new PerceptionPotion(game));
+			rewards[0] = new Reward(game, new HolyWater(game));
+			rewards[1] = new Reward(game, game.selectedClass.armorString, 1);
+			rewards[2] = new Reward(game, new PerceptionPotion(game));
 
-			penalties[0] = new RewardOrPenalty(game, game.selectedClass.foodString, game.stage);
-			penalties[1] = new RewardOrPenalty(game, game.selectedClass.armorString, 1);
-			penalties[2] = new RewardOrPenalty(game, new PoisonDice(game), game.selectedClass.lifeString, game.stage);
+			penalties[0] = new Penalty(game, game.selectedClass.foodString, game.stage);
+			penalties[1] = new Penalty(game, game.selectedClass.armorString, 1);
+			penalties[2] = new Penalty(game, new PoisonDice(game), game.selectedClass.lifeString, game.stage);
 
 		}
 	}
@@ -84,17 +85,17 @@ public class TrapCard extends UpdateOnRoll{
 			switch(game.dungeonDice.value){
 				case 1:
 				case 2:
-					penalties[0].penalty();
+					penalties[0].rewardOrPenalty();
 					details += penalties[0].result;
 					break;
 				case 3:
 				case 4:
-					penalties[1].penalty();
+					penalties[1].rewardOrPenalty();
 					details += penalties[1].result;
 					break;
 				case 5:
 				case 6:
-					penalties[2].penalty();
+					penalties[2].rewardOrPenalty();
 					details += penalties[2].result;	
 					if(isFall){
 						details += " -1 Zone";
@@ -107,17 +108,17 @@ public class TrapCard extends UpdateOnRoll{
 			switch(game.dungeonDice.value){
 				case 1:
 				case 2:
-					rewards[0].reward();
+					rewards[0].rewardOrPenalty();
 					details += rewards[0].result;
 					break;
 				case 3:
 				case 4:
-					rewards[1].reward();
+					rewards[1].rewardOrPenalty();
 					details += rewards[1].result;
 					break;
 				case 5:
 				case 6:
-					rewards[2].reward();
+					rewards[2].rewardOrPenalty();
 					details += rewards[2].result;
 					break;
 			}

@@ -1,11 +1,13 @@
-package main;
+package rewardAndPenalty;
 
 import java.awt.Graphics2D;
 
 import effect.Effect;
+import main.ErrorDraw;
+import main.Game;
 import potions.Potion;
 
-public class RewardPayant extends RewardOrPenalty{
+public class RewardPayant extends Reward{
 
 	String erroString;
 	int moneyValue;
@@ -46,9 +48,9 @@ public class RewardPayant extends RewardOrPenalty{
 	}
 	
 	@Override
-	public void reward() {
+	public void rewardOrPenalty() {
 		if(canBuy() && !isOnSale){
-			super.reward();
+			super.rewardOrPenalty();
 			game.selectedClass.substractStat(game.selectedClass.moneyString, moneyValue);
 		}else{
 			erroString = "Erreur vous n'avez plus d'argent !";

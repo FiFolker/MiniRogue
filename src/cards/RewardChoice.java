@@ -6,7 +6,6 @@ import java.awt.Rectangle;
 
 import main.Button;
 import main.Game;
-import main.RewardOrPenalty;
 import main.Utils;
 import potions.FirePotion;
 import potions.FrostedPotion;
@@ -14,71 +13,51 @@ import potions.HolyWater;
 import potions.LifePotion;
 import potions.PerceptionPotion;
 import potions.PoisonPotion;
+import rewardAndPenalty.Reward;
+import rewardAndPenalty.RewardAndPenalty;
 
 public class RewardChoice{
 	Game game;
 	boolean hasChoiced = false;
-	RewardOrPenalty[] rewards = new RewardOrPenalty[6];
+	RewardAndPenalty[] rewards = new RewardAndPenalty[6];
 	private String result = "Lancez les dés ...";
 	Button firstChoice;
 	Button secondChoice;
 	Rectangle firstRect;
 	Rectangle secondRect;
-	private int i = 0;
 	private Card card;
 
 	public RewardChoice(Game game, Card card) {
 		this.game = game;
 		this.card = card;
 
-		firstRect = new Rectangle(25, game.choicePlaceY+220, 150, 30);
-		secondRect = new Rectangle(200, game.choicePlaceY+220, 150, 30);
+		firstRect = new Rectangle(25, game.choicePlaceY+220, 100, 30);
+		secondRect = new Rectangle(100, game.choicePlaceY+220, 100, 30);
 
-		rewards[0] = new RewardOrPenalty(game, new FirePotion(game), game.selectedClass.xpString, 2);
-		rewards[1] = new RewardOrPenalty(game, new FrostedPotion(game), game.selectedClass.moneyString, 1);
-		rewards[2] = new RewardOrPenalty(game, new PoisonPotion(game), game.selectedClass.xpString, 2);
-		rewards[3] = new RewardOrPenalty(game, new LifePotion(game), game.selectedClass.armorString, 1);
-		rewards[4] = new RewardOrPenalty(game, new HolyWater(game), game.selectedClass.moneyString, 1);
-		rewards[5] = new RewardOrPenalty(game, new PerceptionPotion(game), game.selectedClass.armorString, 1);
+		rewards[0] = new Reward(game, new FirePotion(game), game.selectedClass.xpString, 2);
+		rewards[1] = new Reward(game, new FrostedPotion(game), game.selectedClass.moneyString, 1);
+		rewards[2] = new Reward(game, new PoisonPotion(game), game.selectedClass.xpString, 2);
+		rewards[3] = new Reward(game, new LifePotion(game), game.selectedClass.armorString, 1);
+		rewards[4] = new Reward(game, new HolyWater(game), game.selectedClass.moneyString, 1);
+		rewards[5] = new Reward(game, new PerceptionPotion(game), game.selectedClass.armorString, 1);
 
 	}
 
 	public void update() {
 		if(!game.inFight && game.currentPos.equals(card.coord) && !hasChoiced && game.diceHasRolled){
-			switch(game.dungeonDice.value){
-				case 1:
-					i = 0;
-					break;
-				case 2:
-					i = 1;
-					break;
-				case 3:
-					i = 2;
-					break;
-				case 4:
-					i = 3;
-					break;
-				case 5:
-					i = 4;
-					break;
-				case 6:
-					i = 5;
-					break;
-			}
-	
-			result = rewards[i].rewardString;
-			firstChoice = new Button(firstRect, rewards[i].potion.name);
-			secondChoice = new Button(secondRect, "+ " + rewards[i].value + " " + rewards[i].key);
+			result = rewards[game.dungeonDice.value-1].result;
+			firstChoice = new Button(firstRect, rewards[game.dungeonDice.value-1].potion.name);
+			secondChoice = new Button(secondRect, "+ " + rewards[game.dungeonDice.value-1].value + " " + rewards[game.dungeonDice.value-1].key);
 		}
 		if(firstChoice != null && firstChoice.isClicked() && !hasChoiced){
-			rewards[i].key = null;
-			rewards[i].reward();
+			rewards[game.dungeonDice.value-1].key = null;
+			rewards[game.dungeonDice.value-1].rewardOrPenalty();
 			hasChoiced = true;
 			firstChoice.isSelected = true;
 		}
 		if(secondChoice != null && secondChoice.isClicked() && !hasChoiced){
-			rewards[i].potion = null;
-			rewards[i].reward();
+			rewards[game.dungeonDice.value-1].potion = null;
+			rewards[game.dungeonDice.value-1].rewardOrPenalty();
 			hasChoiced = true;
 			secondChoice.isSelected = true;
 		}
@@ -88,7 +67,7 @@ public class RewardChoice{
 		g2.setColor(Color.black);
 		g2.fillRect(0, game.gui.yChoice, game.gui.xLine, game.getHeight());
 		g2.setColor(Color.white);
-		Utils.drawSixDicePossibilitiesInCol(game, g2, new String[]{rewards[0].rewardString, rewards[1].rewardString, rewards[2].rewardString, rewards[3].rewardString, rewards[4].rewardString, rewards[5].rewardString});
+		Utils.drawSixDicePossibilitiesInCol(game, g2, new String[]{rewards[0].result, rewards[1].result, rewards[2].result, rewards[3].result, rewards[4].result, rewards[5].result});
 		g2.drawString(result, game.choicePlaceX-(int)Utils.textToRectangle2D(result, g2).getWidth()/2, game.choicePlaceY+200);
 		if(firstChoice != null && secondChoice != null){
 			firstChoice.draw(g2);

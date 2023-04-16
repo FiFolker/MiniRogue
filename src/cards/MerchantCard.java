@@ -10,10 +10,10 @@ import effect.Blessing;
 import main.Button;
 import main.Coordonnees;
 import main.Game;
-import main.RewardPayant;
 import main.Utils;
 import potions.FrostedPotion;
 import potions.Potion;
+import rewardAndPenalty.RewardPayant;
 
 public class MerchantCard extends UpdateAlways{
 
@@ -61,7 +61,7 @@ public class MerchantCard extends UpdateAlways{
 					Button b = entry.getKey();
 					RewardPayant buy = entry.getValue();
 					if(b.isClicked()){
-						buy.reward();
+						buy.rewardOrPenalty();
 						Game.mouseH.leftClicked = false;
 					}
 				}
