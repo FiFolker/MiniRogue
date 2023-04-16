@@ -25,10 +25,13 @@ public class Card implements IUpdateAndDraw{
 	public boolean isReveal = false;
 	public boolean isFinish = false;
 	public boolean needSkillTest = false;
+	int centerLeft;
+	int centerRight;
 
 	public Card(Game game, Rectangle hitbox, int x, int y, Coordonnees coord) {
 		this.game = game;
-		
+		centerLeft = (game.gui.xLine/2)/2;
+		centerRight =  (game.gui.xLine/2) + (game.gui.xLine/2)/2;
 		backCard = Utils.loadImage("assets/cards/backCard.png");
 		image = Utils.loadImage("assets/cards/cardBlue.png");
 		currentImage = backCard;

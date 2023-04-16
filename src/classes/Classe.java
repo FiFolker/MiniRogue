@@ -201,11 +201,9 @@ public class Classe {
 		Potion.number --;
 		int i = 0;
 		if(!potions.contains(potion)){
-			System.out.println("test");
 			errorString = "Vous ne possédez pas " + potion.name + " !";
 			errorDraw.errorState = true;
 		}else{
-			System.out.println("test 2");
 			while(i < potions.size() && !potions.isEmpty() && potions.get(i) != potion){
 				i++;
 			}

@@ -31,8 +31,8 @@ public class RewardChoice{
 		this.game = game;
 		this.card = card;
 
-		firstRect = new Rectangle(25, game.choicePlaceY+220, 100, 30);
-		secondRect = new Rectangle(100, game.choicePlaceY+220, 100, 30);
+		firstRect = new Rectangle((game.gui.xLine/2)/2 - 62, game.choicePlaceY+220, 125, 30);
+		secondRect = new Rectangle((game.gui.xLine/2) + (game.gui.xLine/2)/2 - 62, game.choicePlaceY+220, 125, 30);
 
 		rewards[0] = new Reward(game, new FirePotion(game), game.selectedClass.xpString, 2);
 		rewards[1] = new Reward(game, new FrostedPotion(game), game.selectedClass.moneyString, 1);

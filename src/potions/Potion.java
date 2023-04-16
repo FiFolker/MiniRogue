@@ -52,6 +52,7 @@ public abstract class Potion implements IUpdateAndDraw{
 	public void update() {
 		if(potionButton.isClicked()){
 			applyEffect();
+			
 		}
 	}
 

@@ -19,8 +19,6 @@ public class MerchantCard extends UpdateAlways{
 
 	HashMap<Button, RewardPayant> buyPossibilities = new HashMap<>();
 	Button finish;
-	int centerLeft;
-	int centerRight;
 	int width = 145;
 	int height = 25;
 	int gap = 35;
@@ -30,8 +28,6 @@ public class MerchantCard extends UpdateAlways{
         name = "Carte Marchand";
 		image = Utils.loadImage("assets/cards/cardGreen.png");
 		finish = new Button(new Rectangle(game.choicePlaceX-width/2, game.choicePlaceY+245, width, 30), "Terminer");
-		centerLeft = (game.gui.xLine/2)/2;
-		centerRight =  (game.gui.xLine/2) + (game.gui.xLine/2)/2;
 		setupBuyPossibilities();
 	}
 
