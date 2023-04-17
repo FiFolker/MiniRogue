@@ -22,7 +22,7 @@ public abstract class Potion implements IUpdateAndDraw{
 	public Button potionButton;
 	public static int number = 0;
 	ErrorDraw errorDraw = new ErrorDraw();
-	public int[] position = {130, 178};
+	public int[] position = {98, 146};
 	public int size = 32;
 	int i = 0;
 	

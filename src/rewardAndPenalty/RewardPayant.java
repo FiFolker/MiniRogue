@@ -52,7 +52,7 @@ public class RewardPayant extends Reward{
 		if(canBuy() && !isOnSale){
 			super.rewardOrPenalty();
 			game.selectedClass.substractStat(game.selectedClass.moneyString, moneyValue);
-		}else{
+		}else if(!canBuy() && !isOnSale){
 			erroString = "Erreur vous n'avez plus d'argent !";
 			errorDraw.errorState = true;
 		}
@@ -65,8 +65,7 @@ public class RewardPayant extends Reward{
 				game.selectedClass.substractStat(key, value);
 				game.selectedClass.addStat(game.selectedClass.moneyString, moneyValue);
 			}
-		}else if(!canSell()){
-			System.out.println("t");
+		}else if(!canSell() && isOnSale){
 			erroString = "Erreur vous n'avez pas la ressource demandée !";
 			errorDraw.errorState = true;
 		}

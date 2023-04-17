@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.CubicCurve2D;
 import java.awt.image.BufferedImage;
 import java.security.Guard;
 import java.util.ArrayList;
@@ -332,6 +333,8 @@ public class Game extends JPanel implements Runnable{
 				}
 			}
 
+			
+
 			if(cardHovered != null){
 				if(cardHovered.isReveal){ // le subtefurge AKA la solution D
 					g2.setColor(Color.black);
@@ -365,6 +368,12 @@ public class Game extends JPanel implements Runnable{
 
 			diceButton.draw(g2);
 
+			if(currentCard instanceof MerchantCard){
+				MerchantCard m = (MerchantCard)currentCard;
+				if(m.haveToChoicePotion){
+					m.choicePotion(g2);
+				}
+			}
 
 			selectedClass.draw(g2);
 		}else if(gameState == loseState){

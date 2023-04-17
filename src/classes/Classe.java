@@ -145,41 +145,41 @@ public class Classe {
 
 	public void replacePotionBoxChoice(Graphics2D g2, Potion potion){
 		Rectangle box = new Rectangle((game.getWidth() - game.gui.xLine)/2-50, game.getHeight()/2-150, 400, 200);
-			g2.draw(box);
-			g2.setColor(Color.black);
-			g2.fillRect(box.x+1, box.y+1, box.width-1, box.height-1);
-			g2.setColor(Color.white);
-			g2.drawString("Choisissez la Potion à jeter", box.x + box.width/2 -(int)Utils.textToRectangle2D("Choisissez la Potion à jeter", g2).getWidth()/2, box.y + 20);
-
-			g2.drawString("Nouvelle Potion : ", box.x + box.width/2 -(int)Utils.textToRectangle2D("Nouvelle Potion : ", g2).getWidth()/2, box.y + 40);
-			g2.drawImage(potion.icon, box.x + box.width/2 - potion.potionButton.button.width/2, box.y + box.height/2 - potion.potionButton.button.height - 20, null);
-			g2.drawString("Potions actuel : ", box.x + box.width/2 -(int)Utils.textToRectangle2D("Potions actuel : ", g2).getWidth()/2, box.y + 110);
-
-			Button firstPotion = new Button(new Rectangle(box.x + box.width/2 - potions.get(0).potionButton.button.width - 5, box.y + box.height/2 + 20, potions.get(0).potionButton.button.width, potions.get(0).potionButton.button.height), potions.get(0).icon);
-			Button secondPotion = new Button(new Rectangle(box.x + box.width/2 + 5, box.y + box.height/2+ 20, potions.get(potions.size()-1).potionButton.button.width, potions.get(potions.size()-1).potionButton.button.height), potions.get(potions.size()-1).icon);
-
-			Button cancelButton = new Button(new Rectangle(box.x + box.width/2 - 50, box.y + box.height - 35, 100, 25), "Annuler");
-
-			firstPotion.draw(g2);
-			secondPotion.draw(g2);
-			cancelButton.draw(g2);
-
-			if(firstPotion.isClicked()){
-				removePotion(potions.get(0));
-				potion.potionButton.button.x = potion.position[0];
-				addPotion(potion);
-				replacePotionBox = false;
-				Game.mouseH.leftClicked = false;
-			}else if(secondPotion.isClicked()){
-				removePotion(potions.get(1));
-				potion.potionButton.button.x = potion.position[1];
-				addPotion(potion);
-				replacePotionBox = false;
-				Game.mouseH.leftClicked = false;
-			}else if(cancelButton.isClicked()){
-				replacePotionBox = false;
-				Game.mouseH.leftClicked = false;
-			}
+		g2.draw(box);
+		g2.setColor(Color.black);
+		g2.fillRect(box.x+1, box.y+1, box.width-1, box.height-1);
+		g2.setColor(Color.white);
+		g2.drawString("Choisissez la Potion à jeter", box.x + box.width/2 -(int)Utils.textToRectangle2D("Choisissez la Potion à jeter", g2).getWidth()/2, box.y + 20);
+		
+		g2.drawString("Nouvelle Potion : ", box.x + box.width/2 -(int)Utils.textToRectangle2D("Nouvelle Potion : ", g2).getWidth()/2, box.y + 40);
+		g2.drawImage(potion.icon, box.x + box.width/2 - potion.potionButton.button.width/2, box.y + box.height/2 - potion.potionButton.button.height - 20, null);
+		g2.drawString("Potions actuel : ", box.x + box.width/2 -(int)Utils.textToRectangle2D("Potions actuel : ", g2).getWidth()/2, box.y + 110);
+		
+		Button firstPotion = new Button(new Rectangle(box.x + box.width/2 - potions.get(0).potionButton.button.width - 5, box.y + box.height/2 + 20, potions.get(0).potionButton.button.width, potions.get(0).potionButton.button.height), potions.get(0).icon);
+		Button secondPotion = new Button(new Rectangle(box.x + box.width/2 + 5, box.y + box.height/2+ 20, potions.get(potions.size()-1).potionButton.button.width, potions.get(potions.size()-1).potionButton.button.height), potions.get(potions.size()-1).icon);
+		
+		Button cancelButton = new Button(new Rectangle(box.x + box.width/2 - 50, box.y + box.height - 35, 100, 25), "Annuler");
+		
+		firstPotion.draw(g2);
+		secondPotion.draw(g2);
+		cancelButton.draw(g2);
+		
+		if(firstPotion.isClicked()){
+			removePotion(potions.get(0));
+			potion.potionButton.button.x = potion.position[0];
+			addPotion(potion);
+			replacePotionBox = false;
+			Game.mouseH.leftClicked = false;
+		}else if(secondPotion.isClicked()){
+			removePotion(potions.get(1));
+			potion.potionButton.button.x = potion.position[1];
+			addPotion(potion);
+			replacePotionBox = false;
+			Game.mouseH.leftClicked = false;
+		}else if(cancelButton.isClicked()){
+			replacePotionBox = false;
+			Game.mouseH.leftClicked = false;
+		}
 	}
 
 
