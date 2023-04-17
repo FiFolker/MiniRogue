@@ -22,6 +22,7 @@ public abstract class Potion implements IUpdateAndDraw{
 	public Button potionButton;
 	public static int number = 0;
 	ErrorDraw errorDraw = new ErrorDraw();
+	public int[] position = {130, 178};
 	public int size = 32;
 	int i = 0;
 	
@@ -34,7 +35,7 @@ public abstract class Potion implements IUpdateAndDraw{
 	}
 
 	public void addButtton(){
-		potionButton = new Button(new Rectangle(62 + 20 + (size+size/2)*(game.selectedClass.potions.size()), game.gui.yPotions-size/2, size, size), icon, info, false);
+		potionButton = new Button(new Rectangle(0, game.gui.yPotions-size/2, size, size), icon, info, false);
 	}
 
 	public abstract void applyEffect();
@@ -52,7 +53,7 @@ public abstract class Potion implements IUpdateAndDraw{
 	public void update() {
 		if(potionButton.isClicked()){
 			applyEffect();
-			
+			Game.mouseH.leftClicked = false;
 		}
 	}
 

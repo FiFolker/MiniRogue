@@ -166,12 +166,12 @@ public class Classe {
 
 			if(firstPotion.isClicked()){
 				removePotion(potions.get(0));
-				potion.potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(game.selectedClass.potions.size()-1);
+				potion.potionButton.button.x = potion.position[0];
 				addPotion(potion);
 				replacePotionBox = false;
 			}else if(secondPotion.isClicked()){
 				removePotion(potions.get(1));
-				potion.potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(game.selectedClass.potions.size());
+				potion.potionButton.button.x = potion.position[1];
 				addPotion(potion);
 				replacePotionBox = false;
 			}else if(cancelButton.isClicked()){
@@ -190,7 +190,8 @@ public class Classe {
 				}
 			}else{
 				potions.add(potion);
-			}	
+			}
+			potions.get(potions.size()-1).potionButton.button.x = potions.get(potions.size()-1).position[potions.size()-1];
 		}else if(potions.size() == 2 && potions.get(0).getClass() != potion.getClass() && potions.get(1).getClass() != potion.getClass()){
 			replacePotion = potion;
 			replacePotionBox = true;
@@ -211,7 +212,7 @@ public class Classe {
 				potions.remove(potion);
 			}
 			if(i == 0 && !potions.isEmpty() && potions.get(0) != null){
-				potions.get(0).potionButton.button.x = 62 + 20 + (potion.size+potion.size/2)*(potions.size());
+				potions.get(0).potionButton.button.x = potion.position[0];
 			}
 		}
 		
