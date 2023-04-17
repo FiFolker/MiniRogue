@@ -169,13 +169,16 @@ public class Classe {
 				potion.potionButton.button.x = potion.position[0];
 				addPotion(potion);
 				replacePotionBox = false;
+				Game.mouseH.leftClicked = false;
 			}else if(secondPotion.isClicked()){
 				removePotion(potions.get(1));
 				potion.potionButton.button.x = potion.position[1];
 				addPotion(potion);
 				replacePotionBox = false;
+				Game.mouseH.leftClicked = false;
 			}else if(cancelButton.isClicked()){
 				replacePotionBox = false;
+				Game.mouseH.leftClicked = false;
 			}
 	}
 
