@@ -17,6 +17,7 @@ import main.Coordonnees;
 import main.Fight;
 import main.Game;
 import main.Utils;
+import rewardAndPenalty.Reward;
 
 public class EnnemyCard extends UpdateOnRoll{
 
@@ -40,37 +41,37 @@ public class EnnemyCard extends UpdateOnRoll{
 		if(rng == 0){
 			switch(game.stage){ // malédiction
 				case 1:
-					ennemy = new Ennemy(game, "Rat Géant", 6, 2, 1, null);
+					ennemy = new Ennemy(game, "Rat Géant", 6, 2, new Reward(game, game.selectedClass.xpString, 1), null);
 					break;
 				case 2:
-					ennemy = new Ennemy(game, "Soldat Squelette", 9, 4, 2, null);
+					ennemy = new Ennemy(game, "Soldat Squelette", 9, 4, new Reward(game, game.selectedClass.xpString, 2), null);
 					break;
 				case 3:
-					ennemy = new Ennemy(game, "Serpent Ailé", 12, 6, 2, new CurseDice(game));
+					ennemy = new Ennemy(game, "Serpent Ailé", 12, 6, new Reward(game, game.selectedClass.xpString, 2), new CurseDice(game));
 					break;
 				case 4:
-					ennemy = new Ennemy(game, "Garde Maudit", 15, 8, 4, new CurseDice(game));
+					ennemy = new Ennemy(game, "Garde Maudit", 15, 8, new Reward(game, game.selectedClass.xpString, 4), new CurseDice(game));
 					break;
 				default:
-					ennemy = new Ennemy(game, "Default", 1, 0, 0, null);
+					ennemy = new Ennemy(game, "Default", 1, 0, new Reward(game, game.selectedClass.xpString, 0), null);
 	
 			}
 		}else if(rng == 1){ // poison
 			switch(game.stage){
 				case 1:
-					ennemy = new Ennemy(game, "Araignée Géante", 6, 2, 1, null);
+					ennemy = new Ennemy(game, "Araignée Géante", 6, 2, new Reward(game, game.selectedClass.xpString, 1), null);
 					break;
 				case 2:
-					ennemy = new Ennemy(game, "Gobelin", 9, 4, 2, null);
+					ennemy = new Ennemy(game, "Gobelin", 9, 4, new Reward(game, game.selectedClass.xpString, 2), null);
 					break;
 				case 3:
-					ennemy = new Ennemy(game, "Arbalétrier", 12, 6, 2, new PoisonDice(game));
+					ennemy = new Ennemy(game, "Arbalétrier", 12, 6, new Reward(game, game.selectedClass.xpString, 2), new PoisonDice(game));
 					break;
 				case 4:
-					ennemy = new Ennemy(game, "Garde du Roi", 15, 8, 4, new PoisonDice(game));
+					ennemy = new Ennemy(game, "Garde du Roi", 15, 8, new Reward(game, game.selectedClass.xpString, 4), new PoisonDice(game));
 					break;
 				default:
-					ennemy = new Ennemy(game, "Default", 1, 0, 0, null);
+					ennemy = new Ennemy(game, "Default", 1, 0,  new Reward(game, game.selectedClass.xpString, 0), null);
 	
 			}
 		}

@@ -5,12 +5,14 @@ import dices.PoisonDice;
 import dices.Dice;
 import effect.Effect;
 import main.Game;
+import rewardAndPenalty.Reward;
+import rewardAndPenalty.RewardAndPenalty;
 
 public class Ennemy {
 
 	Game game;
 	public int life;
-	public int reward;
+	public RewardAndPenalty reward;
 	public String name;
 	public int damage;
 	public Dice applicableDice;
@@ -20,8 +22,9 @@ public class Ennemy {
 	public Effect effect;
 	public boolean pierceTheArmor = false;
 	public String ennemyAttack = "";
+	public boolean finish = true;
 
-	public Ennemy(Game game, String name, int life, int damage, int reward, Dice applicableDice){
+	public Ennemy(Game game, String name, int life, int damage, Reward reward, Dice applicableDice){
 		this.life = life;
 		this.game = game;
 		totalLife = this.life;
@@ -71,5 +74,7 @@ public class Ennemy {
 			}
 		}
 	}
+
+	public void nextPhase(){}
 	
 }

@@ -38,8 +38,10 @@ public class BurialCard extends UpdateAlways{
 	public void updateAlways() {
 		result = "";
 		if(game.currentPos.equals(this.coord) && !isFinish && game.diceHasRolled){
-			rewardsOrPenalties[game.dungeonDice.value-1].rewardOrPenalty();
-			result += rewardsOrPenalties[game.dungeonDice.value-1].result + " ";
+			if(game.dungeonDice.value < 6){
+				rewardsOrPenalties[game.dungeonDice.value-1].rewardOrPenalty();
+				result += rewardsOrPenalties[game.dungeonDice.value-1].result + " ";
+			}
 			isFinish = true;
 		}
 	}

@@ -190,6 +190,7 @@ public class Classe {
 					potions.add(potion);
 				}else{
 					errorString = "Vous ne pouvez posséder qu'une seule potion par type !";
+					errorDraw.errorState = true;
 				}
 			}else{
 				potions.add(potion);
@@ -198,6 +199,9 @@ public class Classe {
 		}else if(potions.size() == 2 && potions.get(0).getClass() != potion.getClass() && potions.get(1).getClass() != potion.getClass()){
 			replacePotion = potion;
 			replacePotionBox = true;
+		}else if(potions.get(potions.size()-1).getClass() == potion.getClass()){
+			errorString = "Vous ne pouvez posséder qu'une seule potion par type !";
+			errorDraw.errorState = true;
 		}
     }
 

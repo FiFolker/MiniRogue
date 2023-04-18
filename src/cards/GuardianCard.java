@@ -1,10 +1,12 @@
 package cards;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 
 import dices.CurseDice;
+import dices.Dice;
 import dices.PoisonDice;
 import effect.ArmorPiercing;
 import ennemy.Boss;
@@ -13,6 +15,7 @@ import main.Coordonnees;
 import main.Fight;
 import main.Game;
 import main.Utils;
+import rewardAndPenalty.Reward;
 
 public class GuardianCard extends UpdateAlways{
 
@@ -21,7 +24,7 @@ public class GuardianCard extends UpdateAlways{
 	Fight fight;
 	int life;
 	int damage;
-	int reward;
+	Reward reward;
 	int timer = 0;
 	private boolean isLastZone;
 	public static boolean protectorHasSpawned = false;
@@ -45,28 +48,29 @@ public class GuardianCard extends UpdateAlways{
 	public void setupEnnemy(){
 		int rng = Utils.randomNumber(1, 3);
 		if(game.stage == game.totalStage){
-			ennemy = new Boss(game, "Les Restes d'OG", 25, 8, 0, new CurseDice(game));
+			ennemy = new Boss(game, "Les Restes d'OG", new int[]{25, 20}, new int[]{8, 9}, null, new Dice[]{new CurseDice(game), new PoisonDice(game)}, 2);
 		}else{
+			reward = new Reward(game, game.selectedClass.xpString, 0);
 			switch(game.stage){
 				case 1:
 					life = 12;
 					damage = 2;
-					reward = 2;
+					reward.value = 2;
 					break;
 				case 2:
 					life = 16;
 					damage = 4;
-					reward = 3;
+					reward.value = 3;
 					break;
 				case 3:
 					life = 20;
 					damage = 6;
-					reward = 4;
+					reward.value = 4;
 					break;
 				default :
 					life = 12;
 					damage = 2;
-					reward = 2;
+					reward.value = 2;
 			}
 			
 			if(rng == 1 && !protectorHasSpawned){
@@ -103,9 +107,14 @@ public class GuardianCard extends UpdateAlways{
 			fight.draw(g2);
 		}
 		if(!game.inFight && game.currentCard.equals(this)){
-			rewardChoice.draw(g2);
-			if(rewardChoice.hasChoiced){
+			if(!(ennemy instanceof Boss)){
+				rewardChoice.draw(g2);
+			}
+			if(rewardChoice.hasChoiced || ennemy instanceof Boss && ennemy.finish){
 				timer ++;
+				g2.setColor(Color.white);
+				g2.setFont(game.sansSerif);
+				g2.drawString("En train de descendre ...", game.gui.xLine + ((game.getWidth() - game.gui.xLine)/2 - (int)Utils.textToRectangle2D("En train de descendre ...", g2).getWidth()/2), game.textPlaceY);
 				if(timer  >= 120){
 					game.goDownstair();
 					timer = 0;

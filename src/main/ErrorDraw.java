@@ -13,7 +13,7 @@ public class ErrorDraw {
 		if(errorState){
 			g2.setColor(Color.red);
 			g2.setFont(game.sansSerif);
-			g2.drawString(errorString, game.gui.xLine + ((game.getWidth() - game.gui.xLine)/2 - (int)Utils.textToRectangle2D(errorString, g2).getWidth()/2), 830);
+			g2.drawString(errorString, game.gui.xLine + ((game.getWidth() - game.gui.xLine)/2 - (int)Utils.textToRectangle2D(errorString, g2).getWidth()/2), game.textPlaceY);
 			timer ++;
 			if(timer >= 180){
 				timer = 0;

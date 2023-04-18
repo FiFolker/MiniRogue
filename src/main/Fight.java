@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import dices.CharacterDice;
 import dices.CurseDice;
 import dices.PoisonDice;
+import ennemy.Boss;
 import ennemy.Ennemy;
 
 public class Fight implements IUpdateAndDraw{
@@ -72,16 +73,26 @@ public class Fight implements IUpdateAndDraw{
 			game.diceHasRolled = false;
 			game.canMove = false;
 		}else if(ennemy.life <= 0){
-			game.diceHasRolled = false;
-			result = "Bravo vous avez terrasé " + ennemy.name;
-			game.selectedClass.addStat(game.selectedClass.xpString, ennemy.reward);
-			game.currentCard.isFinish = true;
-			game.selectedClass.playerAttack	 = " ";
-			ennemy.ennemyAttack  = " ";
-			game.inFight = false;
+			ennemy.nextPhase();
+			if(ennemy.finish){
+				endOfFight();
+			}
+			
 			
 		}
 		turn ++;
+	}
+
+	public void endOfFight(){
+		game.diceHasRolled = false;
+		result = "Bravo vous avez terrasé " + ennemy.name;
+		if(ennemy.reward != null){
+			ennemy.reward.rewardOrPenalty();
+		}
+		game.currentCard.isFinish = true;
+		game.selectedClass.playerAttack	 = " ";
+		ennemy.ennemyAttack  = " ";
+		game.inFight = false;
 	}
 
 	@Override
@@ -90,6 +101,13 @@ public class Fight implements IUpdateAndDraw{
 		Font defaultFont = g2.getFont();
 		g2.drawString(ennemy.name, game.choicePlaceX-(int)Utils.textToRectangle2D(ennemy.name, g2).getWidth()/2, game.choicePlaceY);
 		g2.drawString("PV : " + ennemy.life+"/"+ennemy.totalLife, game.choicePlaceX-(int)Utils.textToRectangle2D("PV : " + ennemy.life+"/"+ennemy.totalLife, g2).getWidth()/2, game.choicePlaceY+30);
+
+		if(ennemy instanceof Boss){
+			g2.setFont(game.sansSerif);
+			Boss b = (Boss)ennemy;
+			g2.drawString("Phase : " + b.currentPhase + " / " + b.nbPhase, 10, game.choicePlaceY + ((game.choicePlaceY+110)-game.choicePlaceY)/2 -(int)Utils.textToRectangle2D("Phase : " + b.currentPhase + " / " + b.nbPhase, g2).getHeight());
+		}
+		g2.setFont(defaultFont);
 		String damage = "Dégats : " + Integer.toString(ennemy.damage);
 		if(ennemy.applicableDice != null){
 			damage += " + " + ennemy.applicableDice.name;
@@ -97,8 +115,13 @@ public class Fight implements IUpdateAndDraw{
 			damage += " + " + ennemy.effect.name;
 		}
 		g2.drawString(damage, game.choicePlaceX-(int)Utils.textToRectangle2D(damage, g2).getWidth()/2, game.choicePlaceY+60);
-
-		g2.drawString("Récompense : "+ Integer.toString(ennemy.reward) + " XP", game.choicePlaceX-(int)Utils.textToRectangle2D("Récompense : "+ Integer.toString(ennemy.reward)+ " XP", g2).getWidth()/2 , game.choicePlaceY+90);
+		String reward = "";
+		if(ennemy.reward == null){
+			reward = "Récompense : SANG D'OG";
+		}else{
+			reward = "Récompense : "+ Integer.toString(ennemy.reward.value) + " " + ennemy.reward.key;
+		}
+		g2.drawString(reward, game.choicePlaceX-(int)Utils.textToRectangle2D(reward, g2).getWidth()/2 , game.choicePlaceY+90);
 		
 		g2.drawLine(0, game.choicePlaceY+110, game.gui.xLine, game.choicePlaceY+110);
 		g2.setFont(game.sansSerif);

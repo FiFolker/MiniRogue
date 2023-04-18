@@ -83,6 +83,7 @@ public class Game extends JPanel implements Runnable{
 	public int choicePlaceY  = gui.yChoice+30;
 	int sizeWidthCard = 202;
 	int sizeHeightCard = 250;
+	public int textPlaceY = 830;
 
 	// STATIC 
 	public static Font defaultFont = new Font("Dialog", Font.PLAIN, 12);
@@ -130,7 +131,7 @@ public class Game extends JPanel implements Runnable{
 		characterDices.add(new CharacterDice());
 
 		token = Utils.loadImage("assets/jeton/player.png");
-		classes[0] = new Classe(this, Utils.loadImage("assets/classes/rogue.png"), "Voleur", 7, 3, 0, 8);//7, 3, 0, 8
+		classes[0] = new Classe(this, Utils.loadImage("assets/classes/rogue.png"), "Voleur", 1000, 1000, 1000, 1000);//7, 3, 0, 8
 		classes[1] = new Classe(this, Utils.loadImage("assets/classes/mage.png"), "Magicien", 4, 5, 0, 3);
 		classes[2] = new Classe(this, Utils.loadImage("assets/classes/swordman.png"), "Epeiste", 10, 3, 3, 5);
 		classes[3] = new Classe(this, Utils.loadImage("assets/classes/adventurer.png"), "Aventurier", 10, 3, 3, 5);
