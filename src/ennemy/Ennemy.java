@@ -1,5 +1,7 @@
 package ennemy;
 
+import javax.xml.stream.events.EndElement;
+
 import dices.CurseDice;
 import dices.PoisonDice;
 import dices.Dice;
@@ -34,11 +36,12 @@ public class Ennemy {
 		this.applicableDice = applicableDice;
 
 	}
+	public Ennemy(Game game){
+		this.game = game;
+	}
 
 	public void addEffect(Effect effect){
 		this.effect = effect;
-		effect.applyEffect();
-
 	}
 
 	public void actionEnnemy(int value){
@@ -51,12 +54,20 @@ public class Ennemy {
 			case 4:
 			case 5:
 				ennemyAttack = "Attaque ennemi réussi ! " + damage + " dégâts";
+				if(effect != null){
+					effect.applyEffect();
+				}
 				game.selectedClass.damageReceived(damage, pierceTheArmor);
+				
 				addDice();
 				break;
 			case 6:
 				ennemyAttack = "Attaque ennemi Parfaite ! " + damage + " dégâts";
+				if(effect != null){
+					effect.applyEffect();
+				}
 				game.selectedClass.damageReceived(damage, true);
+				
 				addDice();
 				break;
 			default:

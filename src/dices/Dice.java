@@ -36,9 +36,9 @@ public class Dice {
 
 	public void draw(Graphics2D g2, int x, int y){
 		g2.setColor(Color.white);
-		g2.drawString(name, x, y);
 		g2.setFont(Game.defaultFont);
-		Utils.drawDice(g2, x+(int)Utils.textToRectangle2D(name, g2).getWidth()/2, y+10, value, color);
+		g2.drawString(name, x, y);
+		Utils.drawDice(g2, x+(int)Utils.textToRectangle2D(name, g2).getWidth()/2-Utils.diceSize/2, y+10, value, color);
 	}
 	
 }

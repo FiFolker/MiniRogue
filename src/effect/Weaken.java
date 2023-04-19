@@ -4,7 +4,7 @@ import main.Game;
 
 public class Weaken extends Effect {
 
-	public Weaken(Game game, String name, String info) {
+	public Weaken(Game game) {
 		super(game, "Affaiblir", "Perdez 1 XP. Au besoin, perte de dé Aventurier");
 	}
 

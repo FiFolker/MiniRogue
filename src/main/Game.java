@@ -83,6 +83,7 @@ public class Game extends JPanel implements Runnable{
 	public int choicePlaceY  = gui.yChoice+30;
 	int sizeWidthCard = 202;
 	int sizeHeightCard = 250;
+	int gap = 10;
 	public int textPlaceY = 830;
 
 	// STATIC 
@@ -145,8 +146,8 @@ public class Game extends JPanel implements Runnable{
 			for(int col=0; col<cardBoard[lig].length;col++){
 				
 
-				int x = leftPos+(col*sizeWidthCard)+10;
-				int y = topPos+(lig*sizeHeightCard)+10;
+				int x = leftPos+(col*sizeWidthCard)+gap;
+				int y = topPos+(lig*sizeHeightCard)+gap;
 				if(lig == cardBoard.length-1 && col == cardBoard[lig].length-1){
 					cardBoard[lig][col] = new GuardianCard(this, new Rectangle(x,y,sizeWidthCard, sizeHeightCard), x, y, new Coordonnees(lig, col), zone == zonePerStage[stage-1]);
 				}else{
@@ -283,6 +284,8 @@ public class Game extends JPanel implements Runnable{
 	}
 
 	public void goDownstair(){
+		canMove = false;
+		diceHasRolled = false;
 		
 		if(zone == zonePerStage[stage-1] && stage < totalStage){
 			if(!inFight){
@@ -344,23 +347,25 @@ public class Game extends JPanel implements Runnable{
 				cardHovered.draw(g2);
 			}
 
-			int xDice = 10;
+			int yDice = 10;
+
+			dungeonDice.draw(g2, leftPos+(sizeWidthCard*cardBoard.length)+(gap*cardBoard.length-1)+(getWidth()-(leftPos+(sizeWidthCard*cardBoard.length)+(gap*cardBoard.length-1)))/2 - (int)Utils.textToRectangle2D(dungeonDice.name, g2).getWidth()/2, topPos + 50 + yDice);
+			yDice += Utils.textToRectangle2D(dungeonDice.name, g2).getHeight() + Utils.diceSize  + gap*2;
 
 			for(CharacterDice d : characterDices){
-				d.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
-				xDice += Utils.textToRectangle2D(d.name, g2).getWidth() + 10;
+				d.draw(g2, leftPos+(sizeWidthCard*cardBoard.length)+(gap*cardBoard.length-1)+(getWidth()-(leftPos+(sizeWidthCard*cardBoard.length)+(gap*cardBoard.length-1)))/2 - (int)Utils.textToRectangle2D(d.name, g2).getWidth()/2, topPos + 50 + yDice);
+				yDice += Utils.textToRectangle2D(d.name, g2).getHeight() + Utils.diceSize  + gap*2;
 			}
 
-			dungeonDice.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
-			xDice += Utils.textToRectangle2D(dungeonDice.name, g2).getWidth() + 10;
+			
 
 			if(curseDice != null){
-				curseDice.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
-				xDice += Utils.textToRectangle2D(curseDice.name, g2).getWidth() + 10;
+				curseDice.draw(g2, leftPos+(sizeWidthCard*cardBoard.length)+(gap*cardBoard.length-1)+(getWidth()-(leftPos+(sizeWidthCard*cardBoard.length)+(gap*cardBoard.length-1)))/2 - (int)Utils.textToRectangle2D(curseDice.name, g2).getWidth()/2, topPos + 50 + yDice);
+				yDice += Utils.textToRectangle2D(curseDice.name, g2).getHeight() + Utils.diceSize  + gap*2;
 			}
 			
 			if(poisonDice != null){
-				poisonDice.draw(g2, diceButton.button.x+diceButton.button.width + xDice, diceButton.button.y+diceButton.button.height/2);
+				poisonDice.draw(g2, leftPos+(sizeWidthCard*cardBoard.length)+(gap*cardBoard.length-1)+(getWidth()-(leftPos+(sizeWidthCard*cardBoard.length)+(gap*cardBoard.length-1)))/2 - (int)Utils.textToRectangle2D(poisonDice.name, g2).getWidth()/2, topPos + 50 + yDice);
 			}
 			
 			

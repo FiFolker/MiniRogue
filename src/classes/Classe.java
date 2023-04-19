@@ -80,7 +80,7 @@ public class Classe {
 	}
 
 	public void update(){
-		if(this.stats.get(xpString) >= xpRequired[this.stats.get(levelString)-1]  && this.stats.get(xpString) < this.maxStats.get(xpString) && this.stats.get(levelString) < this.maxStats.get(levelString)){
+		if(this.stats.get(xpString) >= xpRequired[this.stats.get(levelString)-1] && this.stats.get(levelString) < this.maxStats.get(levelString)){
 			game.characterDices.add(new CharacterDice());
 			this.addStat(levelString, 1);
 		}
@@ -88,7 +88,7 @@ public class Classe {
 			this.stats.replace(xpString, this.maxStats.get(xpString));
 			this.addStat(lifeString, 1);
 		}
-		if(this.stats.get(xpString) < xpRequired[this.stats.get(levelString)-1] && this.stats.get(levelString) > 1){
+		if(this.stats.get(levelString) > 1 && this.stats.get(xpString) < xpRequired[this.stats.get(levelString)-2]){
 			this.substractStat(levelString, 1);
 		}
 		if(this.stats.get(lifeString) <= 0){

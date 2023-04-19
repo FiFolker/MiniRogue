@@ -4,7 +4,7 @@ import main.Game;
 
 public class Blindness extends Effect{
 
-    public Blindness(Game game, String name, String info) {
+    public Blindness(Game game) {
         super(game, "Aveuglement", "Vous ne pouvez pas réveler les salles suivantes avant de les avoir choisies.");
     }
 
