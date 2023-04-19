@@ -22,7 +22,7 @@ public class Classe {
 	String name;
 	String info;
 	public int damage = 0;
-	public int xpRequired = 6;
+	public int[] xpRequired = {6, 18, 23};
 	public int size = 128;
 	public HashMap<String, Integer> stats;
 	public HashMap<String, Integer> maxStats;
@@ -40,6 +40,7 @@ public class Classe {
 	int timer = 0;
 	public String playerAttack = "";
 	ErrorDraw errorDraw = new ErrorDraw();
+	public boolean blindness = false;
 
 	// TABLEAU DE 2 POTIONS et 1 OBJET ici et 2 SPELL
 
@@ -60,7 +61,7 @@ public class Classe {
 		stats.put(this.foodString, food);
 		stats.put(this.armorString, armor);
 		stats.put(this.moneyString, money);
-		stats.put(this.levelString, 0);
+		stats.put(this.levelString, 1);
 		stats.put(this.xpString, 0);
 		info = "Vie : " + life + " | Nourriture : " + food + " | Armure : " + armor + " | Argent : " + money; 
 	} 
@@ -79,18 +80,16 @@ public class Classe {
 	}
 
 	public void update(){
-		if(this.stats.get(xpString) >= xpRequired  && this.stats.get(xpString) < this.maxStats.get(xpString) && this.stats.get(levelString) < this.maxStats.get(levelString)){
+		if(this.stats.get(xpString) >= xpRequired[this.stats.get(levelString)-1]  && this.stats.get(xpString) < this.maxStats.get(xpString) && this.stats.get(levelString) < this.maxStats.get(levelString)){
 			game.characterDices.add(new CharacterDice());
 			this.addStat(levelString, 1);
-			xpRequired += xpRequired*2;
-		}
-		if(xpRequired >= this.maxStats.get(xpString)){
-			xpRequired = 23;
 		}
 		if(this.stats.get(xpString) >= this.maxStats.get(xpString)){
 			this.stats.replace(xpString, this.maxStats.get(xpString));
-			xpRequired = 23;
 			this.addStat(lifeString, 1);
+		}
+		if(this.stats.get(xpString) < xpRequired[this.stats.get(levelString)-1] && this.stats.get(levelString) > 1){
+			this.substractStat(levelString, 1);
 		}
 		if(this.stats.get(lifeString) <= 0){
 			game.gameState = game.loseState;

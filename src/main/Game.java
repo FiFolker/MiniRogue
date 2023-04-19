@@ -236,7 +236,7 @@ public class Game extends JPanel implements Runnable{
 				keyH.spacePressed = false;
 			}
 
-			if(currentCard.isFinish && !currentCard.coord.equals(new Coordonnees(2, 2))){
+			if(currentCard.isFinish && !currentCard.coord.equals(new Coordonnees(2, 2)) && !selectedClass.blindness){
 				revealNextCard();
 			}
 

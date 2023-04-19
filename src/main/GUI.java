@@ -35,12 +35,15 @@ public class GUI implements IUpdateAndDraw{
 		g2.drawLine(xLine, 0, xLine, game.getHeight());
 		g2.setFont(game.sansSerif);
 		game.selectedClass.drawCard(g2, 25, 25);
+		if(game.selectedClass.blindness){
+			g2.drawString("Effet : Aveuglement", 25, 175);
+		}
 		g2.drawLine(0,  game.selectedClass.size*3/2, xLine, yStats - 20);
 		g2.drawString("Stats", xLine/2-(int)Utils.textToRectangle2D("Stats", g2).getWidth()/2, yStats);
 		int yStatsbyStat = game.selectedClass.size*2;
 		for(String s : game.selectedClass.stats.keySet()){
 			if(s.equals("XP")){
-				g2.drawString(s + " : " + game.selectedClass.stats.get(s) +" / "+game.selectedClass.xpRequired, 10, yStatsbyStat);
+				g2.drawString(s + " : " + game.selectedClass.stats.get(s) +" / "+game.selectedClass.xpRequired[game.selectedClass.stats.get(game.selectedClass.levelString)-1], 10, yStatsbyStat);
 			}else{
 				g2.drawString(s + " : " + game.selectedClass.stats.get(s) + " / "+game.selectedClass.maxStats.get(s), 10, yStatsbyStat);
 			}

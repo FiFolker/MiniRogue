@@ -13,6 +13,7 @@ public class Blessing extends Effect{
     public void applyEffect() {
         game.curseDice = null;
         game.poisonDice = null;
+		game.selectedClass.blindness = false;
     }
     
 }

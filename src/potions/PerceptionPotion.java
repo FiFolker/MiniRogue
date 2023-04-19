@@ -18,6 +18,7 @@ public class PerceptionPotion extends Potion{
 	public void applyEffect() {
 		if(game.currentCard.needSkillTest){
 			game.characterDices.get(0).value = 6;
+			game.selectedClass.blindness = false;
 			game.perceptionEffect = true;
 			game.selectedClass.removePotion(this);
 		}else{

@@ -8,7 +8,7 @@ public class ArmorPiercing extends Effect {
     Ennemy ennemy;
 
     public ArmorPiercing(Game game, Ennemy ennemy) {
-        super(game, "Perce l'armure", "Outrepasse l'armrure au moment de l'attaque");
+        super(game, "Inarêtable", "Outrepasse l'armrure au moment de l'attaque");
         this.ennemy = ennemy;
     }
 

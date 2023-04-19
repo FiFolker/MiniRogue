@@ -17,6 +17,7 @@ public class HolyWater extends Potion {
 	public void applyEffect() {
 		game.curseDice = null;
 		game.poisonDice = null;
+		game.selectedClass.blindness = false;
 		game.selectedClass.removePotion(this);
 	}
 	
